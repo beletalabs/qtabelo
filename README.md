@@ -1,7 +1,12 @@
 
 # Tabelo-Qt
 
-An open source table editor based on Qt.
+A table editor based on Qt for C++.
+
+
+## Description
+
+Tabelo-Qt is an open source table editor written in C++ using the Qt framework.
 
 
 ## Copyright
