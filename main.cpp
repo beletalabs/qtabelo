@@ -18,6 +18,7 @@
  */
 
 #include <QApplication>
+#include <QCommandLineParser>
 
 #include "window.h"
 
@@ -30,6 +31,13 @@ int main(int argc, char *argv[])
     app.setApplicationName(QStringLiteral("Tabelo-Qt"));
     app.setApplicationDisplayName(QStringLiteral("Tabelo-Qt"));
     app.setApplicationVersion(QStringLiteral("0.1.0"));
+
+    // Command line
+    QCommandLineParser parser;
+    parser.setApplicationDescription(QCoreApplication::translate("main", "%1 - A table editor").arg(app.applicationName()));
+    parser.addHelpOption();
+    parser.addVersionOption();
+    parser.process(app);
 
     Window window;
     window.show();
