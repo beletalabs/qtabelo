@@ -25,6 +25,11 @@
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
+    app.setOrganizationName(QStringLiteral("Tabelo"));
+    app.setOrganizationDomain(QStringLiteral("https://github.com/tabeloapp"));
+    app.setApplicationName(QStringLiteral("Tabelo-Qt"));
+    app.setApplicationDisplayName(QStringLiteral("Tabelo-Qt"));
+    app.setApplicationVersion(QStringLiteral("0.1.0"));
 
     Window window;
     window.show();
