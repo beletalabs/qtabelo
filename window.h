@@ -42,6 +42,7 @@ private:
 
     QStatusBar *m_statusbar;
 
+    void createMenuBar();
     void createStatusBar();
 };
 

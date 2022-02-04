@@ -19,6 +19,7 @@
 
 #include "window.h"
 
+#include <QMenuBar>
 #include <QScreen>
 #include <QSettings>
 
@@ -28,6 +29,7 @@ Window::Window(QWidget *parent)
 {
     setWindowIcon(QIcon(QStringLiteral(":/icons/apps/16/tabelo.svg")));
 
+    createMenuBar();
     createStatusBar();
 
     loadSettings();
@@ -87,6 +89,14 @@ void Window::saveSettings()
     // Application property: State
     const auto state = saveState();
     settings.setValue(QStringLiteral("Application/State"), state);
+}
+
+
+void Window::createMenuBar()
+{
+    // Menu: Application
+    auto *menuApplication = menuBar()->addMenu(tr("Application"));
+    menuApplication->setObjectName(QStringLiteral("menuApplication"));
 }
 
 
