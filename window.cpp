@@ -19,12 +19,34 @@
 
 #include "window.h"
 
+#include <QScreen>
+#include <QSettings>
+
 
 Window::Window(QWidget *parent)
     : QMainWindow(parent)
 {
+    loadSettings();
 }
 
 Window::~Window()
 {
+}
+
+
+void Window::loadSettings()
+{
+    QSettings settings;
+
+    // Application property: Geometry
+    const auto geometry = settings.value(QStringLiteral("Application/Geometry"), QByteArray()).toByteArray();
+    if (!geometry.isEmpty()) {
+        restoreGeometry(geometry);
+    }
+    else {
+        // Default: Center window
+        const auto availableGeometry = screen()->availableGeometry();
+        resize(availableGeometry.width() * 2/3, availableGeometry.height() * 2/3);
+        move((availableGeometry.width() - width()) / 2, (availableGeometry.height() - height()) / 2);
+    }
 }

@@ -30,6 +30,9 @@ class Window : public QMainWindow
 public:
     Window(QWidget *parent = nullptr);
     ~Window();
+
+private:
+    void loadSettings();
 };
 
 #endif // WINDOW_H
