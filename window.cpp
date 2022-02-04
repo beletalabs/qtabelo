@@ -31,6 +31,7 @@ Window::Window(QWidget *parent)
 
     createMenuBar();
     createStatusBar();
+    createToolBars();
 
     loadSettings();
 }
@@ -75,6 +76,10 @@ void Window::loadSettings()
     if (!state.isEmpty()) {
         restoreState(state);
     }
+    else {
+        // Default: Show/hide toolbars
+        m_toolbarApplication->setVisible(true);
+    }
 }
 
 
@@ -104,4 +109,12 @@ void Window::createStatusBar()
 {
     m_statusbar = statusBar();
     m_statusbar->showMessage(tr("Ready"), 3000);
+}
+
+
+void Window::createToolBars()
+{
+    // Toolbar: Application
+    m_toolbarApplication = addToolBar(tr("Application"));
+    m_toolbarApplication->setObjectName(QStringLiteral("toolbarApplication"));
 }
