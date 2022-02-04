@@ -63,6 +63,12 @@ void Window::loadSettings()
         resize(availableGeometry.width() * 2/3, availableGeometry.height() * 2/3);
         move((availableGeometry.width() - width()) / 2, (availableGeometry.height() - height()) / 2);
     }
+
+    // Application property: State
+    const auto state = settings.value(QStringLiteral("Application/State"), QByteArray()).toByteArray();
+    if (!state.isEmpty()) {
+        restoreState(state);
+    }
 }
 
 
