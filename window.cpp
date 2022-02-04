@@ -26,6 +26,8 @@
 Window::Window(QWidget *parent)
     : QMainWindow(parent)
 {
+    setWindowIcon(QIcon(QStringLiteral(":/icons/apps/16/tabelo.svg")));
+
     loadSettings();
 }
 

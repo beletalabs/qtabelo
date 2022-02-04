@@ -34,6 +34,9 @@ SOURCES += \
 HEADERS += \
     window.h
 
+RESOURCES += \
+    icons.qrc
+
 CONFIG += lrelease
 
 # Default rules for deployment.
