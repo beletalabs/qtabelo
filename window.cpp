@@ -29,6 +29,7 @@ Window::Window(QWidget *parent)
 {
     setWindowIcon(QIcon(QStringLiteral(":/icons/apps/16/tabelo.svg")));
 
+    createActions();
     createMenuBar();
     createStatusBar();
     createToolBars();
@@ -97,11 +98,26 @@ void Window::saveSettings()
 }
 
 
+void Window::createActions()
+{
+    //
+    // Actions: Application
+
+    m_actionQuit = new QAction(tr("Quit"), this);
+    m_actionQuit->setObjectName(QStringLiteral("actionQuit"));
+    m_actionQuit->setIcon(QIcon::fromTheme(QStringLiteral("application-exit"), QIcon(QStringLiteral(":/icons/actions/16/application-exit.svg"))));
+    m_actionQuit->setShortcut(QKeySequence::Quit);
+    m_actionQuit->setToolTip(tr("Quit the application"));
+    connect(m_actionQuit, &QAction::triggered, this, &Window::close);
+}
+
+
 void Window::createMenuBar()
 {
     // Menu: Application
     auto *menuApplication = menuBar()->addMenu(tr("Application"));
     menuApplication->setObjectName(QStringLiteral("menuApplication"));
+    menuApplication->addAction(m_actionQuit);
 }
 
 
@@ -117,4 +133,5 @@ void Window::createToolBars()
     // Toolbar: Application
     m_toolbarApplication = addToolBar(tr("Application"));
     m_toolbarApplication->setObjectName(QStringLiteral("toolbarApplication"));
+    m_toolbarApplication->addAction(m_actionQuit);
 }

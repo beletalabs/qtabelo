@@ -20,6 +20,7 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
+#include <QAction>
 #include <QCloseEvent>
 #include <QMainWindow>
 #include <QStatusBar>
@@ -41,9 +42,12 @@ private:
     void loadSettings();
     void saveSettings();
 
+    QAction *m_actionQuit;
+
     QStatusBar *m_statusbar;
     QToolBar *m_toolbarApplication;
 
+    void createActions();
     void createMenuBar();
     void createStatusBar();
     void createToolBars();
