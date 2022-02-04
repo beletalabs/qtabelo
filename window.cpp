@@ -79,4 +79,8 @@ void Window::saveSettings()
     // Application property: Geometry
     const auto geometry = saveGeometry();
     settings.setValue(QStringLiteral("Application/Geometry"), geometry);
+
+    // Application property: State
+    const auto state = saveState();
+    settings.setValue(QStringLiteral("Application/State"), state);
 }
