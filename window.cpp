@@ -34,6 +34,20 @@ Window::~Window()
 }
 
 
+void Window::closeEvent(QCloseEvent *event)
+{
+    if (true) {
+        // Store application properties
+        saveSettings();
+
+        event->accept();
+    }
+    else {
+        event->ignore();
+    }
+}
+
+
 void Window::loadSettings()
 {
     QSettings settings;
@@ -49,4 +63,14 @@ void Window::loadSettings()
         resize(availableGeometry.width() * 2/3, availableGeometry.height() * 2/3);
         move((availableGeometry.width() - width()) / 2, (availableGeometry.height() - height()) / 2);
     }
+}
+
+
+void Window::saveSettings()
+{
+    QSettings settings;
+
+    // Application property: Geometry
+    const auto geometry = saveGeometry();
+    settings.setValue(QStringLiteral("Application/Geometry"), geometry);
 }

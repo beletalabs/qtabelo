@@ -20,6 +20,7 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
+#include <QCloseEvent>
 #include <QMainWindow>
 
 
@@ -31,8 +32,12 @@ public:
     Window(QWidget *parent = nullptr);
     ~Window();
 
+protected:
+    void closeEvent(QCloseEvent *event) override;
+
 private:
     void loadSettings();
+    void saveSettings();
 };
 
 #endif // WINDOW_H
