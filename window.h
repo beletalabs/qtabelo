@@ -22,6 +22,7 @@
 
 #include <QCloseEvent>
 #include <QMainWindow>
+#include <QStatusBar>
 
 
 class Window : public QMainWindow
@@ -38,6 +39,10 @@ protected:
 private:
     void loadSettings();
     void saveSettings();
+
+    QStatusBar *m_statusbar;
+
+    void createStatusBar();
 };
 
 #endif // WINDOW_H

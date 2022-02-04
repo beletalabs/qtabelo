@@ -28,6 +28,8 @@ Window::Window(QWidget *parent)
 {
     setWindowIcon(QIcon(QStringLiteral(":/icons/apps/16/tabelo.svg")));
 
+    createStatusBar();
+
     loadSettings();
 }
 
@@ -85,4 +87,11 @@ void Window::saveSettings()
     // Application property: State
     const auto state = saveState();
     settings.setValue(QStringLiteral("Application/State"), state);
+}
+
+
+void Window::createStatusBar()
+{
+    m_statusbar = statusBar();
+    m_statusbar->showMessage(tr("Ready"), 3000);
 }
