@@ -156,8 +156,15 @@ void Window::createActions()
     //
     // Action group: Tool Button Style
 
+    auto *actionToolButtonStyleIconOnly = new QAction(tr("Icon Only"), this);
+    actionToolButtonStyleIconOnly->setObjectName(QStringLiteral("actionToolButtonStyleIconOnly"));
+    actionToolButtonStyleIconOnly->setCheckable(true);
+    actionToolButtonStyleIconOnly->setToolTip(tr("Only display the icon"));
+    actionToolButtonStyleIconOnly->setData(static_cast<int>(Qt::ToolButtonIconOnly));
+
     m_actionsToolButtonStyle = new QActionGroup(this);
     m_actionsToolButtonStyle->setObjectName(QStringLiteral("actionsToolButtonStyle"));
+    m_actionsToolButtonStyle->addAction(actionToolButtonStyleIconOnly);
     connect(m_actionsToolButtonStyle, &QActionGroup::triggered, this, &Window::onActionsToolButtonStyleTriggered);
 }
 
