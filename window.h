@@ -65,6 +65,8 @@ private:
     void createMenuBar();
     void createStatusBar();
     void createToolBars();
+
+    void updateActionsToolButtonStyle(const Qt::ToolButtonStyle toolButtonStyle);
 };
 
 #endif // WINDOW_H

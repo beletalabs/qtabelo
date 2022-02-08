@@ -90,6 +90,10 @@ void Window::loadSettings()
     const auto visible = settings.value(QStringLiteral("Application/StatusBar"), true).toBool();
     m_statusbar->setVisible(visible);
     m_actionStatusbar->setChecked(visible);
+
+    // Application property: Tool Button Style
+    const auto style = settings.value(QStringLiteral("Application/ToolButtonStyle"), static_cast<int>(Qt::ToolButtonFollowStyle)).toInt();
+    updateActionsToolButtonStyle(static_cast<Qt::ToolButtonStyle>(style));
 }
 
 
@@ -245,6 +249,19 @@ void Window::createToolBars()
     m_toolbarView = addToolBar(tr("View"));
     m_toolbarView->setObjectName(QStringLiteral("toolbarView"));
     connect(m_toolbarView, &QToolBar::visibilityChanged, [=] (const bool visible) { m_actionToolbarView->setChecked(visible); });
+}
+
+
+void Window::updateActionsToolButtonStyle(const Qt::ToolButtonStyle toolButtonStyle)
+{
+    const QList<QAction *> actions = m_actionsToolButtonStyle->actions();
+    for (auto *action : actions) {
+        if (static_cast<Qt::ToolButtonStyle>(action->data().toInt()) == toolButtonStyle) {
+            action->setChecked(true);
+            onActionsToolButtonStyleTriggered(action);
+            break;
+        }
+    }
 }
 
 
