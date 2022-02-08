@@ -130,6 +130,10 @@ void Window::createMenuBar()
     menuApplication->addAction(m_actionAbout);
     menuApplication->addSeparator();
     menuApplication->addAction(m_actionQuit);
+
+    // Menu: View
+    auto *menuView = menuBar()->addMenu(tr("View"));
+    menuView->setObjectName(QStringLiteral("menuView"));
 }
 
 
