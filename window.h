@@ -48,6 +48,8 @@ private:
     QAction *m_actionAbout;
     QAction *m_actionQuit;
 
+    QAction *m_actionToolbarApplication;
+
     QStatusBar *m_statusbar;
 
     QToolBar *m_toolbarApplication;

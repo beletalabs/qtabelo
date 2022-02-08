@@ -120,6 +120,16 @@ void Window::createActions()
     m_actionQuit->setShortcut(QKeySequence::Quit);
     m_actionQuit->setToolTip(tr("Quit the application"));
     connect(m_actionQuit, &QAction::triggered, this, &Window::close);
+
+
+    //
+    // Actions: View
+
+    m_actionToolbarApplication = new QAction(tr("Show Application Toolbar"), this);
+    m_actionToolbarApplication->setObjectName(QStringLiteral("actionToolbarApplication"));
+    m_actionToolbarApplication->setCheckable(true);
+    m_actionToolbarApplication->setToolTip(tr("Display the Application toolbar"));
+    connect(m_actionToolbarApplication, &QAction::toggled, [=] (const bool checked) { m_toolbarApplication->setVisible(checked); });
 }
 
 
@@ -137,6 +147,7 @@ void Window::createMenuBar()
 
     auto *menuToolbars = new QMenu(tr("Toolbars"), this);
     menuToolbars->setObjectName(QStringLiteral("menuToolbars"));
+    menuToolbars->addAction(m_actionToolbarApplication);
 
     auto *menuView = menuBar()->addMenu(tr("View"));
     menuView->setObjectName(QStringLiteral("menuView"));
@@ -159,6 +170,7 @@ void Window::createToolBars()
     m_toolbarApplication->addAction(m_actionAbout);
     m_toolbarApplication->addSeparator();
     m_toolbarApplication->addAction(m_actionQuit);
+    connect(m_toolbarApplication, &QToolBar::visibilityChanged, [=] (const bool visible) { m_actionToolbarApplication->setChecked(visible); });
 
     // Toolbar: View
     m_toolbarView = addToolBar(tr("View"));
