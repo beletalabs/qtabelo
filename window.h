@@ -50,6 +50,7 @@ private:
 
     QAction *m_actionToolbarApplication;
     QAction *m_actionToolbarView;
+    QAction *m_actionStatusbar;
 
     QStatusBar *m_statusbar;
 

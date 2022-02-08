@@ -136,6 +136,12 @@ void Window::createActions()
     m_actionToolbarView->setCheckable(true);
     m_actionToolbarView->setToolTip(tr("Display the View toolbar"));
     connect(m_actionToolbarView, &QAction::toggled, [=] (const bool checked) { m_toolbarView->setVisible(checked); });
+
+    m_actionStatusbar = new QAction(tr("Show Status Bar"), this);
+    m_actionStatusbar->setObjectName(QStringLiteral("actionStatusbar"));
+    m_actionStatusbar->setCheckable(true);
+    m_actionStatusbar->setToolTip(tr("Display the Status bar"));
+    connect(m_actionStatusbar, &QAction::toggled, [=] (const bool checked) { m_statusbar->setVisible(checked); });
 }
 
 
@@ -159,6 +165,7 @@ void Window::createMenuBar()
     auto *menuView = menuBar()->addMenu(tr("View"));
     menuView->setObjectName(QStringLiteral("menuView"));
     menuView->addMenu(menuToolbars);
+    menuView->addAction(m_actionStatusbar);
 }
 
 
