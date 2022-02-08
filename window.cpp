@@ -112,6 +112,10 @@ void Window::saveSettings()
     // Application property: Status Bar
     const auto visible = m_statusbar->isVisible();
     settings.setValue(QStringLiteral("Application/StatusBar"), visible);
+
+    // Application property: Tool Button Style
+    const auto style = m_actionsToolButtonStyle->checkedAction()->data();
+    settings.setValue(QStringLiteral("Application/ToolButtonStyle"), style);
 }
 
 
