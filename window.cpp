@@ -24,6 +24,8 @@
 #include <QScreen>
 #include <QSettings>
 
+#include "about_dialog.h"
+
 
 Window::Window(QWidget *parent)
     : QMainWindow(parent)
@@ -151,5 +153,7 @@ void Window::createToolBars()
 
 void Window::onActionAboutTriggered()
 {
-
+    auto *dialog = new AboutDialog(this);
+    dialog->setWindowModality(Qt::ApplicationModal);
+    dialog->show();
 }
