@@ -38,10 +38,14 @@ public:
 protected:
     void closeEvent(QCloseEvent *event) override;
 
+private slots:
+    void onActionAboutTriggered();
+
 private:
     void loadSettings();
     void saveSettings();
 
+    QAction *m_actionAbout;
     QAction *m_actionQuit;
 
     QStatusBar *m_statusbar;
