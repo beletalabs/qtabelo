@@ -83,6 +83,7 @@ void Window::loadSettings()
     else {
         // Default: Show/hide toolbars
         m_toolbarApplication->setVisible(true);
+        m_toolbarView->setVisible(false);
     }
 }
 
@@ -152,6 +153,10 @@ void Window::createToolBars()
     m_toolbarApplication->addAction(m_actionAbout);
     m_toolbarApplication->addSeparator();
     m_toolbarApplication->addAction(m_actionQuit);
+
+    // Toolbar: View
+    m_toolbarView = addToolBar(tr("View"));
+    m_toolbarView->setObjectName(QStringLiteral("toolbarView"));
 }
 
 

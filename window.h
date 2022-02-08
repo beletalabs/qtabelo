@@ -49,7 +49,9 @@ private:
     QAction *m_actionQuit;
 
     QStatusBar *m_statusbar;
+
     QToolBar *m_toolbarApplication;
+    QToolBar *m_toolbarView;
 
     void createActions();
     void createMenuBar();
