@@ -151,6 +151,14 @@ void Window::createActions()
     m_actionStatusbar->setCheckable(true);
     m_actionStatusbar->setToolTip(tr("Display the Status bar"));
     connect(m_actionStatusbar, &QAction::toggled, [=] (const bool checked) { m_statusbar->setVisible(checked); });
+
+
+    //
+    // Action group: Tool Button Style
+
+    m_actionsToolButtonStyle = new QActionGroup(this);
+    m_actionsToolButtonStyle->setObjectName(QStringLiteral("actionsToolButtonStyle"));
+    connect(m_actionsToolButtonStyle, &QActionGroup::triggered, this, &Window::onActionsToolButtonStyleTriggered);
 }
 
 
@@ -163,6 +171,7 @@ void Window::createMenuBar()
     menuApplication->addSeparator();
     menuApplication->addAction(m_actionQuit);
 
+
     //
     // Menus: View
 
@@ -170,6 +179,8 @@ void Window::createMenuBar()
     menuToolbars->setObjectName(QStringLiteral("menuToolbars"));
     menuToolbars->addAction(m_actionToolbarApplication);
     menuToolbars->addAction(m_actionToolbarView);
+    menuToolbars->addSection(tr("Tool Button Style"));
+    menuToolbars->addActions(m_actionsToolButtonStyle->actions());
 
     auto *menuView = menuBar()->addMenu(tr("View"));
     menuView->setObjectName(QStringLiteral("menuView"));
@@ -207,4 +218,13 @@ void Window::onActionAboutTriggered()
     auto *dialog = new AboutDialog(this);
     dialog->setWindowModality(Qt::ApplicationModal);
     dialog->show();
+}
+
+
+void Window::onActionsToolButtonStyleTriggered(const QAction *actionToolButtonStyle)
+{
+    const auto style = static_cast<Qt::ToolButtonStyle>(actionToolButtonStyle->data().toInt());
+
+    m_toolbarApplication->setToolButtonStyle(style);
+    m_toolbarView->setToolButtonStyle(style);
 }

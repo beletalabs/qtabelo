@@ -21,6 +21,7 @@
 #define WINDOW_H
 
 #include <QAction>
+#include <QActionGroup>
 #include <QCloseEvent>
 #include <QMainWindow>
 #include <QStatusBar>
@@ -41,6 +42,8 @@ protected:
 private slots:
     void onActionAboutTriggered();
 
+    void onActionsToolButtonStyleTriggered(const QAction *actionToolButtonStyle);
+
 private:
     void loadSettings();
     void saveSettings();
@@ -50,6 +53,7 @@ private:
 
     QAction *m_actionToolbarApplication;
     QAction *m_actionToolbarView;
+    QActionGroup *m_actionsToolButtonStyle;
     QAction *m_actionStatusbar;
 
     QStatusBar *m_statusbar;
