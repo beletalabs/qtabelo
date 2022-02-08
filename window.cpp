@@ -132,9 +132,15 @@ void Window::createMenuBar()
     menuApplication->addSeparator();
     menuApplication->addAction(m_actionQuit);
 
-    // Menu: View
+    //
+    // Menus: View
+
+    auto *menuToolbars = new QMenu(tr("Toolbars"), this);
+    menuToolbars->setObjectName(QStringLiteral("menuToolbars"));
+
     auto *menuView = menuBar()->addMenu(tr("View"));
     menuView->setObjectName(QStringLiteral("menuView"));
+    menuView->addMenu(menuToolbars);
 }
 
 
