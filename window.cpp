@@ -104,6 +104,10 @@ void Window::saveSettings()
     // Application property: State
     const auto state = saveState();
     settings.setValue(QStringLiteral("Application/State"), state);
+
+    // Application property: Status Bar
+    const auto visible = m_statusbar->isVisible();
+    settings.setValue(QStringLiteral("Application/StatusBar"), visible);
 }
 
 
