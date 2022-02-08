@@ -168,10 +168,17 @@ void Window::createActions()
     actionToolButtonStyleTextOnly->setToolTip(tr("Only display the text"));
     actionToolButtonStyleTextOnly->setData(static_cast<int>(Qt::ToolButtonTextOnly));
 
+    auto *actionToolButtonStyleTextBesideIcon = new QAction(tr("Text Beside Icon"), this);
+    actionToolButtonStyleTextBesideIcon->setObjectName(QStringLiteral("actionToolButtonStyleTextBesideIcon"));
+    actionToolButtonStyleTextBesideIcon->setCheckable(true);
+    actionToolButtonStyleTextBesideIcon->setToolTip(tr("The text appears beside the icon"));
+    actionToolButtonStyleTextBesideIcon->setData(static_cast<int>(Qt::ToolButtonTextBesideIcon));
+
     m_actionsToolButtonStyle = new QActionGroup(this);
     m_actionsToolButtonStyle->setObjectName(QStringLiteral("actionsToolButtonStyle"));
     m_actionsToolButtonStyle->addAction(actionToolButtonStyleIconOnly);
     m_actionsToolButtonStyle->addAction(actionToolButtonStyleTextOnly);
+    m_actionsToolButtonStyle->addAction(actionToolButtonStyleTextBesideIcon);
     connect(m_actionsToolButtonStyle, &QActionGroup::triggered, this, &Window::onActionsToolButtonStyleTriggered);
 }
 
