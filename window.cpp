@@ -85,6 +85,11 @@ void Window::loadSettings()
         m_toolbarApplication->setVisible(true);
         m_toolbarView->setVisible(false);
     }
+
+    // Application property: Status Bar
+    const auto visible = settings.value(QStringLiteral("Application/StatusBar"), true).toBool();
+    m_statusbar->setVisible(visible);
+    m_actionStatusbar->setChecked(visible);
 }
 
 
