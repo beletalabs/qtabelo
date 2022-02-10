@@ -37,7 +37,7 @@ AboutDialog::AboutDialog(QWidget *parent) :
     textBox->setStyleSheet(QStringLiteral("background-color:transparent;"));
     textBox->setOpenExternalLinks(true);
     textBox->setHtml(tr("<html><body>"
-        "<p>%1 is an open source table editor based on Qt.</p>"
+        "<p>%1 is an open source table editor written in C++ using the Qt framework.</p>"
         "<p>Copyright &copy; 2022 <a href=\"%2\" title=\"Visit organization's homepage\">%3</a>.</p>"
         "<p>This application is licensed under the terms of the <a href=\"https://www.gnu.org/licenses/gpl-3.0.en.html\" title=\"Visit license's homepage\">GNU General Public License, version 3</a>.</p>"
         "</body></html>").arg(QApplication::applicationName(), QApplication::organizationDomain(), QApplication::organizationName()));

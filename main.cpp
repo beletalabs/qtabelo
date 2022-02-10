@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
 
     // Command line
     QCommandLineParser parser;
-    parser.setApplicationDescription(QCoreApplication::translate("main", "%1 - A table editor").arg(app.applicationName()));
+    parser.setApplicationDescription(QCoreApplication::translate("main", "%1 - A table editor based on Qt for C++").arg(app.applicationName()));
     parser.addHelpOption();
     parser.addVersionOption();
     parser.process(app);
