@@ -148,6 +148,16 @@ void Window::createActions()
     //
     // Actions: View
 
+    m_actionStatusbar = new QAction(tr("Show Status Bar"), this);
+    m_actionStatusbar->setObjectName(QStringLiteral("actionStatusbar"));
+    m_actionStatusbar->setCheckable(true);
+    m_actionStatusbar->setToolTip(tr("Display the Status bar"));
+    connect(m_actionStatusbar, &QAction::toggled, [=] (const bool checked) { m_statusbar->setVisible(checked); });
+
+
+    //
+    // Actions: Appearance
+
     m_actionToolbarApplication = new QAction(tr("Show Application Toolbar"), this);
     m_actionToolbarApplication->setObjectName(QStringLiteral("actionToolbarApplication"));
     m_actionToolbarApplication->setCheckable(true);
@@ -195,12 +205,6 @@ void Window::createActions()
     m_actionToolbarHelp->setCheckable(true);
     m_actionToolbarHelp->setToolTip(tr("Display the Help toolbar"));
     connect(m_actionToolbarHelp, &QAction::toggled, [=] (const bool checked) { m_toolbarHelp->setVisible(checked); });
-
-    m_actionStatusbar = new QAction(tr("Show Status Bar"), this);
-    m_actionStatusbar->setObjectName(QStringLiteral("actionStatusbar"));
-    m_actionStatusbar->setCheckable(true);
-    m_actionStatusbar->setToolTip(tr("Display the Status bar"));
-    connect(m_actionStatusbar, &QAction::toggled, [=] (const bool checked) { m_statusbar->setVisible(checked); });
 
 
     //
@@ -272,32 +276,31 @@ void Window::createMenuBar()
     auto *menuFormats = menuBar()->addMenu(tr("Formats"));
     menuFormats->setObjectName(QStringLiteral("menuFormats"));
 
-
-    //
-    // Menus: View
-
-    auto *menuToolbars = new QMenu(tr("Toolbars"), this);
-    menuToolbars->setObjectName(QStringLiteral("menuToolbars"));
-    menuToolbars->addAction(m_actionToolbarApplication);
-    menuToolbars->addAction(m_actionToolbarDocument);
-    menuToolbars->addAction(m_actionToolbarEdit);
-    menuToolbars->addAction(m_actionToolbarTools);
-    menuToolbars->addAction(m_actionToolbarFormats);
-    menuToolbars->addAction(m_actionToolbarView);
-    menuToolbars->addAction(m_actionToolbarAppearance);
-    menuToolbars->addAction(m_actionToolbarHelp);
-    menuToolbars->addSection(tr("Tool Button Style"));
-    menuToolbars->addActions(m_actionsToolButtonStyle->actions());
-
+    // Menu: View
     auto *menuView = menuBar()->addMenu(tr("View"));
     menuView->setObjectName(QStringLiteral("menuView"));
-    menuView->addMenu(menuToolbars);
     menuView->addAction(m_actionStatusbar);
 
 
-    // Menu: Appearance
+    //
+    // Menus: Appearance
+
+    auto *menuToolButtonStyle = new QMenu(tr("Tool Button Style"), this);
+    menuToolButtonStyle->setObjectName(QStringLiteral("menuToolButtonStyle"));
+    menuToolButtonStyle->addActions(m_actionsToolButtonStyle->actions());
+
     auto *menuAppearance = menuBar()->addMenu(tr("Appearance"));
     menuAppearance->setObjectName(QStringLiteral("menuAppearance"));
+    menuAppearance->addAction(m_actionToolbarApplication);
+    menuAppearance->addAction(m_actionToolbarDocument);
+    menuAppearance->addAction(m_actionToolbarEdit);
+    menuAppearance->addAction(m_actionToolbarTools);
+    menuAppearance->addAction(m_actionToolbarFormats);
+    menuAppearance->addAction(m_actionToolbarView);
+    menuAppearance->addAction(m_actionToolbarAppearance);
+    menuAppearance->addAction(m_actionToolbarHelp);
+    menuAppearance->addMenu(menuToolButtonStyle);
+
 
     // Menu: Help
     auto *menuHelp = menuBar()->addMenu(tr("Help"));
@@ -385,5 +388,11 @@ void Window::onActionsToolButtonStyleTriggered(const QAction *actionToolButtonSt
     const auto style = static_cast<Qt::ToolButtonStyle>(actionToolButtonStyle->data().toInt());
 
     m_toolbarApplication->setToolButtonStyle(style);
+    m_toolbarDocument->setToolButtonStyle(style);
+    m_toolbarEdit->setToolButtonStyle(style);
+    m_toolbarTools->setToolButtonStyle(style);
+    m_toolbarFormats->setToolButtonStyle(style);
     m_toolbarView->setToolButtonStyle(style);
+    m_toolbarAppearance->setToolButtonStyle(style);
+    m_toolbarHelp->setToolButtonStyle(style);
 }
