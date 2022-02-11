@@ -190,6 +190,12 @@ void Window::createActions()
     m_actionToolbarAppearance->setToolTip(tr("Display the Appearance toolbar"));
     connect(m_actionToolbarAppearance, &QAction::toggled, [=] (const bool checked) { m_toolbarAppearance->setVisible(checked); });
 
+    m_actionToolbarHelp = new QAction(tr("Show Help Toolbar"), this);
+    m_actionToolbarHelp->setObjectName(QStringLiteral("actionToolbarHelp"));
+    m_actionToolbarHelp->setCheckable(true);
+    m_actionToolbarHelp->setToolTip(tr("Display the Help toolbar"));
+    connect(m_actionToolbarHelp, &QAction::toggled, [=] (const bool checked) { m_toolbarHelp->setVisible(checked); });
+
     m_actionStatusbar = new QAction(tr("Show Status Bar"), this);
     m_actionStatusbar->setObjectName(QStringLiteral("actionStatusbar"));
     m_actionStatusbar->setCheckable(true);
@@ -279,6 +285,7 @@ void Window::createMenuBar()
     menuToolbars->addAction(m_actionToolbarFormats);
     menuToolbars->addAction(m_actionToolbarView);
     menuToolbars->addAction(m_actionToolbarAppearance);
+    menuToolbars->addAction(m_actionToolbarHelp);
     menuToolbars->addSection(tr("Tool Button Style"));
     menuToolbars->addActions(m_actionsToolButtonStyle->actions());
 
@@ -348,6 +355,7 @@ void Window::createToolBars()
     // Toolbar: Help
     m_toolbarHelp = addToolBar(tr("Help"));
     m_toolbarHelp->setObjectName(QStringLiteral("toolbarHelp"));
+    connect(m_toolbarHelp, &QToolBar::visibilityChanged, [=] (const bool visible) { m_actionToolbarHelp->setChecked(visible); });
 }
 
 
