@@ -183,6 +183,12 @@ void Window::createActions()
     m_actionToolbarView->setToolTip(tr("Display the View toolbar"));
     connect(m_actionToolbarView, &QAction::toggled, [=] (const bool checked) { m_toolbarView->setVisible(checked); });
 
+    m_actionToolbarAppearance = new QAction(tr("Show Appearance Toolbar"), this);
+    m_actionToolbarAppearance->setObjectName(QStringLiteral("actionToolbarAppearance"));
+    m_actionToolbarAppearance->setCheckable(true);
+    m_actionToolbarAppearance->setToolTip(tr("Display the Appearance toolbar"));
+    connect(m_actionToolbarAppearance, &QAction::toggled, [=] (const bool checked) { m_toolbarAppearance->setVisible(checked); });
+
     m_actionStatusbar = new QAction(tr("Show Status Bar"), this);
     m_actionStatusbar->setObjectName(QStringLiteral("actionStatusbar"));
     m_actionStatusbar->setCheckable(true);
@@ -271,6 +277,7 @@ void Window::createMenuBar()
     menuToolbars->addAction(m_actionToolbarTools);
     menuToolbars->addAction(m_actionToolbarFormats);
     menuToolbars->addAction(m_actionToolbarView);
+    menuToolbars->addAction(m_actionToolbarAppearance);
     menuToolbars->addSection(tr("Tool Button Style"));
     menuToolbars->addActions(m_actionsToolButtonStyle->actions());
 
@@ -331,6 +338,7 @@ void Window::createToolBars()
     // Toolbar: Appearance
     m_toolbarAppearance = addToolBar(tr("Appearance"));
     m_toolbarAppearance->setObjectName(QStringLiteral("toolbarAppearance"));
+    connect(m_toolbarAppearance, &QToolBar::visibilityChanged, [=] (const bool visible) { m_actionToolbarAppearance->setChecked(visible); });
 }
 
 
