@@ -86,6 +86,7 @@ void Window::loadSettings()
         m_toolbarDocument->setVisible(true);
         m_toolbarEdit->setVisible(true);
         m_toolbarTools->setVisible(true);
+        m_toolbarFormats->setVisible(true);
         m_toolbarView->setVisible(false);
     }
 
@@ -303,6 +304,10 @@ void Window::createToolBars()
     m_toolbarTools = addToolBar(tr("Tools"));
     m_toolbarTools->setObjectName(QStringLiteral("toolbarTools"));
     connect(m_toolbarTools, &QToolBar::visibilityChanged, [=] (const bool visible) { m_actionToolbarTools->setChecked(visible); });
+
+    // Toolbar: Formats
+    m_toolbarFormats = addToolBar(tr("Formats"));
+    m_toolbarFormats->setObjectName(QStringLiteral("toolbarFormats"));
 
     // Toolbar: View
     m_toolbarView = addToolBar(tr("View"));
