@@ -52,6 +52,7 @@ private:
     QAction *m_actionQuit;
 
     QAction *m_actionToolbarApplication;
+    QAction *m_actionToolbarDocument;
     QAction *m_actionToolbarView;
     QActionGroup *m_actionsToolButtonStyle;
     QAction *m_actionStatusbar;
