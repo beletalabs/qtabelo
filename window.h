@@ -61,6 +61,7 @@ private:
 
     QToolBar *m_toolbarApplication;
     QToolBar *m_toolbarDocument;
+    QToolBar *m_toolbarEdit;
     QToolBar *m_toolbarView;
 
     void createActions();
