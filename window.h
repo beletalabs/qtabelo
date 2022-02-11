@@ -55,8 +55,8 @@ private:
     QAction *m_actionToolbarDocument;
     QAction *m_actionToolbarEdit;
     QAction *m_actionToolbarView;
+    QAction *m_actionToolbarFormat;
     QAction *m_actionToolbarTools;
-    QAction *m_actionToolbarFormats;
     QAction *m_actionToolbarAppearance;
     QAction *m_actionToolbarHelp;
     QActionGroup *m_actionsToolButtonStyle;
@@ -68,8 +68,8 @@ private:
     QToolBar *m_toolbarDocument;
     QToolBar *m_toolbarEdit;
     QToolBar *m_toolbarView;
+    QToolBar *m_toolbarFormat;
     QToolBar *m_toolbarTools;
-    QToolBar *m_toolbarFormats;
     QToolBar *m_toolbarAppearance;
     QToolBar *m_toolbarHelp;
 

@@ -86,8 +86,8 @@ void Window::loadSettings()
         m_toolbarDocument->setVisible(true);
         m_toolbarEdit->setVisible(true);
         m_toolbarView->setVisible(true);
+        m_toolbarFormat->setVisible(true);
         m_toolbarTools->setVisible(true);
-        m_toolbarFormats->setVisible(true);
         m_toolbarAppearance->setVisible(false);
         m_toolbarHelp->setVisible(false);
     }
@@ -172,17 +172,17 @@ void Window::createActions()
     m_actionToolbarView->setToolTip(tr("Display the View toolbar"));
     connect(m_actionToolbarView, &QAction::toggled, [=] (const bool checked) { m_toolbarView->setVisible(checked); });
 
+    m_actionToolbarFormat = new QAction(tr("Show Format Toolbar"), this);
+    m_actionToolbarFormat->setObjectName(QStringLiteral("actionToolbarFormat"));
+    m_actionToolbarFormat->setCheckable(true);
+    m_actionToolbarFormat->setToolTip(tr("Display the Format toolbar"));
+    connect(m_actionToolbarFormat, &QAction::toggled, [=] (const bool checked) { m_toolbarFormat->setVisible(checked); });
+
     m_actionToolbarTools = new QAction(tr("Show Tools Toolbar"), this);
     m_actionToolbarTools->setObjectName(QStringLiteral("actionToolbarTools"));
     m_actionToolbarTools->setCheckable(true);
     m_actionToolbarTools->setToolTip(tr("Display the Tools toolbar"));
     connect(m_actionToolbarTools, &QAction::toggled, [=] (const bool checked) { m_toolbarTools->setVisible(checked); });
-
-    m_actionToolbarFormats = new QAction(tr("Show Formats Toolbar"), this);
-    m_actionToolbarFormats->setObjectName(QStringLiteral("actionToolbarFormats"));
-    m_actionToolbarFormats->setCheckable(true);
-    m_actionToolbarFormats->setToolTip(tr("Display the Formats toolbar"));
-    connect(m_actionToolbarFormats, &QAction::toggled, [=] (const bool checked) { m_toolbarFormats->setVisible(checked); });
 
     m_actionToolbarAppearance = new QAction(tr("Show Appearance Toolbar"), this);
     m_actionToolbarAppearance->setObjectName(QStringLiteral("actionToolbarAppearance"));
@@ -268,13 +268,13 @@ void Window::createMenuBar()
     auto *menuView = menuBar()->addMenu(tr("View"));
     menuView->setObjectName(QStringLiteral("menuView"));
 
+    // Menu: Format
+    auto *menuFormat = menuBar()->addMenu(tr("Format"));
+    menuFormat->setObjectName(QStringLiteral("menuFormat"));
+
     // Menu: Tools
     auto *menuTools = menuBar()->addMenu(tr("Tools"));
     menuTools->setObjectName(QStringLiteral("menuTools"));
-
-    // Menu: Formats
-    auto *menuFormats = menuBar()->addMenu(tr("Formats"));
-    menuFormats->setObjectName(QStringLiteral("menuFormats"));
 
 
     //
@@ -290,8 +290,8 @@ void Window::createMenuBar()
     menuAppearance->addAction(m_actionToolbarDocument);
     menuAppearance->addAction(m_actionToolbarEdit);
     menuAppearance->addAction(m_actionToolbarView);
+    menuAppearance->addAction(m_actionToolbarFormat);
     menuAppearance->addAction(m_actionToolbarTools);
-    menuAppearance->addAction(m_actionToolbarFormats);
     menuAppearance->addAction(m_actionToolbarAppearance);
     menuAppearance->addAction(m_actionToolbarHelp);
     menuAppearance->addMenu(menuToolButtonStyle);
@@ -337,15 +337,15 @@ void Window::createToolBars()
     m_toolbarView->setObjectName(QStringLiteral("toolbarView"));
     connect(m_toolbarView, &QToolBar::visibilityChanged, [=] (const bool visible) { m_actionToolbarView->setChecked(visible); });
 
+    // Toolbar: Format
+    m_toolbarFormat = addToolBar(tr("Format"));
+    m_toolbarFormat->setObjectName(QStringLiteral("toolbarFormat"));
+    connect(m_toolbarFormat, &QToolBar::visibilityChanged, [=] (const bool visible) { m_actionToolbarFormat->setChecked(visible); });
+
     // Toolbar: Tools
     m_toolbarTools = addToolBar(tr("Tools"));
     m_toolbarTools->setObjectName(QStringLiteral("toolbarTools"));
     connect(m_toolbarTools, &QToolBar::visibilityChanged, [=] (const bool visible) { m_actionToolbarTools->setChecked(visible); });
-
-    // Toolbar: Formats
-    m_toolbarFormats = addToolBar(tr("Formats"));
-    m_toolbarFormats->setObjectName(QStringLiteral("toolbarFormats"));
-    connect(m_toolbarFormats, &QToolBar::visibilityChanged, [=] (const bool visible) { m_actionToolbarFormats->setChecked(visible); });
 
     // Toolbar: Appearance
     m_toolbarAppearance = addToolBar(tr("Appearance"));
@@ -388,8 +388,8 @@ void Window::onActionsToolButtonStyleTriggered(const QAction *actionToolButtonSt
     m_toolbarDocument->setToolButtonStyle(style);
     m_toolbarEdit->setToolButtonStyle(style);
     m_toolbarView->setToolButtonStyle(style);
+    m_toolbarFormat->setToolButtonStyle(style);
     m_toolbarTools->setToolButtonStyle(style);
-    m_toolbarFormats->setToolButtonStyle(style);
     m_toolbarAppearance->setToolButtonStyle(style);
     m_toolbarHelp->setToolButtonStyle(style);
 }
