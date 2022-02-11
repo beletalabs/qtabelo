@@ -68,6 +68,7 @@ private:
     QToolBar *m_toolbarTools;
     QToolBar *m_toolbarFormats;
     QToolBar *m_toolbarView;
+    QToolBar *m_toolbarAppearance;
 
     void createActions();
     void createMenuBar();
