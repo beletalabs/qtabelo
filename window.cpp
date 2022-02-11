@@ -83,6 +83,7 @@ void Window::loadSettings()
     else {
         // Default: Show/hide toolbars
         m_toolbarApplication->setVisible(true);
+        m_toolbarDocument->setVisible(true);
         m_toolbarView->setVisible(false);
     }
 
@@ -252,6 +253,10 @@ void Window::createToolBars()
     m_toolbarApplication->addSeparator();
     m_toolbarApplication->addAction(m_actionQuit);
     connect(m_toolbarApplication, &QToolBar::visibilityChanged, [=] (const bool visible) { m_actionToolbarApplication->setChecked(visible); });
+
+    // Toolbar: Document
+    m_toolbarDocument = addToolBar(tr("Document"));
+    m_toolbarDocument->setObjectName(QStringLiteral("m_toolbarDocument"));
 
     // Toolbar: View
     m_toolbarView = addToolBar(tr("View"));

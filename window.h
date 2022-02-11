@@ -59,6 +59,7 @@ private:
     QStatusBar *m_statusbar;
 
     QToolBar *m_toolbarApplication;
+    QToolBar *m_toolbarDocument;
     QToolBar *m_toolbarView;
 
     void createActions();
