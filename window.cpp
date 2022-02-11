@@ -146,16 +146,6 @@ void Window::createActions()
 
 
     //
-    // Actions: View
-
-    m_actionStatusbar = new QAction(tr("Show Status Bar"), this);
-    m_actionStatusbar->setObjectName(QStringLiteral("actionStatusbar"));
-    m_actionStatusbar->setCheckable(true);
-    m_actionStatusbar->setToolTip(tr("Display the Status bar"));
-    connect(m_actionStatusbar, &QAction::toggled, [=] (const bool checked) { m_statusbar->setVisible(checked); });
-
-
-    //
     // Actions: Appearance
 
     m_actionToolbarApplication = new QAction(tr("Show Application Toolbar"), this);
@@ -205,6 +195,12 @@ void Window::createActions()
     m_actionToolbarHelp->setCheckable(true);
     m_actionToolbarHelp->setToolTip(tr("Display the Help toolbar"));
     connect(m_actionToolbarHelp, &QAction::toggled, [=] (const bool checked) { m_toolbarHelp->setVisible(checked); });
+
+    m_actionStatusbar = new QAction(tr("Show Status Bar"), this);
+    m_actionStatusbar->setObjectName(QStringLiteral("actionStatusbar"));
+    m_actionStatusbar->setCheckable(true);
+    m_actionStatusbar->setToolTip(tr("Display the Status bar"));
+    connect(m_actionStatusbar, &QAction::toggled, [=] (const bool checked) { m_statusbar->setVisible(checked); });
 
 
     //
@@ -279,7 +275,6 @@ void Window::createMenuBar()
     // Menu: View
     auto *menuView = menuBar()->addMenu(tr("View"));
     menuView->setObjectName(QStringLiteral("menuView"));
-    menuView->addAction(m_actionStatusbar);
 
 
     //
@@ -300,6 +295,8 @@ void Window::createMenuBar()
     menuAppearance->addAction(m_actionToolbarAppearance);
     menuAppearance->addAction(m_actionToolbarHelp);
     menuAppearance->addMenu(menuToolButtonStyle);
+    menuAppearance->addSeparator();
+    menuAppearance->addAction(m_actionStatusbar);
 
 
     // Menu: Help
