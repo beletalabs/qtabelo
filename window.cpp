@@ -89,6 +89,7 @@ void Window::loadSettings()
         m_toolbarFormats->setVisible(true);
         m_toolbarView->setVisible(false);
         m_toolbarAppearance->setVisible(false);
+        m_toolbarHelp->setVisible(false);
     }
 
     // Application property: Status Bar
@@ -343,6 +344,10 @@ void Window::createToolBars()
     m_toolbarAppearance = addToolBar(tr("Appearance"));
     m_toolbarAppearance->setObjectName(QStringLiteral("toolbarAppearance"));
     connect(m_toolbarAppearance, &QToolBar::visibilityChanged, [=] (const bool visible) { m_actionToolbarAppearance->setChecked(visible); });
+
+    // Toolbar: Help
+    m_toolbarHelp = addToolBar(tr("Help"));
+    m_toolbarHelp->setObjectName(QStringLiteral("toolbarHelp"));
 }
 
 
