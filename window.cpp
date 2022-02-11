@@ -236,6 +236,10 @@ void Window::createMenuBar()
     auto *menuEdit = menuBar()->addMenu(tr("Edit"));
     menuEdit->setObjectName(QStringLiteral("menuEdit"));
 
+    // Menu: Tools
+    auto *menuTools = menuBar()->addMenu(tr("Tools"));
+    menuTools->setObjectName(QStringLiteral("menuTools"));
+
 
     //
     // Menus: View
