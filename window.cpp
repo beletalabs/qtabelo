@@ -277,6 +277,11 @@ void Window::createMenuBar()
     menuView->setObjectName(QStringLiteral("menuView"));
     menuView->addMenu(menuToolbars);
     menuView->addAction(m_actionStatusbar);
+
+
+    // Menu: Appearance
+    auto *menuAppearance = menuBar()->addMenu(tr("Appearance"));
+    menuAppearance->setObjectName(QStringLiteral("menuAppearance"));
 }
 
 
