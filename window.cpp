@@ -214,6 +214,10 @@ void Window::createMenuBar()
     menuApplication->addSeparator();
     menuApplication->addAction(m_actionQuit);
 
+    // Menu: Document
+    auto *menuDocument = menuBar()->addMenu(tr("Document"));
+    menuDocument->setObjectName(QStringLiteral("menuDocument"));
+
 
     //
     // Menus: View
