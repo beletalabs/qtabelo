@@ -290,6 +290,10 @@ void Window::createMenuBar()
     // Menu: Appearance
     auto *menuAppearance = menuBar()->addMenu(tr("Appearance"));
     menuAppearance->setObjectName(QStringLiteral("menuAppearance"));
+
+    // Menu: Help
+    auto *menuHelp = menuBar()->addMenu(tr("Help"));
+    menuHelp->setObjectName(QStringLiteral("menuHelp"));
 }
 
 
