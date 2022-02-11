@@ -324,7 +324,7 @@ void Window::createToolBars()
 
     // Toolbar: Document
     m_toolbarDocument = addToolBar(tr("Document"));
-    m_toolbarDocument->setObjectName(QStringLiteral("m_toolbarDocument"));
+    m_toolbarDocument->setObjectName(QStringLiteral("toolbarDocument"));
     connect(m_toolbarDocument, &QToolBar::visibilityChanged, [=] (const bool visible) { m_actionToolbarDocument->setChecked(visible); });
 
     // Toolbar: Edit

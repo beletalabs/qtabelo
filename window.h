@@ -39,11 +39,6 @@ public:
 protected:
     void closeEvent(QCloseEvent *event) override;
 
-private slots:
-    void onActionAboutTriggered();
-
-    void onActionsToolButtonStyleTriggered(const QAction *actionToolButtonStyle);
-
 private:
     void loadSettings();
     void saveSettings();
@@ -62,7 +57,13 @@ private:
     QActionGroup *m_actionsToolButtonStyle;
     QAction *m_actionStatusbar;
 
+    void createActions();
+
+    void createMenuBar();
+
     QStatusBar *m_statusbar;
+
+    void createStatusBar();
 
     QToolBar *m_toolbarApplication;
     QToolBar *m_toolbarDocument;
@@ -73,12 +74,14 @@ private:
     QToolBar *m_toolbarAppearance;
     QToolBar *m_toolbarHelp;
 
-    void createActions();
-    void createMenuBar();
-    void createStatusBar();
     void createToolBars();
 
     void updateActionsToolButtonStyle(const Qt::ToolButtonStyle toolButtonStyle);
+
+private slots:
+    void onActionAboutTriggered();
+
+    void onActionsToolButtonStyleTriggered(const QAction *actionToolButtonStyle);
 };
 
 #endif // WINDOW_H
