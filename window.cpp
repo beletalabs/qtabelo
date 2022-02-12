@@ -315,7 +315,7 @@ void Window::createStatusBar()
 void Window::createToolBars()
 {
     // Toolbar: Application
-    m_toolbarApplication = addToolBar(tr("Application"));
+    m_toolbarApplication = addToolBar(tr("Application Toolbar"));
     m_toolbarApplication->setObjectName(QStringLiteral("toolbarApplication"));
     m_toolbarApplication->addAction(m_actionAbout);
     m_toolbarApplication->addSeparator();
@@ -323,37 +323,37 @@ void Window::createToolBars()
     connect(m_toolbarApplication, &QToolBar::visibilityChanged, this, [=] (const bool visible) { m_actionToolbarApplication->setChecked(visible); });
 
     // Toolbar: File
-    m_toolbarFile = addToolBar(tr("File"));
+    m_toolbarFile = addToolBar(tr("File Toolbar"));
     m_toolbarFile->setObjectName(QStringLiteral("toolbarFile"));
     connect(m_toolbarFile, &QToolBar::visibilityChanged, this, [=] (const bool visible) { m_actionToolbarFile->setChecked(visible); });
 
     // Toolbar: Edit
-    m_toolbarEdit = addToolBar(tr("Edit"));
+    m_toolbarEdit = addToolBar(tr("Edit Toolbar"));
     m_toolbarEdit->setObjectName(QStringLiteral("toolbarEdit"));
     connect(m_toolbarEdit, &QToolBar::visibilityChanged, this, [=] (const bool visible) { m_actionToolbarEdit->setChecked(visible); });
 
     // Toolbar: View
-    m_toolbarView = addToolBar(tr("View"));
+    m_toolbarView = addToolBar(tr("View Toolbar"));
     m_toolbarView->setObjectName(QStringLiteral("toolbarView"));
     connect(m_toolbarView, &QToolBar::visibilityChanged, this, [=] (const bool visible) { m_actionToolbarView->setChecked(visible); });
 
     // Toolbar: Format
-    m_toolbarFormat = addToolBar(tr("Format"));
+    m_toolbarFormat = addToolBar(tr("Format Toolbar"));
     m_toolbarFormat->setObjectName(QStringLiteral("toolbarFormat"));
     connect(m_toolbarFormat, &QToolBar::visibilityChanged, this, [=] (const bool visible) { m_actionToolbarFormat->setChecked(visible); });
 
     // Toolbar: Tools
-    m_toolbarTools = addToolBar(tr("Tools"));
+    m_toolbarTools = addToolBar(tr("Tools Toolbar"));
     m_toolbarTools->setObjectName(QStringLiteral("toolbarTools"));
     connect(m_toolbarTools, &QToolBar::visibilityChanged, this, [=] (const bool visible) { m_actionToolbarTools->setChecked(visible); });
 
     // Toolbar: Appearance
-    m_toolbarAppearance = addToolBar(tr("Appearance"));
+    m_toolbarAppearance = addToolBar(tr("Appearance Toolbar"));
     m_toolbarAppearance->setObjectName(QStringLiteral("toolbarAppearance"));
     connect(m_toolbarAppearance, &QToolBar::visibilityChanged, this, [=] (const bool visible) { m_actionToolbarAppearance->setChecked(visible); });
 
     // Toolbar: Help
-    m_toolbarHelp = addToolBar(tr("Help"));
+    m_toolbarHelp = addToolBar(tr("Help Toolbar"));
     m_toolbarHelp->setObjectName(QStringLiteral("toolbarHelp"));
     connect(m_toolbarHelp, &QToolBar::visibilityChanged, this, [=] (const bool visible) { m_actionToolbarHelp->setChecked(visible); });
 }
