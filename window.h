@@ -47,7 +47,7 @@ private:
     QAction *m_actionQuit;
 
     QAction *m_actionToolbarApplication;
-    QAction *m_actionToolbarDocument;
+    QAction *m_actionToolbarFile;
     QAction *m_actionToolbarEdit;
     QAction *m_actionToolbarView;
     QAction *m_actionToolbarFormat;
@@ -66,7 +66,7 @@ private:
     void createStatusBar();
 
     QToolBar *m_toolbarApplication;
-    QToolBar *m_toolbarDocument;
+    QToolBar *m_toolbarFile;
     QToolBar *m_toolbarEdit;
     QToolBar *m_toolbarView;
     QToolBar *m_toolbarFormat;

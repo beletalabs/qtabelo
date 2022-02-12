@@ -83,7 +83,7 @@ void Window::loadSettings()
     else {
         // Default: Show/hide toolbars
         m_toolbarApplication->setVisible(true);
-        m_toolbarDocument->setVisible(true);
+        m_toolbarFile->setVisible(true);
         m_toolbarEdit->setVisible(true);
         m_toolbarView->setVisible(true);
         m_toolbarFormat->setVisible(true);
@@ -154,11 +154,11 @@ void Window::createActions()
     m_actionToolbarApplication->setToolTip(tr("Display the Application toolbar"));
     connect(m_actionToolbarApplication, &QAction::toggled, [=] (const bool checked) { m_toolbarApplication->setVisible(checked); });
 
-    m_actionToolbarDocument = new QAction(tr("Show Document Toolbar"), this);
-    m_actionToolbarDocument->setObjectName(QStringLiteral("actionToolbarDocument"));
-    m_actionToolbarDocument->setCheckable(true);
-    m_actionToolbarDocument->setToolTip(tr("Display the Document toolbar"));
-    connect(m_actionToolbarDocument, &QAction::toggled, [=] (const bool checked) { m_toolbarDocument->setVisible(checked); });
+    m_actionToolbarFile = new QAction(tr("Show File Toolbar"), this);
+    m_actionToolbarFile->setObjectName(QStringLiteral("actionToolbarFile"));
+    m_actionToolbarFile->setCheckable(true);
+    m_actionToolbarFile->setToolTip(tr("Display the File toolbar"));
+    connect(m_actionToolbarFile, &QAction::toggled, [=] (const bool checked) { m_toolbarFile->setVisible(checked); });
 
     m_actionToolbarEdit = new QAction(tr("Show Edit Toolbar"), this);
     m_actionToolbarEdit->setObjectName(QStringLiteral("actionToolbarEdit"));
@@ -256,9 +256,9 @@ void Window::createMenuBar()
     menuApplication->addSeparator();
     menuApplication->addAction(m_actionQuit);
 
-    // Menu: Document
-    auto *menuDocument = menuBar()->addMenu(tr("Document"));
-    menuDocument->setObjectName(QStringLiteral("menuDocument"));
+    // Menu: File
+    auto *menuFile = menuBar()->addMenu(tr("File"));
+    menuFile->setObjectName(QStringLiteral("menuFile"));
 
     // Menu: Edit
     auto *menuEdit = menuBar()->addMenu(tr("Edit"));
@@ -287,7 +287,7 @@ void Window::createMenuBar()
     auto *menuAppearance = menuBar()->addMenu(tr("Appearance"));
     menuAppearance->setObjectName(QStringLiteral("menuAppearance"));
     menuAppearance->addAction(m_actionToolbarApplication);
-    menuAppearance->addAction(m_actionToolbarDocument);
+    menuAppearance->addAction(m_actionToolbarFile);
     menuAppearance->addAction(m_actionToolbarEdit);
     menuAppearance->addAction(m_actionToolbarView);
     menuAppearance->addAction(m_actionToolbarFormat);
@@ -322,10 +322,10 @@ void Window::createToolBars()
     m_toolbarApplication->addAction(m_actionQuit);
     connect(m_toolbarApplication, &QToolBar::visibilityChanged, [=] (const bool visible) { m_actionToolbarApplication->setChecked(visible); });
 
-    // Toolbar: Document
-    m_toolbarDocument = addToolBar(tr("Document"));
-    m_toolbarDocument->setObjectName(QStringLiteral("toolbarDocument"));
-    connect(m_toolbarDocument, &QToolBar::visibilityChanged, [=] (const bool visible) { m_actionToolbarDocument->setChecked(visible); });
+    // Toolbar: File
+    m_toolbarFile = addToolBar(tr("File"));
+    m_toolbarFile->setObjectName(QStringLiteral("toolbarFile"));
+    connect(m_toolbarFile, &QToolBar::visibilityChanged, [=] (const bool visible) { m_actionToolbarFile->setChecked(visible); });
 
     // Toolbar: Edit
     m_toolbarEdit = addToolBar(tr("Edit"));
@@ -385,7 +385,7 @@ void Window::onActionsToolButtonStyleTriggered(const QAction *actionToolButtonSt
     const auto style = static_cast<Qt::ToolButtonStyle>(actionToolButtonStyle->data().toInt());
 
     m_toolbarApplication->setToolButtonStyle(style);
-    m_toolbarDocument->setToolButtonStyle(style);
+    m_toolbarFile->setToolButtonStyle(style);
     m_toolbarEdit->setToolButtonStyle(style);
     m_toolbarView->setToolButtonStyle(style);
     m_toolbarFormat->setToolButtonStyle(style);
