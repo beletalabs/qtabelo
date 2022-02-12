@@ -152,55 +152,55 @@ void Window::createActions()
     m_actionToolbarApplication->setObjectName(QStringLiteral("actionToolbarApplication"));
     m_actionToolbarApplication->setCheckable(true);
     m_actionToolbarApplication->setToolTip(tr("Display the Application toolbar"));
-    connect(m_actionToolbarApplication, &QAction::toggled, [=] (const bool checked) { m_toolbarApplication->setVisible(checked); });
+    connect(m_actionToolbarApplication, &QAction::toggled, this, [=] (const bool checked) { m_toolbarApplication->setVisible(checked); });
 
     m_actionToolbarFile = new QAction(tr("Show File Toolbar"), this);
     m_actionToolbarFile->setObjectName(QStringLiteral("actionToolbarFile"));
     m_actionToolbarFile->setCheckable(true);
     m_actionToolbarFile->setToolTip(tr("Display the File toolbar"));
-    connect(m_actionToolbarFile, &QAction::toggled, [=] (const bool checked) { m_toolbarFile->setVisible(checked); });
+    connect(m_actionToolbarFile, &QAction::toggled, this, [=] (const bool checked) { m_toolbarFile->setVisible(checked); });
 
     m_actionToolbarEdit = new QAction(tr("Show Edit Toolbar"), this);
     m_actionToolbarEdit->setObjectName(QStringLiteral("actionToolbarEdit"));
     m_actionToolbarEdit->setCheckable(true);
     m_actionToolbarEdit->setToolTip(tr("Display the Edit toolbar"));
-    connect(m_actionToolbarEdit, &QAction::toggled, [=] (const bool checked) { m_toolbarEdit->setVisible(checked); });
+    connect(m_actionToolbarEdit, &QAction::toggled, this, [=] (const bool checked) { m_toolbarEdit->setVisible(checked); });
 
     m_actionToolbarView = new QAction(tr("Show View Toolbar"), this);
     m_actionToolbarView->setObjectName(QStringLiteral("actionToolbarView"));
     m_actionToolbarView->setCheckable(true);
     m_actionToolbarView->setToolTip(tr("Display the View toolbar"));
-    connect(m_actionToolbarView, &QAction::toggled, [=] (const bool checked) { m_toolbarView->setVisible(checked); });
+    connect(m_actionToolbarView, &QAction::toggled, this, [=] (const bool checked) { m_toolbarView->setVisible(checked); });
 
     m_actionToolbarFormat = new QAction(tr("Show Format Toolbar"), this);
     m_actionToolbarFormat->setObjectName(QStringLiteral("actionToolbarFormat"));
     m_actionToolbarFormat->setCheckable(true);
     m_actionToolbarFormat->setToolTip(tr("Display the Format toolbar"));
-    connect(m_actionToolbarFormat, &QAction::toggled, [=] (const bool checked) { m_toolbarFormat->setVisible(checked); });
+    connect(m_actionToolbarFormat, &QAction::toggled, this, [=] (const bool checked) { m_toolbarFormat->setVisible(checked); });
 
     m_actionToolbarTools = new QAction(tr("Show Tools Toolbar"), this);
     m_actionToolbarTools->setObjectName(QStringLiteral("actionToolbarTools"));
     m_actionToolbarTools->setCheckable(true);
     m_actionToolbarTools->setToolTip(tr("Display the Tools toolbar"));
-    connect(m_actionToolbarTools, &QAction::toggled, [=] (const bool checked) { m_toolbarTools->setVisible(checked); });
+    connect(m_actionToolbarTools, &QAction::toggled, this, [=] (const bool checked) { m_toolbarTools->setVisible(checked); });
 
     m_actionToolbarAppearance = new QAction(tr("Show Appearance Toolbar"), this);
     m_actionToolbarAppearance->setObjectName(QStringLiteral("actionToolbarAppearance"));
     m_actionToolbarAppearance->setCheckable(true);
     m_actionToolbarAppearance->setToolTip(tr("Display the Appearance toolbar"));
-    connect(m_actionToolbarAppearance, &QAction::toggled, [=] (const bool checked) { m_toolbarAppearance->setVisible(checked); });
+    connect(m_actionToolbarAppearance, &QAction::toggled, this, [=] (const bool checked) { m_toolbarAppearance->setVisible(checked); });
 
     m_actionToolbarHelp = new QAction(tr("Show Help Toolbar"), this);
     m_actionToolbarHelp->setObjectName(QStringLiteral("actionToolbarHelp"));
     m_actionToolbarHelp->setCheckable(true);
     m_actionToolbarHelp->setToolTip(tr("Display the Help toolbar"));
-    connect(m_actionToolbarHelp, &QAction::toggled, [=] (const bool checked) { m_toolbarHelp->setVisible(checked); });
+    connect(m_actionToolbarHelp, &QAction::toggled, this, [=] (const bool checked) { m_toolbarHelp->setVisible(checked); });
 
     m_actionStatusbar = new QAction(tr("Show Status Bar"), this);
     m_actionStatusbar->setObjectName(QStringLiteral("actionStatusbar"));
     m_actionStatusbar->setCheckable(true);
     m_actionStatusbar->setToolTip(tr("Display the Status bar"));
-    connect(m_actionStatusbar, &QAction::toggled, [=] (const bool checked) { m_statusbar->setVisible(checked); });
+    connect(m_actionStatusbar, &QAction::toggled, this, [=] (const bool checked) { m_statusbar->setVisible(checked); });
 
 
     //
@@ -320,42 +320,42 @@ void Window::createToolBars()
     m_toolbarApplication->addAction(m_actionAbout);
     m_toolbarApplication->addSeparator();
     m_toolbarApplication->addAction(m_actionQuit);
-    connect(m_toolbarApplication, &QToolBar::visibilityChanged, [=] (const bool visible) { m_actionToolbarApplication->setChecked(visible); });
+    connect(m_toolbarApplication, &QToolBar::visibilityChanged, this, [=] (const bool visible) { m_actionToolbarApplication->setChecked(visible); });
 
     // Toolbar: File
     m_toolbarFile = addToolBar(tr("File"));
     m_toolbarFile->setObjectName(QStringLiteral("toolbarFile"));
-    connect(m_toolbarFile, &QToolBar::visibilityChanged, [=] (const bool visible) { m_actionToolbarFile->setChecked(visible); });
+    connect(m_toolbarFile, &QToolBar::visibilityChanged, this, [=] (const bool visible) { m_actionToolbarFile->setChecked(visible); });
 
     // Toolbar: Edit
     m_toolbarEdit = addToolBar(tr("Edit"));
     m_toolbarEdit->setObjectName(QStringLiteral("toolbarEdit"));
-    connect(m_toolbarEdit, &QToolBar::visibilityChanged, [=] (const bool visible) { m_actionToolbarEdit->setChecked(visible); });
+    connect(m_toolbarEdit, &QToolBar::visibilityChanged, this, [=] (const bool visible) { m_actionToolbarEdit->setChecked(visible); });
 
     // Toolbar: View
     m_toolbarView = addToolBar(tr("View"));
     m_toolbarView->setObjectName(QStringLiteral("toolbarView"));
-    connect(m_toolbarView, &QToolBar::visibilityChanged, [=] (const bool visible) { m_actionToolbarView->setChecked(visible); });
+    connect(m_toolbarView, &QToolBar::visibilityChanged, this, [=] (const bool visible) { m_actionToolbarView->setChecked(visible); });
 
     // Toolbar: Format
     m_toolbarFormat = addToolBar(tr("Format"));
     m_toolbarFormat->setObjectName(QStringLiteral("toolbarFormat"));
-    connect(m_toolbarFormat, &QToolBar::visibilityChanged, [=] (const bool visible) { m_actionToolbarFormat->setChecked(visible); });
+    connect(m_toolbarFormat, &QToolBar::visibilityChanged, this, [=] (const bool visible) { m_actionToolbarFormat->setChecked(visible); });
 
     // Toolbar: Tools
     m_toolbarTools = addToolBar(tr("Tools"));
     m_toolbarTools->setObjectName(QStringLiteral("toolbarTools"));
-    connect(m_toolbarTools, &QToolBar::visibilityChanged, [=] (const bool visible) { m_actionToolbarTools->setChecked(visible); });
+    connect(m_toolbarTools, &QToolBar::visibilityChanged, this, [=] (const bool visible) { m_actionToolbarTools->setChecked(visible); });
 
     // Toolbar: Appearance
     m_toolbarAppearance = addToolBar(tr("Appearance"));
     m_toolbarAppearance->setObjectName(QStringLiteral("toolbarAppearance"));
-    connect(m_toolbarAppearance, &QToolBar::visibilityChanged, [=] (const bool visible) { m_actionToolbarAppearance->setChecked(visible); });
+    connect(m_toolbarAppearance, &QToolBar::visibilityChanged, this, [=] (const bool visible) { m_actionToolbarAppearance->setChecked(visible); });
 
     // Toolbar: Help
     m_toolbarHelp = addToolBar(tr("Help"));
     m_toolbarHelp->setObjectName(QStringLiteral("toolbarHelp"));
-    connect(m_toolbarHelp, &QToolBar::visibilityChanged, [=] (const bool visible) { m_actionToolbarHelp->setChecked(visible); });
+    connect(m_toolbarHelp, &QToolBar::visibilityChanged, this, [=] (const bool visible) { m_actionToolbarHelp->setChecked(visible); });
 }
 
 
