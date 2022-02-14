@@ -375,8 +375,7 @@ void Window::updateActionsToolButtonStyle(const Qt::ToolButtonStyle toolButtonSt
 void Window::onActionAboutTriggered()
 {
     auto *dialog = new AboutDialog(this);
-    dialog->setWindowModality(Qt::ApplicationModal);
-    dialog->show();
+    dialog->open();
 }
 
 
