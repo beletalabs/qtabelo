@@ -25,6 +25,7 @@
 #include <QSettings>
 
 #include "about_dialog.h"
+#include "colophon_dialog.h"
 
 
 Window::Window(QWidget *parent)
@@ -387,7 +388,8 @@ void Window::onActionAboutTriggered()
 
 void Window::onActionColophonTriggered()
 {
-
+    auto *dialog = new ColophonDialog(this);
+    dialog->open();
 }
 
 

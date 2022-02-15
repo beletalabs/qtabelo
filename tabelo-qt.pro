@@ -29,11 +29,13 @@ CONFIG += c++17
 
 SOURCES += \
     about_dialog.cpp \
+    colophon_dialog.cpp \
     main.cpp \
     window.cpp
 
 HEADERS += \
     about_dialog.h \
+    colophon_dialog.h \
     window.h
 
 RESOURCES += \
