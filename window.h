@@ -44,6 +44,7 @@ private:
     void saveSettings();
 
     QAction *m_actionAbout;
+    QAction *m_actionColophon;
     QAction *m_actionQuit;
 
     QAction *m_actionToolbarApplication;
@@ -80,6 +81,7 @@ private:
 
 private slots:
     void onActionAboutTriggered();
+    void onActionColophonTriggered();
 
     void onActionsToolButtonStyleTriggered(const QAction *actionToolButtonStyle);
 };
