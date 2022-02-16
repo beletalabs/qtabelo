@@ -70,4 +70,20 @@ public:
     QString title() const;
 };
 
+
+//
+//
+// Colophon page: License
+//
+
+class ColophonPageLicense : public QWidget
+{
+    Q_OBJECT
+
+public:
+    explicit ColophonPageLicense(QWidget *parent = nullptr);
+
+    QString title() const;
+};
+
 #endif // COLOPHON_PAGES_H

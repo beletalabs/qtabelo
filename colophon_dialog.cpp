@@ -40,11 +40,13 @@ ColophonDialog::ColophonDialog(QWidget *parent) :
     auto *pageAbout = new ColophonPageAbout;
     auto *pageAuthors = new ColophonPageAuthors;
     auto *pageCredits = new ColophonPageCredits;
+    auto *pageLicense = new ColophonPageLicense;
 
     auto *tabBox = new QTabWidget;
     tabBox->addTab(pageAbout, pageAbout->title());
     tabBox->addTab(pageAuthors, pageAuthors->title());
     tabBox->addTab(pageCredits, pageCredits->title());
+    tabBox->addTab(pageLicense, pageLicense->title());
 
 
     // Button box
