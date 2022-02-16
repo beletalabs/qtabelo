@@ -73,6 +73,22 @@ public:
 
 //
 //
+// Colophon page: Environment
+//
+
+class ColophonPageEnvironment : public QWidget
+{
+    Q_OBJECT
+
+public:
+    explicit ColophonPageEnvironment(QWidget *parent = nullptr);
+
+    QString title() const;
+};
+
+
+//
+//
 // Colophon page: License
 //
 

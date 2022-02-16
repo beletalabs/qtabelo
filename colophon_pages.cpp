@@ -124,6 +124,42 @@ QString ColophonPageCredits::title() const
 
 //
 //
+// Colophon page: Environment
+//
+
+ColophonPageEnvironment::ColophonPageEnvironment(QWidget *parent)
+    : QWidget(parent)
+{
+    QString text = QStringLiteral("<html><body><dl>");
+    text += tr("<dt><strong>Application version</strong></dt>");
+    text += tr("<dd>%1</dd>").arg(QApplication::applicationVersion());
+    text += tr("<dt><strong>Qt for C++ version</strong></dt>");
+    text += tr("<dd>Qt %1 (Built against %2)</dd>").arg(qVersion(), QT_VERSION_STR);
+    text += tr("<dt><strong>Operation System</strong></dt>");
+    text += tr("<dd>%1 (Kernel %2 on %3)</dd>").arg(QSysInfo::prettyProductName(), QSysInfo::kernelVersion(), QSysInfo::currentCpuArchitecture());
+    text += QStringLiteral("</dl></body></html>");
+
+    auto *textBox = new QTextBrowser;
+    textBox->setFrameStyle(QFrame::NoFrame);
+    textBox->setStyleSheet(QStringLiteral("background-color:transparent;"));
+    textBox->setOpenExternalLinks(true);
+    textBox->setHtml(text);
+
+    // Main layout
+    auto *mainLayout = new QVBoxLayout;
+    mainLayout->addWidget(textBox);
+    setLayout(mainLayout);
+}
+
+
+QString ColophonPageEnvironment::title() const
+{
+    return tr("Environment");
+}
+
+
+//
+//
 // Colophon page: License
 //
 
