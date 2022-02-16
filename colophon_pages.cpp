@@ -87,3 +87,36 @@ QString ColophonPageAuthors::title() const
 {
     return tr("Authors");
 }
+
+
+//
+//
+// Colophon page: Credits
+//
+
+ColophonPageCredits::ColophonPageCredits(QWidget *parent)
+    : QWidget(parent)
+{
+    QString text = QStringLiteral("<html><body><dl>");
+    text += tr("<dt><strong>BreezeIcons project</strong></dt>");
+    text += tr("<dd>Application logo and icons made by <a href=\"https://api.kde.org/frameworks/breeze-icons/html/\" title=\"Visit project's homepage\">BreezeIcons project</a> "
+               "from <a href=\"https://kde.org\" title=\"Visit organization's homepage\">KDE</a> are licensed under <a href=\"https://www.gnu.org/licenses/lgpl-3.0.en.html\" title=\"Visit license's homepage\">LGPLv3</a>.</dd>");
+    text += QStringLiteral("</dl></body></html>");
+
+    auto *textBox = new QTextBrowser;
+    textBox->setFrameStyle(QFrame::NoFrame);
+    textBox->setStyleSheet(QStringLiteral("background-color:transparent;"));
+    textBox->setOpenExternalLinks(true);
+    textBox->setHtml(text);
+
+    // Main layout
+    auto *mainLayout = new QVBoxLayout;
+    mainLayout->addWidget(textBox);
+    setLayout(mainLayout);
+}
+
+
+QString ColophonPageCredits::title() const
+{
+    return tr("Credits");
+}

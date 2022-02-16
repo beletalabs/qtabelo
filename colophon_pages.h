@@ -54,4 +54,20 @@ public:
     QString title() const;
 };
 
+
+//
+//
+// Colophon page: Credits
+//
+
+class ColophonPageCredits : public QWidget
+{
+    Q_OBJECT
+
+public:
+    explicit ColophonPageCredits(QWidget *parent = nullptr);
+
+    QString title() const;
+};
+
 #endif // COLOPHON_PAGES_H
