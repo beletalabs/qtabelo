@@ -38,9 +38,11 @@ ColophonDialog::ColophonDialog(QWidget *parent) :
     // Content
 
     auto *pageAbout = new ColophonPageAbout;
+    auto *pageAuthors = new ColophonPageAuthors;
 
     auto *tabBox = new QTabWidget;
     tabBox->addTab(pageAbout, pageAbout->title());
+    tabBox->addTab(pageAuthors, pageAuthors->title());
 
 
     // Button box

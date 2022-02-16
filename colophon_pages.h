@@ -38,4 +38,20 @@ public:
     QString title() const;
 };
 
+
+//
+//
+// Colophon page: Authors
+//
+
+class ColophonPageAuthors : public QWidget
+{
+    Q_OBJECT
+
+public:
+    explicit ColophonPageAuthors(QWidget *parent = nullptr);
+
+    QString title() const;
+};
+
 #endif // COLOPHON_PAGES_H

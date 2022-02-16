@@ -55,3 +55,35 @@ QString ColophonPageAbout::title() const
 {
     return tr("About");
 }
+
+
+//
+//
+// Colophon page: Authors
+//
+
+ColophonPageAuthors::ColophonPageAuthors(QWidget *parent)
+    : QWidget(parent)
+{
+    QString text = QStringLiteral("<html><body><dl>");
+    text += tr("<dt><strong>naracanto</strong></dt>");
+    text += tr("<dd>Created and developed by <a href=\"https://naracanto.com\" title=\"Visit author's homepage\">naracanto</a>.</dd>");
+    text += QStringLiteral("</dl></body></html>");
+
+    auto *textBox = new QTextBrowser;
+    textBox->setFrameStyle(QFrame::NoFrame);
+    textBox->setStyleSheet(QStringLiteral("background-color:transparent;"));
+    textBox->setOpenExternalLinks(true);
+    textBox->setHtml(text);
+
+    // Main layout
+    auto *mainLayout = new QVBoxLayout;
+    mainLayout->addWidget(textBox);
+    setLayout(mainLayout);
+}
+
+
+QString ColophonPageAuthors::title() const
+{
+    return tr("Authors");
+}
