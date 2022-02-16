@@ -20,7 +20,10 @@
 #include "colophon_dialog.h"
 
 #include <QDialogButtonBox>
+#include <QTabWidget>
 #include <QVBoxLayout>
+
+#include "colophon_pages.h"
 
 
 ColophonDialog::ColophonDialog(QWidget *parent) :
@@ -31,13 +34,22 @@ ColophonDialog::ColophonDialog(QWidget *parent) :
     setWindowTitle(tr("Colophon"));
 
 
+    //
+    // Content
+
+    auto *pageAbout = new ColophonPageAbout;
+
+    auto *tabBox = new QTabWidget;
+    tabBox->addTab(pageAbout, pageAbout->title());
+
+
     // Button box
     auto *buttonBox = new QDialogButtonBox(QDialogButtonBox::Close);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &ColophonDialog::close);
 
     // Main layout
     auto *layout = new QVBoxLayout(this);
-    layout->addStretch();
+    layout->addWidget(tabBox);
     layout->addWidget(buttonBox);
 }
 

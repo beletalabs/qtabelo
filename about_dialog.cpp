@@ -21,8 +21,9 @@
 
 #include <QApplication>
 #include <QDialogButtonBox>
-#include <QTextBrowser>
 #include <QVBoxLayout>
+
+#include "colophon_pages.h"
 
 
 AboutDialog::AboutDialog(QWidget *parent) :
@@ -32,22 +33,9 @@ AboutDialog::AboutDialog(QWidget *parent) :
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
     setWindowTitle(tr("About %1").arg(QApplication::applicationName()));
 
-
-    //
     // Content
-
-    QString text = QStringLiteral("<html><body>");
-    text += tr("<p>%1 is an open source table editor written in C++ using the Qt framework.</p>").arg(QApplication::applicationName());
-    text += tr("<p>Copyright &copy; 2022 <a href=\"%1\" title=\"Visit organization's homepage\">%2</a>.</p>").arg(QApplication::organizationDomain(), QApplication::organizationName());
-    text += tr("<p>This application is licensed under the terms of the <a href=\"https://www.gnu.org/licenses/gpl-3.0.en.html\" title=\"Visit license's homepage\">GNU General Public License, version 3</a>.</p>");
-    text += QStringLiteral("</body></html>");
-
-    auto *textBox = new QTextBrowser;
-    textBox->setFrameStyle(QFrame::NoFrame);
-    textBox->setStyleSheet(QStringLiteral("background-color:transparent;"));
-    textBox->setOpenExternalLinks(true);
-    textBox->setHtml(text);
-
+    auto *pageAbout = new ColophonPageAbout;
+    pageAbout->layout()->setContentsMargins(0, 0, 0, 0);
 
     // Button box
     auto *buttonBox = new QDialogButtonBox(QDialogButtonBox::Close);
@@ -55,7 +43,7 @@ AboutDialog::AboutDialog(QWidget *parent) :
 
     // Main layout
     auto *layout = new QVBoxLayout(this);
-    layout->addWidget(textBox);
+    layout->addWidget(pageAbout);
     layout->addWidget(buttonBox);
 }
 
