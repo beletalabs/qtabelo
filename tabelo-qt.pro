@@ -31,6 +31,7 @@ SOURCES += \
     about_dialog.cpp \
     colophon_dialog.cpp \
     colophon_pages.cpp \
+    dialog_header_box.cpp \
     main.cpp \
     window.cpp
 
@@ -38,6 +39,7 @@ HEADERS += \
     about_dialog.h \
     colophon_dialog.h \
     colophon_pages.h \
+    dialog_header_box.h \
     window.h
 
 RESOURCES += \

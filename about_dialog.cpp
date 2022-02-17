@@ -24,6 +24,7 @@
 #include <QVBoxLayout>
 
 #include "colophon_pages.h"
+#include "dialog_header_box.h"
 
 
 AboutDialog::AboutDialog(QWidget *parent) :
@@ -32,6 +33,9 @@ AboutDialog::AboutDialog(QWidget *parent) :
     setMinimumSize(480, 320);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
     setWindowTitle(tr("About %1").arg(QApplication::applicationName()));
+
+    // Header box
+    auto *headerBox = new DialogHeaderBox;
 
     // Content
     auto *pageAbout = new ColophonPageAbout;
@@ -43,6 +47,7 @@ AboutDialog::AboutDialog(QWidget *parent) :
 
     // Main layout
     auto *layout = new QVBoxLayout(this);
+    layout->addWidget(headerBox);
     layout->addWidget(pageAbout);
     layout->addWidget(buttonBox);
 }
