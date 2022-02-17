@@ -19,9 +19,32 @@
 
 #include "dialog_header_box.h"
 
+#include <QApplication>
+#include <QGridLayout>
+#include <QLabel>
+#include <QSvgWidget>
+
 
 DialogHeaderBox::DialogHeaderBox(QWidget *parent)
     : QWidget{parent}
 {
+    auto *logo = new QSvgWidget;
+    logo->load(QStringLiteral(":/icons/apps/22/tabelo.svg"));
 
+    auto *title = new QLabel(QStringLiteral("<strong style=\"font-size:large;\">%1</strong>").arg(QApplication::applicationName()));
+    auto *version = new QLabel(QApplication::applicationVersion());
+    auto *subtitle = new QLabel(tr("A table editor based on Qt for C++"));
+
+    // Main layout
+    auto *mainLayout = new QGridLayout;
+    mainLayout->addWidget(logo, 0, 0, 2, 1);
+    mainLayout->addWidget(title, 0, 1, 1, 1);
+    mainLayout->addWidget(version, 0, 2, 1, 1, Qt::AlignBottom);
+    mainLayout->addWidget(subtitle, 1, 1, 1, 2);
+    mainLayout->setColumnStretch(2, 1);
+    setLayout(mainLayout);
+
+    // Logo size
+    const int height = title->sizeHint().height() + mainLayout->verticalSpacing() + subtitle->sizeHint().height();
+    logo->setFixedSize(height, height);
 }

@@ -17,7 +17,7 @@
 # along with Tabelo-Qt.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-QT += core gui
+QT += core gui svg
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
