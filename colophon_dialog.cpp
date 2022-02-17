@@ -27,8 +27,8 @@
 #include "dialog_header_box.h"
 
 
-ColophonDialog::ColophonDialog(QWidget *parent) :
-    QDialog(parent)
+ColophonDialog::ColophonDialog(QWidget *parent)
+    : QDialog{parent}
 {
     setMinimumSize(640, 480);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -60,12 +60,9 @@ ColophonDialog::ColophonDialog(QWidget *parent) :
     connect(buttonBox, &QDialogButtonBox::rejected, this, &ColophonDialog::close);
 
     // Main layout
-    auto *layout = new QVBoxLayout(this);
-    layout->addWidget(headerBox);
-    layout->addWidget(tabBox);
-    layout->addWidget(buttonBox);
-}
-
-ColophonDialog::~ColophonDialog()
-{
+    auto *mainLayout = new QVBoxLayout;
+    mainLayout->addWidget(headerBox);
+    mainLayout->addWidget(tabBox);
+    mainLayout->addWidget(buttonBox);
+    setLayout(mainLayout);
 }

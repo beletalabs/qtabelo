@@ -29,7 +29,6 @@ class ColophonDialog : public QDialog
 
 public:
     explicit ColophonDialog(QWidget *parent = nullptr);
-    ~ColophonDialog();
 };
 
 #endif // COLOPHON_DIALOG_H

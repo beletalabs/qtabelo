@@ -29,8 +29,8 @@
 // Colophon page: About
 //
 
-ColophonPageAbout::ColophonPageAbout(QWidget *parent) :
-    QWidget(parent)
+ColophonPageAbout::ColophonPageAbout(QWidget *parent)
+    : QWidget{parent}
 {
     QString text = QStringLiteral("<html><body>");
     text += tr("<p>%1 is an open source table editor written in C++ using the Qt framework.</p>").arg(QApplication::applicationName());
@@ -39,10 +39,10 @@ ColophonPageAbout::ColophonPageAbout(QWidget *parent) :
     text += QStringLiteral("</body></html>");
 
     auto *textBox = new QTextBrowser;
+    textBox->setHtml(text);
+    textBox->setOpenExternalLinks(true);
     textBox->setFrameStyle(QFrame::NoFrame);
     textBox->setStyleSheet(QStringLiteral("background-color:transparent;"));
-    textBox->setOpenExternalLinks(true);
-    textBox->setHtml(text);
 
     // Main layout
     auto *mainLayout = new QVBoxLayout;
@@ -63,7 +63,7 @@ QString ColophonPageAbout::title() const
 //
 
 ColophonPageAuthors::ColophonPageAuthors(QWidget *parent)
-    : QWidget(parent)
+    : QWidget{parent}
 {
     QString text = QStringLiteral("<html><body><dl>");
     text += tr("<dt><strong>naracanto</strong></dt>");
@@ -71,10 +71,10 @@ ColophonPageAuthors::ColophonPageAuthors(QWidget *parent)
     text += QStringLiteral("</dl></body></html>");
 
     auto *textBox = new QTextBrowser;
+    textBox->setHtml(text);
+    textBox->setOpenExternalLinks(true);
     textBox->setFrameStyle(QFrame::NoFrame);
     textBox->setStyleSheet(QStringLiteral("background-color:transparent;"));
-    textBox->setOpenExternalLinks(true);
-    textBox->setHtml(text);
 
     // Main layout
     auto *mainLayout = new QVBoxLayout;
@@ -95,7 +95,7 @@ QString ColophonPageAuthors::title() const
 //
 
 ColophonPageCredits::ColophonPageCredits(QWidget *parent)
-    : QWidget(parent)
+    : QWidget{parent}
 {
     QString text = QStringLiteral("<html><body><dl>");
     text += tr("<dt><strong>BreezeIcons project</strong></dt>");
@@ -104,10 +104,10 @@ ColophonPageCredits::ColophonPageCredits(QWidget *parent)
     text += QStringLiteral("</dl></body></html>");
 
     auto *textBox = new QTextBrowser;
+    textBox->setHtml(text);
+    textBox->setOpenExternalLinks(true);
     textBox->setFrameStyle(QFrame::NoFrame);
     textBox->setStyleSheet(QStringLiteral("background-color:transparent;"));
-    textBox->setOpenExternalLinks(true);
-    textBox->setHtml(text);
 
     // Main layout
     auto *mainLayout = new QVBoxLayout;
@@ -128,7 +128,7 @@ QString ColophonPageCredits::title() const
 //
 
 ColophonPageEnvironment::ColophonPageEnvironment(QWidget *parent)
-    : QWidget(parent)
+    : QWidget{parent}
 {
     QString text = QStringLiteral("<html><body><dl>");
     text += tr("<dt><strong>Application version</strong></dt>");
@@ -140,10 +140,10 @@ ColophonPageEnvironment::ColophonPageEnvironment(QWidget *parent)
     text += QStringLiteral("</dl></body></html>");
 
     auto *textBox = new QTextBrowser;
+    textBox->setHtml(text);
+    textBox->setOpenExternalLinks(true);
     textBox->setFrameStyle(QFrame::NoFrame);
     textBox->setStyleSheet(QStringLiteral("background-color:transparent;"));
-    textBox->setOpenExternalLinks(true);
-    textBox->setHtml(text);
 
     // Main layout
     auto *mainLayout = new QVBoxLayout;
@@ -164,7 +164,7 @@ QString ColophonPageEnvironment::title() const
 //
 
 ColophonPageLicense::ColophonPageLicense(QWidget *parent)
-    : QWidget(parent)
+    : QWidget{parent}
 {
     QString text = QStringLiteral("<html><body>");
     text += tr("<p>%1 is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p>").arg(QApplication::applicationName());
@@ -173,10 +173,10 @@ ColophonPageLicense::ColophonPageLicense(QWidget *parent)
     text += QStringLiteral("</body></html>");
 
     auto *textBox = new QTextBrowser;
+    textBox->setHtml(text);
+    textBox->setOpenExternalLinks(true);
     textBox->setFrameStyle(QFrame::NoFrame);
     textBox->setStyleSheet(QStringLiteral("background-color:transparent;"));
-    textBox->setOpenExternalLinks(true);
-    textBox->setHtml(text);
 
     // Main layout
     auto *mainLayout = new QVBoxLayout;

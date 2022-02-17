@@ -27,8 +27,8 @@
 #include "dialog_header_box.h"
 
 
-AboutDialog::AboutDialog(QWidget *parent) :
-    QDialog(parent)
+AboutDialog::AboutDialog(QWidget *parent)
+    : QDialog{parent}
 {
     setMinimumSize(480, 320);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -46,12 +46,9 @@ AboutDialog::AboutDialog(QWidget *parent) :
     connect(buttonBox, &QDialogButtonBox::rejected, this, &AboutDialog::close);
 
     // Main layout
-    auto *layout = new QVBoxLayout(this);
-    layout->addWidget(headerBox);
-    layout->addWidget(pageAbout);
-    layout->addWidget(buttonBox);
-}
-
-AboutDialog::~AboutDialog()
-{
+    auto *mainLayout = new QVBoxLayout;
+    mainLayout->addWidget(headerBox);
+    mainLayout->addWidget(pageAbout);
+    mainLayout->addWidget(buttonBox);
+    setLayout(mainLayout);
 }
