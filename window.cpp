@@ -143,6 +143,12 @@ void Window::createActions()
     m_actionColophon->setToolTip(tr("Lengthy description of the application"));
     connect(m_actionColophon, &QAction::triggered, this, &Window::onActionColophonTriggered);
 
+    m_actionPreferences = new QAction(tr("Preferences…"), this);
+    m_actionPreferences->setObjectName(QStringLiteral("actionPreferences"));
+    m_actionPreferences->setIcon(QIcon::fromTheme(QStringLiteral("configure"), QIcon(QStringLiteral(":/icons/actions/16/configure.svg"))));
+    m_actionPreferences->setToolTip(tr("Customize the appearance and behavior of the application"));
+    connect(m_actionPreferences, &QAction::triggered, this, &Window::onActionPreferencesTriggered);
+
     m_actionQuit = new QAction(tr("Quit"), this);
     m_actionQuit->setObjectName(QStringLiteral("actionQuit"));
     m_actionQuit->setIcon(QIcon::fromTheme(QStringLiteral("application-exit"), QIcon(QStringLiteral(":/icons/actions/16/application-exit.svg"))));
@@ -261,6 +267,8 @@ void Window::createMenuBar()
     menuApplication->addAction(m_actionAbout);
     menuApplication->addAction(m_actionColophon);
     menuApplication->addSeparator();
+    menuApplication->addAction(m_actionPreferences);
+    menuApplication->addSeparator();
     menuApplication->addAction(m_actionQuit);
 
     // Menu: File
@@ -325,6 +333,7 @@ void Window::createToolBars()
     m_toolbarApplication = addToolBar(tr("Application Toolbar"));
     m_toolbarApplication->setObjectName(QStringLiteral("toolbarApplication"));
     m_toolbarApplication->addAction(m_actionAbout);
+    m_toolbarApplication->addAction(m_actionPreferences);
     m_toolbarApplication->addSeparator();
     m_toolbarApplication->addAction(m_actionQuit);
     connect(m_toolbarApplication, &QToolBar::visibilityChanged, this, [=] (const bool visible) { m_actionToolbarApplication->setChecked(visible); });
@@ -390,6 +399,12 @@ void Window::onActionColophonTriggered()
 {
     auto *dialog = new ColophonDialog(this);
     dialog->open();
+}
+
+
+void Window::onActionPreferencesTriggered()
+{
+
 }
 
 
