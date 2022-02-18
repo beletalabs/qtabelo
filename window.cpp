@@ -26,6 +26,7 @@
 
 #include "about_dialog.h"
 #include "colophon_dialog.h"
+#include "preferences_dialog.h"
 
 
 Window::Window(QWidget *parent)
@@ -404,7 +405,8 @@ void Window::onActionColophonTriggered()
 
 void Window::onActionPreferencesTriggered()
 {
-
+    auto *dialog = new PreferencesDialog(this);
+    dialog->open();
 }
 
 
