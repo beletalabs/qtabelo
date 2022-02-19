@@ -48,6 +48,7 @@ private:
     QAction *m_actionPreferences;
     QAction *m_actionQuit;
 
+    QAction *m_actionMenubar;
     QAction *m_actionToolbarApplication;
     QAction *m_actionToolbarFile;
     QAction *m_actionToolbarEdit;

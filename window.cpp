@@ -161,6 +161,16 @@ void Window::createActions()
     //
     // Actions: Appearance
 
+    m_actionMenubar = new QAction(tr("Show Menu Bar"), this);
+    m_actionMenubar->setObjectName(QStringLiteral("actionMenubar"));
+    m_actionMenubar->setCheckable(true);
+    m_actionMenubar->setIcon(QIcon::fromTheme(QStringLiteral("show-menu"), QIcon(QStringLiteral(":/icons/actions/16/show-menu.svg"))));
+    m_actionMenubar->setIconText(tr("Menu Bar"));
+    m_actionMenubar->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_M));
+    m_actionMenubar->setToolTip(tr("Display the Menu bar"));
+    connect(m_actionMenubar, &QAction::toggled, this, [=] (const bool checked) { menuBar()->setVisible(checked); });
+    addAction(m_actionMenubar);
+
     m_actionToolbarApplication = new QAction(tr("Show Application Toolbar"), this);
     m_actionToolbarApplication->setObjectName(QStringLiteral("actionToolbarApplication"));
     m_actionToolbarApplication->setCheckable(true);
@@ -302,6 +312,8 @@ void Window::createMenuBar()
 
     auto *menuAppearance = menuBar()->addMenu(tr("Appearance"));
     menuAppearance->setObjectName(QStringLiteral("menuAppearance"));
+    menuAppearance->addAction(m_actionMenubar);
+    menuAppearance->addSeparator();
     menuAppearance->addAction(m_actionToolbarApplication);
     menuAppearance->addAction(m_actionToolbarFile);
     menuAppearance->addAction(m_actionToolbarEdit);
@@ -367,6 +379,7 @@ void Window::createToolBars()
     // Toolbar: Appearance
     m_toolbarAppearance = addToolBar(tr("Appearance Toolbar"));
     m_toolbarAppearance->setObjectName(QStringLiteral("toolbarAppearance"));
+    m_toolbarAppearance->addAction(m_actionMenubar);
     connect(m_toolbarAppearance, &QToolBar::visibilityChanged, this, [=] (const bool visible) { m_actionToolbarAppearance->setChecked(visible); });
 
     // Toolbar: Help
