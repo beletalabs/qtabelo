@@ -59,6 +59,7 @@ private:
     QAction *m_actionToolbarHelp;
     QActionGroup *m_actionsToolButtonStyle;
     QAction *m_actionStatusbar;
+    QAction *m_actionFullScreen;
 
     void createActions();
 
@@ -80,6 +81,7 @@ private:
     void createToolBars();
 
     void updateActionsToolButtonStyle(const Qt::ToolButtonStyle toolButtonStyle);
+    void updateActionFullScreen();
 
 private slots:
     void onActionAboutTriggered();
@@ -87,6 +89,7 @@ private slots:
     void onActionPreferencesTriggered();
 
     void onActionsToolButtonStyleTriggered(const QAction *actionToolButtonStyle);
+    void onActionFullScreenTriggered();
 };
 
 #endif // WINDOW_H

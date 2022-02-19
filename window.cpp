@@ -40,6 +40,8 @@ Window::Window(QWidget *parent)
     createToolBars();
 
     loadSettings();
+
+    updateActionFullScreen();
 }
 
 Window::~Window()
@@ -234,6 +236,14 @@ void Window::createActions()
     m_actionStatusbar->setToolTip(tr("Display the Status bar"));
     connect(m_actionStatusbar, &QAction::toggled, this, [=] (const bool checked) { m_statusbar->setVisible(checked); });
 
+    m_actionFullScreen = new QAction(this);
+    m_actionFullScreen->setObjectName(QStringLiteral("actionFullScreen"));
+    m_actionFullScreen->setCheckable(true);
+    m_actionFullScreen->setIconText(tr("Full Screen"));
+    m_actionFullScreen->setShortcuts(QList<QKeySequence>() << QKeySequence(Qt::Key_F11) << QKeySequence::FullScreen);
+    connect(m_actionFullScreen, &QAction::triggered, this, &Window::onActionFullScreenTriggered);
+    addAction(m_actionFullScreen);
+
 
     //
     // Action group: Tool Button Style
@@ -334,6 +344,8 @@ void Window::createMenuBar()
     menuAppearance->addMenu(menuToolButtonStyle);
     menuAppearance->addSeparator();
     menuAppearance->addAction(m_actionStatusbar);
+    menuAppearance->addSeparator();
+    menuAppearance->addAction(m_actionFullScreen);
 
 
     // Menu: Help
@@ -389,6 +401,8 @@ void Window::createToolBars()
     m_toolbarAppearance = addToolBar(tr("Appearance Toolbar"));
     m_toolbarAppearance->setObjectName(QStringLiteral("toolbarAppearance"));
     m_toolbarAppearance->addAction(m_actionMenubar);
+    m_toolbarAppearance->addSeparator();
+    m_toolbarAppearance->addAction(m_actionFullScreen);
     connect(m_toolbarAppearance, &QToolBar::visibilityChanged, this, [=] (const bool visible) { m_actionToolbarAppearance->setChecked(visible); });
 
     // Toolbar: Help
@@ -407,6 +421,23 @@ void Window::updateActionsToolButtonStyle(const Qt::ToolButtonStyle toolButtonSt
             onActionsToolButtonStyleTriggered(action);
             break;
         }
+    }
+}
+
+
+void Window::updateActionFullScreen()
+{
+    if (!isFullScreen()) {
+        m_actionFullScreen->setText(tr("Full Screen Mode"));
+        m_actionFullScreen->setChecked(false);
+        m_actionFullScreen->setIcon(QIcon::fromTheme(QStringLiteral("view-fullscreen"), QIcon(QStringLiteral(":/icons/actions/16/view-fullscreen.svg"))));
+        m_actionFullScreen->setToolTip(tr("Display the window in full screen"));
+    }
+    else {
+        m_actionFullScreen->setText(tr("Exit Full Screen Mode"));
+        m_actionFullScreen->setChecked(true);
+        m_actionFullScreen->setIcon(QIcon::fromTheme(QStringLiteral("view-restore"), QIcon(QStringLiteral(":/icons/actions/16/view-restore.svg"))));
+        m_actionFullScreen->setToolTip(tr("Exit the full screen mode"));
     }
 }
 
@@ -444,4 +475,15 @@ void Window::onActionsToolButtonStyleTriggered(const QAction *actionToolButtonSt
     m_toolbarTools->setToolButtonStyle(style);
     m_toolbarAppearance->setToolButtonStyle(style);
     m_toolbarHelp->setToolButtonStyle(style);
+}
+
+
+void Window::onActionFullScreenTriggered()
+{
+    if (!isFullScreen())
+        setWindowState(windowState() | Qt::WindowFullScreen);
+    else
+        setWindowState(windowState() & ~Qt::WindowFullScreen);
+
+    updateActionFullScreen();
 }
