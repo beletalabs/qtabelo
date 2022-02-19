@@ -94,6 +94,11 @@ void Window::loadSettings()
         m_toolbarHelp->setVisible(false);
     }
 
+    // Application property: Menu Bar
+    const auto visibleMenuBar = settings.value(QStringLiteral("Application/MenuBar"), true).toBool();
+    menuBar()->setVisible(visibleMenuBar);
+    m_actionMenubar->setChecked(visibleMenuBar);
+
     // Application property: Status Bar
     const auto visible = settings.value(QStringLiteral("Application/StatusBar"), true).toBool();
     m_statusbar->setVisible(visible);
