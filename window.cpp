@@ -167,6 +167,7 @@ void Window::createActions()
     m_actionQuit->setShortcut(QKeySequence::Quit);
     m_actionQuit->setToolTip(tr("Quit the application"));
     connect(m_actionQuit, &QAction::triggered, this, &Window::close);
+    addAction(m_actionQuit);
 
 
     //
