@@ -1,5 +1,5 @@
 #
-# Copyright 2022 Tabelo, <https://github.com/tabeloapp>.
+# Copyright 2022 naracanto <https://naracanto.github.io>.
 #
 # This file is part of Tabelo-Qt, <https://github.com/tabeloapp/tabelo-qt>.
 #

@@ -1,5 +1,5 @@
 /**
- * Copyright 2022 Tabelo, <https://github.com/tabeloapp>.
+ * Copyright 2022 naracanto <https://naracanto.github.io>.
  *
  * This file is part of Tabelo-Qt, <https://github.com/tabeloapp/tabelo-qt>.
  *
@@ -67,7 +67,7 @@ ColophonPageAuthors::ColophonPageAuthors(QWidget *parent)
 {
     QString text = QStringLiteral("<html><body><dl>");
     text += tr("<dt><strong>naracanto</strong></dt>");
-    text += tr("<dd>Created and developed by <a href=\"https://naracanto.com\" title=\"Visit author's homepage\">naracanto</a>.</dd>");
+    text += tr("<dd>Created and developed by <a href=\"https://naracanto.github.io\" title=\"Visit author's homepage\">naracanto</a>.</dd>");
     text += QStringLiteral("</dl></body></html>");
 
     auto *textBox = new QTextBrowser;
