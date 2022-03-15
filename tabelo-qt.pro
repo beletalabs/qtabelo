@@ -33,16 +33,16 @@ SOURCES += \
     colophon_pages.cpp \
     dialog_header_box.cpp \
     main.cpp \
-    preferences_dialog.cpp \
-    window.cpp
+    main_window.cpp \
+    preferences_dialog.cpp
 
 HEADERS += \
     about_dialog.h \
     colophon_dialog.h \
     colophon_pages.h \
     dialog_header_box.h \
-    preferences_dialog.h \
-    window.h
+    main_window.h \
+    preferences_dialog.h
 
 RESOURCES += \
     icons.qrc

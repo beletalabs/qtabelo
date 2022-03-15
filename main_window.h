@@ -17,8 +17,8 @@
  * along with Tabelo-Qt.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef WINDOW_H
-#define WINDOW_H
+#ifndef MAIN_WINDOW_H
+#define MAIN_WINDOW_H
 
 #include <QAction>
 #include <QActionGroup>
@@ -28,13 +28,13 @@
 #include <QToolBar>
 
 
-class Window : public QMainWindow
+class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    Window(QWidget *parent = nullptr);
-    ~Window();
+    MainWindow(QWidget *parent = nullptr);
+    ~MainWindow();
 
 protected:
     void closeEvent(QCloseEvent *event) override;
@@ -92,4 +92,4 @@ private slots:
     void onActionFullScreenTriggered();
 };
 
-#endif // WINDOW_H
+#endif // MAIN_WINDOW_H

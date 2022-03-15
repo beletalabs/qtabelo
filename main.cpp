@@ -20,7 +20,7 @@
 #include <QApplication>
 #include <QCommandLineParser>
 
-#include "window.h"
+#include "main_window.h"
 
 
 int main(int argc, char *argv[])
@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
     parser.addVersionOption();
     parser.process(app);
 
-    Window window;
+    MainWindow window;
     window.show();
 
     return app.exec();

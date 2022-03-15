@@ -17,7 +17,7 @@
  * along with Tabelo-Qt.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "window.h"
+#include "main_window.h"
 
 #include <QApplication>
 #include <QMenuBar>
@@ -29,7 +29,7 @@
 #include "preferences_dialog.h"
 
 
-Window::Window(QWidget *parent)
+MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
     setWindowIcon(QIcon(QStringLiteral(":/icons/apps/16/tabelo.svg")));
@@ -44,12 +44,12 @@ Window::Window(QWidget *parent)
     updateActionFullScreen();
 }
 
-Window::~Window()
+MainWindow::~MainWindow()
 {
 }
 
 
-void Window::closeEvent(QCloseEvent *event)
+void MainWindow::closeEvent(QCloseEvent *event)
 {
     if (true) {
         // Store application properties
@@ -63,7 +63,7 @@ void Window::closeEvent(QCloseEvent *event)
 }
 
 
-void Window::loadSettings()
+void MainWindow::loadSettings()
 {
     QSettings settings;
 
@@ -112,7 +112,7 @@ void Window::loadSettings()
 }
 
 
-void Window::saveSettings()
+void MainWindow::saveSettings()
 {
     QSettings settings;
 
@@ -138,7 +138,7 @@ void Window::saveSettings()
 }
 
 
-void Window::createActions()
+void MainWindow::createActions()
 {
     //
     // Actions: Application
@@ -148,25 +148,25 @@ void Window::createActions()
     m_actionAbout->setIcon(QIcon(QStringLiteral(":/icons/apps/16/tabelo.svg")));
     m_actionAbout->setIconText(tr("About"));
     m_actionAbout->setToolTip(tr("Brief description of the application"));
-    connect(m_actionAbout, &QAction::triggered, this, &Window::onActionAboutTriggered);
+    connect(m_actionAbout, &QAction::triggered, this, &MainWindow::onActionAboutTriggered);
 
     m_actionColophon = new QAction(tr("Colophon"), this);
     m_actionColophon->setObjectName(QStringLiteral("actionColophon"));
     m_actionColophon->setToolTip(tr("Lengthy description of the application"));
-    connect(m_actionColophon, &QAction::triggered, this, &Window::onActionColophonTriggered);
+    connect(m_actionColophon, &QAction::triggered, this, &MainWindow::onActionColophonTriggered);
 
     m_actionPreferences = new QAction(tr("Preferences…"), this);
     m_actionPreferences->setObjectName(QStringLiteral("actionPreferences"));
     m_actionPreferences->setIcon(QIcon::fromTheme(QStringLiteral("configure"), QIcon(QStringLiteral(":/icons/actions/16/configure.svg"))));
     m_actionPreferences->setToolTip(tr("Customize the appearance and behavior of the application"));
-    connect(m_actionPreferences, &QAction::triggered, this, &Window::onActionPreferencesTriggered);
+    connect(m_actionPreferences, &QAction::triggered, this, &MainWindow::onActionPreferencesTriggered);
 
     m_actionQuit = new QAction(tr("Quit"), this);
     m_actionQuit->setObjectName(QStringLiteral("actionQuit"));
     m_actionQuit->setIcon(QIcon::fromTheme(QStringLiteral("application-exit"), QIcon(QStringLiteral(":/icons/actions/16/application-exit.svg"))));
     m_actionQuit->setShortcut(QKeySequence::Quit);
     m_actionQuit->setToolTip(tr("Quit the application"));
-    connect(m_actionQuit, &QAction::triggered, this, &Window::close);
+    connect(m_actionQuit, &QAction::triggered, this, &MainWindow::close);
     addAction(m_actionQuit);
 
 
@@ -242,7 +242,7 @@ void Window::createActions()
     m_actionFullScreen->setCheckable(true);
     m_actionFullScreen->setIconText(tr("Full Screen"));
     m_actionFullScreen->setShortcuts(QList<QKeySequence>() << QKeySequence(Qt::Key_F11) << QKeySequence::FullScreen);
-    connect(m_actionFullScreen, &QAction::triggered, this, &Window::onActionFullScreenTriggered);
+    connect(m_actionFullScreen, &QAction::triggered, this, &MainWindow::onActionFullScreenTriggered);
     addAction(m_actionFullScreen);
 
 
@@ -286,11 +286,11 @@ void Window::createActions()
     m_actionsToolButtonStyle->addAction(actionToolButtonStyleTextBesideIcon);
     m_actionsToolButtonStyle->addAction(actionToolButtonStyleTextUnderIcon);
     m_actionsToolButtonStyle->addAction(actionToolButtonStyleFollowStyle);
-    connect(m_actionsToolButtonStyle, &QActionGroup::triggered, this, &Window::onActionsToolButtonStyleTriggered);
+    connect(m_actionsToolButtonStyle, &QActionGroup::triggered, this, &MainWindow::onActionsToolButtonStyleTriggered);
 }
 
 
-void Window::createMenuBar()
+void MainWindow::createMenuBar()
 {
     // Menu: Application
     auto *menuApplication = menuBar()->addMenu(tr("Application"));
@@ -355,14 +355,14 @@ void Window::createMenuBar()
 }
 
 
-void Window::createStatusBar()
+void MainWindow::createStatusBar()
 {
     m_statusbar = statusBar();
     m_statusbar->showMessage(tr("Ready"), 3000);
 }
 
 
-void Window::createToolBars()
+void MainWindow::createToolBars()
 {
     // Toolbar: Application
     m_toolbarApplication = addToolBar(tr("Application Toolbar"));
@@ -413,7 +413,7 @@ void Window::createToolBars()
 }
 
 
-void Window::updateActionsToolButtonStyle(const Qt::ToolButtonStyle toolButtonStyle)
+void MainWindow::updateActionsToolButtonStyle(const Qt::ToolButtonStyle toolButtonStyle)
 {
     const QList<QAction *> actions = m_actionsToolButtonStyle->actions();
     for (auto *action : actions) {
@@ -426,7 +426,7 @@ void Window::updateActionsToolButtonStyle(const Qt::ToolButtonStyle toolButtonSt
 }
 
 
-void Window::updateActionFullScreen()
+void MainWindow::updateActionFullScreen()
 {
     if (!isFullScreen()) {
         m_actionFullScreen->setText(tr("Full Screen Mode"));
@@ -443,28 +443,28 @@ void Window::updateActionFullScreen()
 }
 
 
-void Window::onActionAboutTriggered()
+void MainWindow::onActionAboutTriggered()
 {
     auto *dialog = new AboutDialog(this);
     dialog->open();
 }
 
 
-void Window::onActionColophonTriggered()
+void MainWindow::onActionColophonTriggered()
 {
     auto *dialog = new ColophonDialog(this);
     dialog->open();
 }
 
 
-void Window::onActionPreferencesTriggered()
+void MainWindow::onActionPreferencesTriggered()
 {
     auto *dialog = new PreferencesDialog(this);
     dialog->open();
 }
 
 
-void Window::onActionsToolButtonStyleTriggered(const QAction *actionToolButtonStyle)
+void MainWindow::onActionsToolButtonStyleTriggered(const QAction *actionToolButtonStyle)
 {
     const auto style = static_cast<Qt::ToolButtonStyle>(actionToolButtonStyle->data().toInt());
 
@@ -479,7 +479,7 @@ void Window::onActionsToolButtonStyleTriggered(const QAction *actionToolButtonSt
 }
 
 
-void Window::onActionFullScreenTriggered()
+void MainWindow::onActionFullScreenTriggered()
 {
     if (!isFullScreen())
         setWindowState(windowState() | Qt::WindowFullScreen);
