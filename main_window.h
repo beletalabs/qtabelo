@@ -40,13 +40,38 @@ protected:
     void closeEvent(QCloseEvent *event) override;
 
 private:
+    void setupActions();
+
     void loadSettings();
     void saveSettings();
 
+    void updateActionsToolButtonStyle(const Qt::ToolButtonStyle toolButtonStyle);
+    void updateActionFullScreen();
+
+private slots:
+    void onActionAboutTriggered();
+    void onActionColophonTriggered();
+    void onActionPreferencesTriggered();
+
+    void onActionsToolButtonStyleTriggered(const QAction *actionToolButtonStyle);
+    void onActionFullScreenTriggered();
+
+private:
     QAction *m_actionAbout;
     QAction *m_actionColophon;
     QAction *m_actionPreferences;
     QAction *m_actionQuit;
+    QToolBar *m_toolbarApplication;
+
+    QToolBar *m_toolbarFile;
+
+    QToolBar *m_toolbarEdit;
+
+    QToolBar *m_toolbarView;
+
+    QToolBar *m_toolbarFormat;
+
+    QToolBar *m_toolbarTools;
 
     QAction *m_actionMenubar;
     QAction *m_actionToolbarApplication;
@@ -60,36 +85,11 @@ private:
     QActionGroup *m_actionsToolButtonStyle;
     QAction *m_actionStatusbar;
     QAction *m_actionFullScreen;
-
-    void createActions();
-
-    void createMenuBar();
-
-    QStatusBar *m_statusbar;
-
-    void createStatusBar();
-
-    QToolBar *m_toolbarApplication;
-    QToolBar *m_toolbarFile;
-    QToolBar *m_toolbarEdit;
-    QToolBar *m_toolbarView;
-    QToolBar *m_toolbarFormat;
-    QToolBar *m_toolbarTools;
     QToolBar *m_toolbarAppearance;
+
     QToolBar *m_toolbarHelp;
 
-    void createToolBars();
-
-    void updateActionsToolButtonStyle(const Qt::ToolButtonStyle toolButtonStyle);
-    void updateActionFullScreen();
-
-private slots:
-    void onActionAboutTriggered();
-    void onActionColophonTriggered();
-    void onActionPreferencesTriggered();
-
-    void onActionsToolButtonStyleTriggered(const QAction *actionToolButtonStyle);
-    void onActionFullScreenTriggered();
+    QStatusBar *m_statusbar;
 };
 
 #endif // MAIN_WINDOW_H
