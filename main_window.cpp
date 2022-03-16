@@ -26,13 +26,21 @@
 
 #include "about_dialog.h"
 #include "colophon_dialog.h"
+#include "mdi_area.h"
 #include "preferences_dialog.h"
 
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
+    , m_documentsArea{new MdiArea}
 {
     setWindowIcon(QIcon(QStringLiteral(":/icons/apps/16/tabelo.svg")));
+
+    m_documentsArea->setViewMode(QMdiArea::TabbedView);
+    m_documentsArea->setDocumentMode(true);
+    m_documentsArea->setTabsClosable(true);
+    m_documentsArea->setTabsMovable(true);
+    setCentralWidget(m_documentsArea);
 
     setupActions();
 

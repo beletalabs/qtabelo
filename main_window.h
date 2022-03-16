@@ -27,6 +27,8 @@
 #include <QStatusBar>
 #include <QToolBar>
 
+class MdiArea;
+
 
 class MainWindow : public QMainWindow
 {
@@ -57,6 +59,8 @@ private slots:
     void onActionFullScreenTriggered();
 
 private:
+    MdiArea *m_documentsArea;
+
     QAction *m_actionAbout;
     QAction *m_actionColophon;
     QAction *m_actionPreferences;
