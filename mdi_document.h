@@ -20,10 +20,10 @@
 #ifndef MDI_DOCUMENT_H
 #define MDI_DOCUMENT_H
 
-#include <QWidget>
+#include "tabular_document.h"
 
 
-class MdiDocument : public QWidget
+class MdiDocument : public TabularDocument
 {
     Q_OBJECT
 

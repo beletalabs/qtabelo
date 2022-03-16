@@ -17,11 +17,11 @@
  * along with Tabelo-Qt.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "mdi_document.h"
+#include "tabular_document.h"
 
 
-MdiDocument::MdiDocument(QWidget *parent)
-    : TabularDocument{parent}
+TabularDocument::TabularDocument(QWidget *parent)
+    : QWidget{parent}
 {
 
 }

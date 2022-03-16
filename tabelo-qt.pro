@@ -36,7 +36,8 @@ SOURCES += \
     main_window.cpp \
     mdi_area.cpp \
     mdi_document.cpp \
-    preferences_dialog.cpp
+    preferences_dialog.cpp \
+    tabular_document.cpp
 
 HEADERS += \
     about_dialog.h \
@@ -46,7 +47,8 @@ HEADERS += \
     main_window.h \
     mdi_area.h \
     mdi_document.h \
-    preferences_dialog.h
+    preferences_dialog.h \
+    tabular_document.h
 
 RESOURCES += \
     icons.qrc
