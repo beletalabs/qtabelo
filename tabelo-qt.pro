@@ -35,6 +35,7 @@ SOURCES += \
     main.cpp \
     main_window.cpp \
     mdi_area.cpp \
+    mdi_document.cpp \
     preferences_dialog.cpp
 
 HEADERS += \
@@ -44,6 +45,7 @@ HEADERS += \
     dialog_header_box.h \
     main_window.h \
     mdi_area.h \
+    mdi_document.h \
     preferences_dialog.h
 
 RESOURCES += \
