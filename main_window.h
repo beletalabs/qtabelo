@@ -28,6 +28,7 @@
 #include <QToolBar>
 
 class MdiArea;
+class MdiDocument;
 
 
 class MainWindow : public QMainWindow
@@ -49,6 +50,8 @@ private:
 
     void updateActionsToolButtonStyle(const Qt::ToolButtonStyle toolButtonStyle);
     void updateActionFullScreen();
+
+    MdiDocument *createDocument();
 
 private slots:
     void onActionAboutTriggered();

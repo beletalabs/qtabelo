@@ -27,6 +27,7 @@
 #include "about_dialog.h"
 #include "colophon_dialog.h"
 #include "mdi_area.h"
+#include "mdi_document.h"
 #include "preferences_dialog.h"
 
 
@@ -451,6 +452,15 @@ void MainWindow::updateActionFullScreen()
 }
 
 
+MdiDocument *MainWindow::createDocument()
+{
+    auto *document = new MdiDocument;
+    m_documentsArea->addSubWindow(document);
+
+    return document;
+}
+
+
 void MainWindow::onActionAboutTriggered()
 {
     auto *dialog = new AboutDialog(this);
@@ -474,7 +484,8 @@ void MainWindow::onActionPreferencesTriggered()
 
 void MainWindow::onActionNewTriggered()
 {
-
+    MdiDocument *document = createDocument();
+    document->show();
 }
 
 
