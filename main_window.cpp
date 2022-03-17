@@ -20,6 +20,7 @@
 #include "main_window.h"
 
 #include <QApplication>
+#include <QMdiSubWindow>
 #include <QMenuBar>
 #include <QScreen>
 #include <QSettings>
@@ -455,7 +456,9 @@ void MainWindow::updateActionFullScreen()
 MdiDocument *MainWindow::createDocument()
 {
     auto *document = new MdiDocument;
-    m_documentsArea->addSubWindow(document);
+
+    QMdiSubWindow *subWindow = m_documentsArea->addSubWindow(document);
+    subWindow->setWindowIcon(QIcon());
 
     return document;
 }
