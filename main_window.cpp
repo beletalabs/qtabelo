@@ -121,11 +121,21 @@ void MainWindow::setupActions()
     //
     // File
 
+    m_actionNew = new QAction(tr("New"), this);
+    m_actionNew->setObjectName(QStringLiteral("actionNew"));
+    m_actionNew->setIcon(QIcon::fromTheme(QStringLiteral("document-new"), QIcon(QStringLiteral(":/icons/actions/16/document-new.svg"))));
+    m_actionNew->setShortcut(QKeySequence::New);
+    m_actionNew->setToolTip(tr("Create new document"));
+    connect(m_actionNew, &QAction::triggered, this, &MainWindow::onActionNewTriggered);
+    addAction(m_actionNew);
+
     auto *menuFile = menuBar()->addMenu(tr("File"));
     menuFile->setObjectName(QStringLiteral("menuFile"));
+    menuFile->addAction(m_actionNew);
 
     m_toolbarFile = addToolBar(tr("File Toolbar"));
     m_toolbarFile->setObjectName(QStringLiteral("toolbarFile"));
+    m_toolbarFile->addAction(m_actionNew);
     connect(m_toolbarFile, &QToolBar::visibilityChanged, this, [=] (const bool visible) { m_actionToolbarFile->setChecked(visible); });
 
 
@@ -459,6 +469,12 @@ void MainWindow::onActionPreferencesTriggered()
 {
     auto *dialog = new PreferencesDialog(this);
     dialog->open();
+}
+
+
+void MainWindow::onActionNewTriggered()
+{
+
 }
 
 
