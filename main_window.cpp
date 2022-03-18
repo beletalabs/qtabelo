@@ -19,11 +19,16 @@
 
 #include "main_window.h"
 
+#include <QAction>
+#include <QActionGroup>
 #include <QApplication>
+#include <QCloseEvent>
 #include <QMdiSubWindow>
 #include <QMenuBar>
 #include <QScreen>
 #include <QSettings>
+#include <QStatusBar>
+#include <QToolBar>
 
 #include "about_dialog.h"
 #include "colophon_dialog.h"
@@ -38,7 +43,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     setWindowIcon(QIcon(QStringLiteral(":/icons/apps/16/tabelo.svg")));
 
-    m_documentsArea->setViewMode(QMdiArea::TabbedView);
+    m_documentsArea->setViewMode(MdiArea::TabbedView);
     m_documentsArea->setDocumentMode(true);
     m_documentsArea->setTabsClosable(true);
     m_documentsArea->setTabsMovable(true);
@@ -352,6 +357,36 @@ void MainWindow::setupActions()
 }
 
 
+void MainWindow::updateActionsToolButtonStyle(const Qt::ToolButtonStyle toolButtonStyle)
+{
+    const QList<QAction *> actions = m_actionsToolButtonStyle->actions();
+    for (auto *action : actions) {
+        if (static_cast<Qt::ToolButtonStyle>(action->data().toInt()) == toolButtonStyle) {
+            action->setChecked(true);
+            onActionsToolButtonStyleTriggered(action);
+            break;
+        }
+    }
+}
+
+
+void MainWindow::updateActionFullScreen()
+{
+    if (!isFullScreen()) {
+        m_actionFullScreen->setText(tr("Full Screen Mode"));
+        m_actionFullScreen->setChecked(false);
+        m_actionFullScreen->setIcon(QIcon::fromTheme(QStringLiteral("view-fullscreen"), QIcon(QStringLiteral(":/icons/actions/16/view-fullscreen.svg"))));
+        m_actionFullScreen->setToolTip(tr("Display the window in full screen"));
+    }
+    else {
+        m_actionFullScreen->setText(tr("Exit Full Screen Mode"));
+        m_actionFullScreen->setChecked(true);
+        m_actionFullScreen->setIcon(QIcon::fromTheme(QStringLiteral("view-restore"), QIcon(QStringLiteral(":/icons/actions/16/view-restore.svg"))));
+        m_actionFullScreen->setToolTip(tr("Exit the full screen mode"));
+    }
+}
+
+
 void MainWindow::loadSettings()
 {
     QSettings settings;
@@ -424,36 +459,6 @@ void MainWindow::saveSettings()
     // Application property: Tool Button Style
     const auto style = m_actionsToolButtonStyle->checkedAction()->data();
     settings.setValue(QStringLiteral("Application/ToolButtonStyle"), style);
-}
-
-
-void MainWindow::updateActionsToolButtonStyle(const Qt::ToolButtonStyle toolButtonStyle)
-{
-    const QList<QAction *> actions = m_actionsToolButtonStyle->actions();
-    for (auto *action : actions) {
-        if (static_cast<Qt::ToolButtonStyle>(action->data().toInt()) == toolButtonStyle) {
-            action->setChecked(true);
-            onActionsToolButtonStyleTriggered(action);
-            break;
-        }
-    }
-}
-
-
-void MainWindow::updateActionFullScreen()
-{
-    if (!isFullScreen()) {
-        m_actionFullScreen->setText(tr("Full Screen Mode"));
-        m_actionFullScreen->setChecked(false);
-        m_actionFullScreen->setIcon(QIcon::fromTheme(QStringLiteral("view-fullscreen"), QIcon(QStringLiteral(":/icons/actions/16/view-fullscreen.svg"))));
-        m_actionFullScreen->setToolTip(tr("Display the window in full screen"));
-    }
-    else {
-        m_actionFullScreen->setText(tr("Exit Full Screen Mode"));
-        m_actionFullScreen->setChecked(true);
-        m_actionFullScreen->setIcon(QIcon::fromTheme(QStringLiteral("view-restore"), QIcon(QStringLiteral(":/icons/actions/16/view-restore.svg"))));
-        m_actionFullScreen->setToolTip(tr("Exit the full screen mode"));
-    }
 }
 
 

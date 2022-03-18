@@ -20,12 +20,13 @@
 #ifndef MAIN_WINDOW_H
 #define MAIN_WINDOW_H
 
-#include <QAction>
-#include <QActionGroup>
-#include <QCloseEvent>
 #include <QMainWindow>
-#include <QStatusBar>
-#include <QToolBar>
+
+class QAction;
+class QActionGroup;
+class QCloseEvent;
+class QStatusBar;
+class QToolBar;
 
 class MdiArea;
 class MdiDocument;
@@ -45,11 +46,11 @@ protected:
 private:
     void setupActions();
 
-    void loadSettings();
-    void saveSettings();
-
     void updateActionsToolButtonStyle(const Qt::ToolButtonStyle toolButtonStyle);
     void updateActionFullScreen();
+
+    void loadSettings();
+    void saveSettings();
 
     MdiDocument *createDocument();
 
