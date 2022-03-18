@@ -81,17 +81,20 @@ void MainWindow::setupActions()
     m_actionAbout->setIcon(QIcon(QStringLiteral(":/icons/apps/16/tabelo.svg")));
     m_actionAbout->setIconText(tr("About"));
     m_actionAbout->setToolTip(tr("Brief description of the application"));
+    m_actionAbout->setMenuRole(QAction::AboutRole);
     connect(m_actionAbout, &QAction::triggered, this, &MainWindow::onActionAboutTriggered);
 
     m_actionColophon = new QAction(tr("Colophon"), this);
     m_actionColophon->setObjectName(QStringLiteral("actionColophon"));
     m_actionColophon->setToolTip(tr("Lengthy description of the application"));
+    m_actionColophon->setMenuRole(QAction::ApplicationSpecificRole);
     connect(m_actionColophon, &QAction::triggered, this, &MainWindow::onActionColophonTriggered);
 
     m_actionPreferences = new QAction(tr("Preferences…"), this);
     m_actionPreferences->setObjectName(QStringLiteral("actionPreferences"));
     m_actionPreferences->setIcon(QIcon::fromTheme(QStringLiteral("configure"), QIcon(QStringLiteral(":/icons/actions/16/configure.svg"))));
     m_actionPreferences->setToolTip(tr("Customize the appearance and behavior of the application"));
+    m_actionPreferences->setMenuRole(QAction::PreferencesRole);
     connect(m_actionPreferences, &QAction::triggered, this, &MainWindow::onActionPreferencesTriggered);
 
     m_actionQuit = new QAction(tr("Quit"), this);
@@ -99,6 +102,7 @@ void MainWindow::setupActions()
     m_actionQuit->setIcon(QIcon::fromTheme(QStringLiteral("application-exit"), QIcon(QStringLiteral(":/icons/actions/16/application-exit.svg"))));
     m_actionQuit->setShortcut(QKeySequence::Quit);
     m_actionQuit->setToolTip(tr("Quit the application"));
+    m_actionQuit->setMenuRole(QAction::QuitRole);
     connect(m_actionQuit, &QAction::triggered, this, &MainWindow::close);
     addAction(m_actionQuit);
 
