@@ -1,7 +1,7 @@
 /**
  * Copyright 2022 naracanto <https://naracanto.github.io>.
  *
- * This file is part of Tabelo-Qt <https://github.com/tabelolabs/tabelo-qt>.
+ * This file is part of Tabelo-Qt <https://github.com/cutelabs/tabelo-qt>.
  *
  * Tabelo-Qt is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
