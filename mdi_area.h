@@ -22,6 +22,9 @@
 
 #include <QMdiArea>
 
+class QMdiSubWindow;
+class QUrl;
+
 
 class MdiArea : public QMdiArea
 {
@@ -29,6 +32,8 @@ class MdiArea : public QMdiArea
 
 public:
     explicit MdiArea(QWidget *parent = nullptr);
+
+    QMdiSubWindow *findSubWindow(const QUrl &url) const;
 
     int subWindowCount() const;
 };

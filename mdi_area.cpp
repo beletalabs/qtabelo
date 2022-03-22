@@ -19,11 +19,34 @@
 
 #include "mdi_area.h"
 
+#include <QList>
+#include <QMdiSubWindow>
+#include <QUrl>
+
+#include "mdi_document.h"
+
 
 MdiArea::MdiArea(QWidget *parent)
     : QMdiArea{parent}
 {
 
+}
+
+
+QMdiSubWindow *MdiArea::findSubWindow(const QUrl &url) const
+{
+    if (url.isEmpty())
+        return nullptr;
+
+    const QList<QMdiSubWindow *> subWindows = subWindowList();
+    for (auto *subWindow : subWindows) {
+
+        auto *document = qobject_cast<MdiDocument *>(subWindow->widget());
+        if (document->documentUrl() == url)
+            return subWindow;
+    }
+
+    return nullptr;
 }
 
 
