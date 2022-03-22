@@ -30,20 +30,24 @@ class MdiDocument : public TabularDocument
     Q_OBJECT
 
     Q_PROPERTY(QUrl documentUrl MEMBER m_documentUrl READ documentUrl WRITE setDocumentUrl NOTIFY documentUrlChanged)
+    Q_PROPERTY(int filenameSequenceNumber MEMBER m_filenameSequenceNumber READ filenameSequenceNumber WRITE setFilenameSequenceNumber)
 
 public:
     explicit MdiDocument(QWidget *parent = nullptr);
 
     QUrl documentUrl() const;
+    int filenameSequenceNumber() const;
 
 public slots:
     void setDocumentUrl(const QUrl &url);
+    void setFilenameSequenceNumber(const int number);
 
 signals:
     void documentUrlChanged(const QUrl &url);
 
 private:
     QUrl m_documentUrl;
+    int m_filenameSequenceNumber;
 };
 
 #endif // MDI_DOCUMENT_H
