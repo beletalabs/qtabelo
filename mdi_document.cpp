@@ -22,6 +22,23 @@
 
 MdiDocument::MdiDocument(QWidget *parent)
     : TabularDocument{parent}
+    , m_documentUrl{QString()}
 {
 
+}
+
+
+QUrl MdiDocument::documentUrl() const
+{
+    return m_documentUrl;
+}
+
+
+void MdiDocument::setDocumentUrl(const QUrl &url)
+{
+    if (url != m_documentUrl) {
+        m_documentUrl = url;
+
+        emit documentUrlChanged(url);
+    }
 }

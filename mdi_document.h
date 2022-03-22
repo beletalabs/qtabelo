@@ -22,13 +22,28 @@
 
 #include "tabular_document.h"
 
+#include <QUrl>
+
 
 class MdiDocument : public TabularDocument
 {
     Q_OBJECT
 
+    Q_PROPERTY(QUrl documentUrl MEMBER m_documentUrl READ documentUrl WRITE setDocumentUrl NOTIFY documentUrlChanged)
+
 public:
     explicit MdiDocument(QWidget *parent = nullptr);
+
+    QUrl documentUrl() const;
+
+public slots:
+    void setDocumentUrl(const QUrl &url);
+
+signals:
+    void documentUrlChanged(const QUrl &url);
+
+private:
+    QUrl m_documentUrl;
 };
 
 #endif // MDI_DOCUMENT_H
