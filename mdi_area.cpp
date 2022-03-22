@@ -25,3 +25,9 @@ MdiArea::MdiArea(QWidget *parent)
 {
 
 }
+
+
+int MdiArea::subWindowCount() const
+{
+    return subWindowList().size();
+}

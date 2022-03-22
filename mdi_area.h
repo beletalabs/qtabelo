@@ -29,6 +29,8 @@ class MdiArea : public QMdiArea
 
 public:
     explicit MdiArea(QWidget *parent = nullptr);
+
+    int subWindowCount() const;
 };
 
 #endif // MDI_AREA_H
