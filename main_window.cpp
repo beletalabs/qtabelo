@@ -140,13 +140,24 @@ void MainWindow::setupActions()
     connect(m_actionNew, &QAction::triggered, this, &MainWindow::onActionNewTriggered);
     addAction(m_actionNew);
 
+    m_actionOpen = new QAction(tr("Open…"), this);
+    m_actionOpen->setObjectName(QStringLiteral("actionOpen"));
+    m_actionOpen->setIcon(QIcon::fromTheme(QStringLiteral("document-open"), QIcon(QStringLiteral(":/icons/actions/16/document-open.svg"))));
+    m_actionOpen->setShortcut(QKeySequence::Open);
+    m_actionOpen->setToolTip(tr("Open an existing document"));
+    connect(m_actionOpen, &QAction::triggered, this, &MainWindow::onActionOpenTriggered);
+    addAction(m_actionOpen);
+
     auto *menuFile = menuBar()->addMenu(tr("File"));
     menuFile->setObjectName(QStringLiteral("menuFile"));
     menuFile->addAction(m_actionNew);
+    menuFile->addSeparator();
+    menuFile->addAction(m_actionOpen);
 
     m_toolbarFile = addToolBar(tr("File Toolbar"));
     m_toolbarFile->setObjectName(QStringLiteral("toolbarFile"));
     m_toolbarFile->addAction(m_actionNew);
+    m_toolbarFile->addAction(m_actionOpen);
     connect(m_toolbarFile, &QToolBar::visibilityChanged, this, [=] (const bool visible) { m_actionToolbarFile->setChecked(visible); });
 
 
@@ -498,6 +509,12 @@ void MainWindow::onActionNewTriggered()
 {
     MdiDocument *document = createDocument();
     document->show();
+}
+
+
+void MainWindow::onActionOpenTriggered()
+{
+
 }
 
 
