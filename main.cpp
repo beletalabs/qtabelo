@@ -19,6 +19,8 @@
 
 #include <QApplication>
 #include <QCommandLineParser>
+#include <QDir>
+#include <QUrl>
 
 #include "main_window.h"
 
@@ -37,10 +39,20 @@ int main(int argc, char *argv[])
     parser.setApplicationDescription(QCoreApplication::translate("main", "%1 - A table editor based on Qt for C++").arg(app.applicationName()));
     parser.addHelpOption();
     parser.addVersionOption();
+    parser.addPositionalArgument(QStringLiteral("urls"), QCoreApplication::translate("main", "Documents to open."), QStringLiteral("[urls...]"));
     parser.process(app);
+
+
+    //
+    // Main window
 
     MainWindow window;
     window.show();
+
+    const QStringList urls = parser.positionalArguments();
+    for(const QString &url : urls)
+        window.openDocument(QUrl::fromUserInput(url, QDir::currentPath()));
+
 
     return app.exec();
 }
