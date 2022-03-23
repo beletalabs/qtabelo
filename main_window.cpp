@@ -594,7 +594,17 @@ void MainWindow::onActionCloseOtherTriggered()
 
 void MainWindow::onActionCloseAllTriggered()
 {
+    if (m_documentsArea->subWindowCount() > 0
+        && QMessageBox::warning(this,
+                                tr("Close all documents"),
+                                tr("This will close all open documents.\n"
+                                   "Are you sure you want to continue?"),
+                                QMessageBox::Yes | QMessageBox::Cancel,
+                                QMessageBox::Yes)
+            != QMessageBox::Cancel) {
 
+        m_documentsArea->closeAllSubWindows();
+    }
 }
 
 
