@@ -26,6 +26,7 @@
 #include <QFileDialog>
 #include <QMdiSubWindow>
 #include <QMenuBar>
+#include <QMessageBox>
 #include <QScreen>
 #include <QSettings>
 #include <QStatusBar>
@@ -571,7 +572,17 @@ void MainWindow::onActionOpenTriggered()
 
 void MainWindow::onActionCloseOtherTriggered()
 {
+    if (m_documentsArea->subWindowCount() > 1
+        && QMessageBox::warning(this,
+                                tr("Close all documents beside current one"),
+                                tr("This will close all open documents beside the current one.\n"
+                                   "Are you sure you want to continue?"),
+                                QMessageBox::Yes | QMessageBox::Cancel,
+                                QMessageBox::Yes)
+            != QMessageBox::Cancel) {
 
+        m_documentsArea->closeOtherSubWindows();
+    }
 }
 
 
