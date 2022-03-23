@@ -164,6 +164,11 @@ void MainWindow::setupActions()
     m_actionCloseOther->setToolTip(tr("Close other open documents"));
     connect(m_actionCloseOther, &QAction::triggered, this, &MainWindow::onActionCloseOtherTriggered);
 
+    m_actionCloseAll = new QAction(tr("Close All"), this);
+    m_actionCloseAll->setObjectName(QStringLiteral("actionCloseAll"));
+    m_actionCloseAll->setToolTip(tr("Close all open documents"));
+    connect(m_actionCloseAll, &QAction::triggered, this, &MainWindow::onActionCloseAllTriggered);
+
     auto *menuFile = menuBar()->addMenu(tr("File"));
     menuFile->setObjectName(QStringLiteral("menuFile"));
     menuFile->addAction(m_actionNew);
@@ -172,6 +177,7 @@ void MainWindow::setupActions()
     menuFile->addSeparator();
     menuFile->addAction(m_actionClose);
     menuFile->addAction(m_actionCloseOther);
+    menuFile->addAction(m_actionCloseAll);
 
     m_toolbarFile = addToolBar(tr("File Toolbar"));
     m_toolbarFile->setObjectName(QStringLiteral("toolbarFile"));
@@ -583,6 +589,12 @@ void MainWindow::onActionCloseOtherTriggered()
 
         m_documentsArea->closeOtherSubWindows();
     }
+}
+
+
+void MainWindow::onActionCloseAllTriggered()
+{
+
 }
 
 
