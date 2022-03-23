@@ -67,8 +67,22 @@ MainWindow::~MainWindow()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    if (true) {
-        // Store application properties
+    if (m_documentsArea->subWindowCount() == 0) {
+
+        saveSettings();
+
+        event->accept();
+    }
+    else if (m_documentsArea->subWindowCount() > 0
+             && QMessageBox::warning(this,
+                                     tr("Quit the application"),
+                                     tr("This will close all open documents and quit the application.\n"
+                                        "Are you sure you want to continue?"),
+                                     QMessageBox::Yes | QMessageBox::Cancel,
+                                     QMessageBox::Yes)
+                 != QMessageBox::Cancel) {
+
+        m_documentsArea->closeAllSubWindows();
         saveSettings();
 
         event->accept();
