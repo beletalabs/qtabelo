@@ -54,3 +54,25 @@ int MdiArea::subWindowCount() const
 {
     return subWindowList().size();
 }
+
+
+void MdiArea::closeOtherSubWindows(QMdiSubWindow *givenSubWindow)
+{
+    QList<QMdiSubWindow *> subWindows = subWindowList();
+
+    if (subWindows.isEmpty())
+        return;
+
+    // First remove the subwindow from the list that should not be closed
+    if (givenSubWindow)
+        if (subWindows.indexOf(givenSubWindow) >= 0)
+            subWindows.removeOne(givenSubWindow);
+        else
+            return;
+    else
+        subWindows.removeOne(activeSubWindow());
+
+    // Then close all other subwindows
+    for (auto *subWindow : subWindows)
+        subWindow->close();
+}

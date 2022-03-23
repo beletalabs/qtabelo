@@ -36,6 +36,9 @@ public:
     QMdiSubWindow *findSubWindow(const QUrl &url) const;
 
     int subWindowCount() const;
+
+public slots:
+    void closeOtherSubWindows(QMdiSubWindow *givenSubWindow = nullptr);
 };
 
 #endif // MDI_AREA_H
