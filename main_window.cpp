@@ -23,12 +23,14 @@
 #include <QActionGroup>
 #include <QApplication>
 #include <QCloseEvent>
+#include <QFileDialog>
 #include <QMdiSubWindow>
 #include <QMenuBar>
 #include <QScreen>
 #include <QSettings>
 #include <QStatusBar>
 #include <QToolBar>
+#include <QUrl>
 
 #include "about_dialog.h"
 #include "colophon_dialog.h"
@@ -484,6 +486,35 @@ MdiDocument *MainWindow::createDocument()
 }
 
 
+bool MainWindow::openDocument(const QUrl &url)
+{
+    if (QMdiSubWindow *subWindow = m_documentsArea->findSubWindow(url)) {
+        // Given document is already loaded; activate the subwindow
+        m_documentsArea->setActiveSubWindow(subWindow);
+        return true;
+    }
+
+    return loadDocument(url);
+}
+
+
+bool MainWindow::loadDocument(const QUrl &url)
+{
+    MdiDocument *document = createDocument();
+
+    if (!true) {
+        // Given document could not be loaded
+        document->close();
+        return false;
+    }
+
+    document->setDocumentUrl(url);
+    document->show();
+
+    return true;
+}
+
+
 void MainWindow::onActionAboutTriggered()
 {
     auto *dialog = new AboutDialog(this);
@@ -514,7 +545,9 @@ void MainWindow::onActionNewTriggered()
 
 void MainWindow::onActionOpenTriggered()
 {
-
+    const QList<QUrl> urls = QFileDialog::getOpenFileUrls(this, tr("Open Document"));
+    for (const QUrl &url : urls)
+        openDocument(url);
 }
 
 

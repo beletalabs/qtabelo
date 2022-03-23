@@ -27,6 +27,7 @@ class QActionGroup;
 class QCloseEvent;
 class QStatusBar;
 class QToolBar;
+class QUrl;
 
 class MdiArea;
 class MdiDocument;
@@ -39,6 +40,8 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
+    bool openDocument(const QUrl &url);
 
 protected:
     void closeEvent(QCloseEvent *event) override;
@@ -53,6 +56,7 @@ private:
     void saveSettings();
 
     MdiDocument *createDocument();
+    bool loadDocument(const QUrl &url);
 
 private slots:
     void onActionAboutTriggered();
