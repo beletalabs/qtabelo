@@ -150,16 +150,28 @@ void MainWindow::setupActions()
     connect(m_actionOpen, &QAction::triggered, this, &MainWindow::onActionOpenTriggered);
     addAction(m_actionOpen);
 
+    m_actionClose = new QAction(tr("Close"), this);
+    m_actionClose->setObjectName(QStringLiteral("actionClose"));
+    m_actionClose->setIcon(QIcon::fromTheme(QStringLiteral("document-close"), QIcon(QStringLiteral(":/icons/actions/16/document-close.svg"))));
+    m_actionClose->setShortcut(QKeySequence::Close);
+    m_actionClose->setToolTip(tr("Close document"));
+    connect(m_actionClose, &QAction::triggered, m_documentsArea, &MdiArea::closeActiveSubWindow);
+    addAction(m_actionClose);
+
     auto *menuFile = menuBar()->addMenu(tr("File"));
     menuFile->setObjectName(QStringLiteral("menuFile"));
     menuFile->addAction(m_actionNew);
     menuFile->addSeparator();
     menuFile->addAction(m_actionOpen);
+    menuFile->addSeparator();
+    menuFile->addAction(m_actionClose);
 
     m_toolbarFile = addToolBar(tr("File Toolbar"));
     m_toolbarFile->setObjectName(QStringLiteral("toolbarFile"));
     m_toolbarFile->addAction(m_actionNew);
     m_toolbarFile->addAction(m_actionOpen);
+    m_toolbarFile->addSeparator();
+    m_toolbarFile->addAction(m_actionClose);
     connect(m_toolbarFile, &QToolBar::visibilityChanged, this, [=] (const bool visible) { m_actionToolbarFile->setChecked(visible); });
 
 

@@ -80,6 +80,7 @@ private:
 
     QAction *m_actionNew;
     QAction *m_actionOpen;
+    QAction *m_actionClose;
     QToolBar *m_toolbarFile;
 
     QToolBar *m_toolbarEdit;
