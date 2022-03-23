@@ -65,6 +65,7 @@ private slots:
 
     void onActionNewTriggered();
     void onActionOpenTriggered();
+    void onActionCloseOtherTriggered();
 
     void onActionsToolButtonStyleTriggered(const QAction *actionToolButtonStyle);
     void onActionFullScreenTriggered();
@@ -81,6 +82,7 @@ private:
     QAction *m_actionNew;
     QAction *m_actionOpen;
     QAction *m_actionClose;
+    QAction *m_actionCloseOther;
     QToolBar *m_toolbarFile;
 
     QToolBar *m_toolbarEdit;

@@ -158,6 +158,11 @@ void MainWindow::setupActions()
     connect(m_actionClose, &QAction::triggered, m_documentsArea, &MdiArea::closeActiveSubWindow);
     addAction(m_actionClose);
 
+    m_actionCloseOther = new QAction(tr("Close Other"), this);
+    m_actionCloseOther->setObjectName(QStringLiteral("actionCloseOther"));
+    m_actionCloseOther->setToolTip(tr("Close other open documents"));
+    connect(m_actionCloseOther, &QAction::triggered, this, &MainWindow::onActionCloseOtherTriggered);
+
     auto *menuFile = menuBar()->addMenu(tr("File"));
     menuFile->setObjectName(QStringLiteral("menuFile"));
     menuFile->addAction(m_actionNew);
@@ -165,6 +170,7 @@ void MainWindow::setupActions()
     menuFile->addAction(m_actionOpen);
     menuFile->addSeparator();
     menuFile->addAction(m_actionClose);
+    menuFile->addAction(m_actionCloseOther);
 
     m_toolbarFile = addToolBar(tr("File Toolbar"));
     m_toolbarFile->setObjectName(QStringLiteral("toolbarFile"));
@@ -560,6 +566,12 @@ void MainWindow::onActionOpenTriggered()
     const QList<QUrl> urls = QFileDialog::getOpenFileUrls(this, tr("Open Document"));
     for (const QUrl &url : urls)
         openDocument(url);
+}
+
+
+void MainWindow::onActionCloseOtherTriggered()
+{
+
 }
 
 
