@@ -165,6 +165,14 @@ void MainWindow::setupActions()
     connect(m_actionOpen, &QAction::triggered, this, &MainWindow::onActionOpenTriggered);
     addAction(m_actionOpen);
 
+    m_actionSave = new QAction(tr("Save"), this);
+    m_actionSave->setObjectName(QStringLiteral("actionSave"));
+    m_actionSave->setIcon(QIcon::fromTheme(QStringLiteral("document-save"), QIcon(QStringLiteral(":/icons/actions/16/document-save.svg"))));
+    m_actionSave->setShortcut(QKeySequence::Save);
+    m_actionSave->setToolTip(QStringLiteral("Save document"));
+    connect(m_actionSave, &QAction::triggered, this, &MainWindow::onActionSaveTriggered);
+    addAction(m_actionSave);
+
     m_actionClose = new QAction(tr("Close"), this);
     m_actionClose->setObjectName(QStringLiteral("actionClose"));
     m_actionClose->setIcon(QIcon::fromTheme(QStringLiteral("document-close"), QIcon(QStringLiteral(":/icons/actions/16/document-close.svg"))));
@@ -189,6 +197,8 @@ void MainWindow::setupActions()
     menuFile->addSeparator();
     menuFile->addAction(m_actionOpen);
     menuFile->addSeparator();
+    menuFile->addAction(m_actionSave);
+    menuFile->addSeparator();
     menuFile->addAction(m_actionClose);
     menuFile->addAction(m_actionCloseOther);
     menuFile->addAction(m_actionCloseAll);
@@ -197,6 +207,8 @@ void MainWindow::setupActions()
     m_toolbarFile->setObjectName(QStringLiteral("toolbarFile"));
     m_toolbarFile->addAction(m_actionNew);
     m_toolbarFile->addAction(m_actionOpen);
+    m_toolbarFile->addSeparator();
+    m_toolbarFile->addAction(m_actionSave);
     m_toolbarFile->addSeparator();
     m_toolbarFile->addAction(m_actionClose);
     connect(m_toolbarFile, &QToolBar::visibilityChanged, this, [=] (const bool visible) { m_actionToolbarFile->setChecked(visible); });
@@ -587,6 +599,12 @@ void MainWindow::onActionOpenTriggered()
     const QList<QUrl> urls = QFileDialog::getOpenFileUrls(this, tr("Open Document"));
     for (const QUrl &url : urls)
         openDocument(url);
+}
+
+
+void MainWindow::onActionSaveTriggered()
+{
+
 }
 
 
