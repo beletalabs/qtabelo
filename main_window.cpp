@@ -181,6 +181,12 @@ void MainWindow::setupActions()
     connect(m_actionSaveAs, &QAction::triggered, this, &MainWindow::onActionSaveAsTriggered);
     addAction(m_actionSaveAs);
 
+    m_actionSaveCopyAs = new QAction(tr("Save Copy As…"), this);
+    m_actionSaveCopyAs->setObjectName(QStringLiteral("actionSaveCopyAs"));
+    m_actionSaveCopyAs->setIcon(QIcon::fromTheme(QStringLiteral("document-save-as"), QIcon(QStringLiteral(":/icons/actions/16/document-save-as.svg"))));
+    m_actionSaveCopyAs->setToolTip(tr("Save copy of document under a new name"));
+    connect(m_actionSaveCopyAs, &QAction::triggered, this, &MainWindow::onActionSaveCopyAsTriggered);
+
     m_actionClose = new QAction(tr("Close"), this);
     m_actionClose->setObjectName(QStringLiteral("actionClose"));
     m_actionClose->setIcon(QIcon::fromTheme(QStringLiteral("document-close"), QIcon(QStringLiteral(":/icons/actions/16/document-close.svg"))));
@@ -207,6 +213,7 @@ void MainWindow::setupActions()
     menuFile->addSeparator();
     menuFile->addAction(m_actionSave);
     menuFile->addAction(m_actionSaveAs);
+    menuFile->addAction(m_actionSaveCopyAs);
     menuFile->addSeparator();
     menuFile->addAction(m_actionClose);
     menuFile->addAction(m_actionCloseOther);
@@ -619,6 +626,12 @@ void MainWindow::onActionSaveTriggered()
 
 
 void MainWindow::onActionSaveAsTriggered()
+{
+
+}
+
+
+void MainWindow::onActionSaveCopyAsTriggered()
 {
 
 }
