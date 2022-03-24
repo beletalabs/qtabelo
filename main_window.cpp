@@ -173,6 +173,14 @@ void MainWindow::setupActions()
     connect(m_actionSave, &QAction::triggered, this, &MainWindow::onActionSaveTriggered);
     addAction(m_actionSave);
 
+    m_actionSaveAs = new QAction(tr("Save As…"), this);
+    m_actionSaveAs->setObjectName(QStringLiteral("actionSaveAs"));
+    m_actionSaveAs->setIcon(QIcon::fromTheme(QStringLiteral("document-save-as"), QIcon(QStringLiteral(":/icons/actions/16/document-save-as.svg"))));
+    m_actionSaveAs->setShortcut(QKeySequence::SaveAs);
+    m_actionSaveAs->setToolTip(QStringLiteral("Save document under a new name"));
+    connect(m_actionSaveAs, &QAction::triggered, this, &MainWindow::onActionSaveAsTriggered);
+    addAction(m_actionSaveAs);
+
     m_actionClose = new QAction(tr("Close"), this);
     m_actionClose->setObjectName(QStringLiteral("actionClose"));
     m_actionClose->setIcon(QIcon::fromTheme(QStringLiteral("document-close"), QIcon(QStringLiteral(":/icons/actions/16/document-close.svg"))));
@@ -198,6 +206,7 @@ void MainWindow::setupActions()
     menuFile->addAction(m_actionOpen);
     menuFile->addSeparator();
     menuFile->addAction(m_actionSave);
+    menuFile->addAction(m_actionSaveAs);
     menuFile->addSeparator();
     menuFile->addAction(m_actionClose);
     menuFile->addAction(m_actionCloseOther);
@@ -209,6 +218,7 @@ void MainWindow::setupActions()
     m_toolbarFile->addAction(m_actionOpen);
     m_toolbarFile->addSeparator();
     m_toolbarFile->addAction(m_actionSave);
+    m_toolbarFile->addAction(m_actionSaveAs);
     m_toolbarFile->addSeparator();
     m_toolbarFile->addAction(m_actionClose);
     connect(m_toolbarFile, &QToolBar::visibilityChanged, this, [=] (const bool visible) { m_actionToolbarFile->setChecked(visible); });
@@ -603,6 +613,12 @@ void MainWindow::onActionOpenTriggered()
 
 
 void MainWindow::onActionSaveTriggered()
+{
+
+}
+
+
+void MainWindow::onActionSaveAsTriggered()
 {
 
 }
