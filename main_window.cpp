@@ -187,6 +187,14 @@ void MainWindow::setupActions()
     m_actionSaveCopyAs->setToolTip(tr("Save copy of document under a new name"));
     connect(m_actionSaveCopyAs, &QAction::triggered, this, &MainWindow::onActionSaveCopyAsTriggered);
 
+    m_actionSaveAll = new QAction(tr("Save All"), this);
+    m_actionSaveAll->setObjectName(QStringLiteral("actionSaveAll"));
+    m_actionSaveAll->setIcon(QIcon::fromTheme(QStringLiteral("document-save-all"), QIcon(QStringLiteral(":/icons/actions/16/document-save-all.svg"))));
+    m_actionSaveAll->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_L));
+    m_actionSaveAll->setToolTip(tr("Save all open documents"));
+    connect(m_actionSaveAll, &QAction::triggered, this, &MainWindow::onActionSaveAllTriggered);
+    addAction(m_actionSaveAll);
+
     m_actionClose = new QAction(tr("Close"), this);
     m_actionClose->setObjectName(QStringLiteral("actionClose"));
     m_actionClose->setIcon(QIcon::fromTheme(QStringLiteral("document-close"), QIcon(QStringLiteral(":/icons/actions/16/document-close.svg"))));
@@ -214,6 +222,7 @@ void MainWindow::setupActions()
     menuFile->addAction(m_actionSave);
     menuFile->addAction(m_actionSaveAs);
     menuFile->addAction(m_actionSaveCopyAs);
+    menuFile->addAction(m_actionSaveAll);
     menuFile->addSeparator();
     menuFile->addAction(m_actionClose);
     menuFile->addAction(m_actionCloseOther);
@@ -632,6 +641,12 @@ void MainWindow::onActionSaveAsTriggered()
 
 
 void MainWindow::onActionSaveCopyAsTriggered()
+{
+
+}
+
+
+void MainWindow::onActionSaveAllTriggered()
 {
 
 }

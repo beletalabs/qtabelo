@@ -68,6 +68,7 @@ private slots:
     void onActionSaveTriggered();
     void onActionSaveAsTriggered();
     void onActionSaveCopyAsTriggered();
+    void onActionSaveAllTriggered();
     void onActionCloseOtherTriggered();
     void onActionCloseAllTriggered();
 
@@ -88,6 +89,7 @@ private:
     QAction *m_actionSave;
     QAction *m_actionSaveAs;
     QAction *m_actionSaveCopyAs;
+    QAction *m_actionSaveAll;
     QAction *m_actionClose;
     QAction *m_actionCloseOther;
     QAction *m_actionCloseAll;
