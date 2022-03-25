@@ -287,6 +287,12 @@ void MainWindow::setupActions()
     //
     // Appearance
 
+    m_actionFullPath = new QAction(tr("Show Path in Titlebar"), this);
+    m_actionFullPath->setObjectName(QStringLiteral("actionFullPath"));
+    m_actionFullPath->setCheckable(true);
+    m_actionFullPath->setToolTip(tr("Show document path in the window caption"));
+    connect(m_actionFullPath, &QAction::triggered, this, [=] () { updateWindowCaption(m_documentsArea->activeSubWindow()); });
+
     m_actionMenubar = new QAction(tr("Show Menu Bar"), this);
     m_actionMenubar->setObjectName(QStringLiteral("actionMenubar"));
     m_actionMenubar->setCheckable(true);
@@ -404,6 +410,8 @@ void MainWindow::setupActions()
 
     auto *menuAppearance = menuBar()->addMenu(tr("Appearance"));
     menuAppearance->setObjectName(QStringLiteral("menuAppearance"));
+    menuAppearance->addAction(m_actionFullPath);
+    menuAppearance->addSeparator();
     menuAppearance->addAction(m_actionMenubar);
     menuAppearance->addSeparator();
     menuAppearance->addAction(m_actionToolbarApplication);
@@ -510,6 +518,10 @@ void MainWindow::loadSettings()
         m_toolbarHelp->setVisible(false);
     }
 
+    // Application property: Full Path
+    const auto visibleFullPath = settings.value(QStringLiteral("Application/FullPath"), true).toBool();
+    m_actionFullPath->setChecked(visibleFullPath);
+
     // Application property: Menu Bar
     const auto visibleMenuBar = settings.value(QStringLiteral("Application/MenuBar"), true).toBool();
     menuBar()->setVisible(visibleMenuBar);
@@ -537,6 +549,10 @@ void MainWindow::saveSettings()
     // Application property: State
     const auto state = saveState();
     settings.setValue(QStringLiteral("Application/State"), state);
+
+    // Application property: Full Path
+    const auto visibleFullPath = m_actionFullPath->isChecked();
+    settings.setValue(QStringLiteral("Application/FullPath"), visibleFullPath);
 
     // Application property: Menu Bar
     const auto visibleMenuBar = menuBar()->isVisible();
@@ -613,6 +629,12 @@ bool MainWindow::saveDocument(const MdiDocument *document, const QUrl &url)
     Q_UNUSED(url)
 
     return true;
+}
+
+
+void MainWindow::updateWindowCaption(const QMdiSubWindow *subWindow)
+{
+
 }
 
 

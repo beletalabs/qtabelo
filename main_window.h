@@ -63,6 +63,8 @@ private:
     bool saveDocument(const MdiDocument *document, const QUrl &url);
 
 private slots:
+    void updateWindowCaption(const QMdiSubWindow *subWindow);
+
     void onActionAboutTriggered();
     void onActionColophonTriggered();
     void onActionPreferencesTriggered();
@@ -107,6 +109,7 @@ private:
 
     QToolBar *m_toolbarTools;
 
+    QAction *m_actionFullPath;
     QAction *m_actionMenubar;
     QAction *m_actionToolbarApplication;
     QAction *m_actionToolbarFile;
