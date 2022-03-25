@@ -25,6 +25,7 @@
 class QAction;
 class QActionGroup;
 class QCloseEvent;
+class QMdiSubWindow;
 class QStatusBar;
 class QToolBar;
 class QUrl;
@@ -56,7 +57,10 @@ private:
     void saveSettings();
 
     MdiDocument *createDocument();
+    MdiDocument *extractDocument(const QMdiSubWindow *subWindow) const;
+    MdiDocument *activeDocument() const;
     bool loadDocument(const QUrl &url);
+    bool saveDocument(const MdiDocument *document, const QUrl &url);
 
 private slots:
     void onActionAboutTriggered();

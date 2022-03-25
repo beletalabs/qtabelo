@@ -563,6 +563,21 @@ MdiDocument *MainWindow::createDocument()
 }
 
 
+MdiDocument *MainWindow::extractDocument(const QMdiSubWindow *subWindow) const
+{
+    if (subWindow)
+        return qobject_cast<MdiDocument *>(subWindow->widget());
+
+    return nullptr;
+}
+
+
+MdiDocument *MainWindow::activeDocument() const
+{
+    return extractDocument(m_documentsArea->activeSubWindow());
+}
+
+
 bool MainWindow::openDocument(const QUrl &url)
 {
     if (QMdiSubWindow *subWindow = m_documentsArea->findSubWindow(url)) {
@@ -587,6 +602,15 @@ bool MainWindow::loadDocument(const QUrl &url)
 
     document->setDocumentUrl(url);
     document->show();
+
+    return true;
+}
+
+
+bool MainWindow::saveDocument(const MdiDocument *document, const QUrl &url)
+{
+    Q_UNUSED(document)
+    Q_UNUSED(url)
 
     return true;
 }
@@ -630,25 +654,63 @@ void MainWindow::onActionOpenTriggered()
 
 void MainWindow::onActionSaveTriggered()
 {
+    MdiDocument *document = activeDocument();
+    if (!document)
+        return;
 
+    if (!document->documentUrl().isEmpty())
+        saveDocument(document, document->documentUrl());
+    else
+        onActionSaveAsTriggered();
 }
 
 
 void MainWindow::onActionSaveAsTriggered()
 {
+    MdiDocument *document = activeDocument();
+    if (!document)
+        return;
 
+    const QUrl url = QFileDialog::getSaveFileUrl(this, tr("Save Document"));
+    if (!url.isEmpty()) {
+        document->setDocumentUrl(url);
+        saveDocument(document, url);
+    }
 }
 
 
 void MainWindow::onActionSaveCopyAsTriggered()
 {
+    MdiDocument *document = activeDocument();
+    if (!document)
+        return;
 
+    const QUrl url = QFileDialog::getSaveFileUrl(this, tr("Save Copy of Document"));
+    if (!url.isEmpty())
+        saveDocument(document, url);
 }
 
 
 void MainWindow::onActionSaveAllTriggered()
 {
+    const QList<QMdiSubWindow *> subWindows = m_documentsArea->subWindowList();
+    for (auto *subWindow : subWindows) {
 
+        MdiDocument *document = extractDocument(subWindow);
+        if (!document)
+            continue;
+
+        if (!document->documentUrl().isEmpty()) {
+            saveDocument(document, document->documentUrl());
+        }
+        else {
+            const QUrl url = QFileDialog::getSaveFileUrl(this, tr("Save Document"));
+            if (!url.isEmpty()) {
+                document->setDocumentUrl(url);
+                saveDocument(document, url);
+            }
+        }
+    }
 }
 
 
