@@ -19,6 +19,8 @@
 
 #include "mdi_document.h"
 
+#include <QDir>
+
 
 MdiDocument::MdiDocument(QWidget *parent)
     : TabularDocument{parent}
@@ -68,4 +70,35 @@ void MdiDocument::setPathVisibleInWindowTitle(const bool visible)
 {
     if (visible != m_pathVisibleInWindowTitle)
         m_pathVisibleInWindowTitle = visible;
+}
+
+
+QString MdiDocument::windowCaption(const bool pathVisible) const
+{
+    QString caption;
+
+    // Name
+    if (!m_documentUrl.isEmpty()) {
+
+        if (pathVisible) {
+
+            caption = m_documentUrl.toString(QUrl::PreferLocalFile);
+
+            const QString homePath = QDir::homePath();
+            if (caption.startsWith(homePath))
+                caption.replace(0, homePath.length(), QLatin1Char('~'));
+        }
+        else {
+            caption = m_documentUrl.isLocalFile() ? m_documentUrl.fileName() : tr("Untitled");
+        }
+    }
+    else {
+        caption = tr("Untitled");
+    }
+
+    // Sequence number
+    if (m_filenameSequenceNumber > 1 && (!pathVisible || m_documentUrl.isEmpty()))
+        caption = tr("%1 (%2)").arg(caption, m_filenameSequenceNumber);
+
+    return caption;
 }

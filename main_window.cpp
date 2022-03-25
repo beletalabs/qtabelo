@@ -51,6 +51,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_documentsArea->setTabsClosable(true);
     m_documentsArea->setTabsMovable(true);
     setCentralWidget(m_documentsArea);
+    connect(m_documentsArea, &MdiArea::subWindowActivated, this, &MainWindow::updateWindowTitle);
 
     setupActions();
 
@@ -291,7 +292,7 @@ void MainWindow::setupActions()
     m_actionFullPath->setObjectName(QStringLiteral("actionFullPath"));
     m_actionFullPath->setCheckable(true);
     m_actionFullPath->setToolTip(tr("Show document path in the window caption"));
-    connect(m_actionFullPath, &QAction::triggered, this, [=] () { updateWindowCaption(m_documentsArea->activeSubWindow()); });
+    connect(m_actionFullPath, &QAction::triggered, this, [=] () { updateWindowTitle(m_documentsArea->activeSubWindow()); });
 
     m_actionMenubar = new QAction(tr("Show Menu Bar"), this);
     m_actionMenubar->setObjectName(QStringLiteral("actionMenubar"));
@@ -632,9 +633,17 @@ bool MainWindow::saveDocument(const MdiDocument *document, const QUrl &url)
 }
 
 
-void MainWindow::updateWindowCaption(const QMdiSubWindow *subWindow)
+void MainWindow::updateWindowTitle(const QMdiSubWindow *subWindow)
 {
-
+    MdiDocument *document = extractDocument(subWindow);
+    if (document) {
+        setWindowTitle(document->windowCaption(m_actionFullPath->isChecked()) + QStringLiteral(" [*]"));
+        setWindowModified(document->isWindowModified());
+    }
+    else {
+        setWindowTitle(QString());
+        setWindowModified(false);
+    }
 }
 
 

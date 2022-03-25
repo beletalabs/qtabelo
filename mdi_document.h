@@ -39,6 +39,7 @@ public:
     QUrl documentUrl() const;
     int filenameSequenceNumber() const;
     bool isPathVisibleInWindowTitle() const;
+    QString windowCaption(const bool pathVisible) const;
 
 public slots:
     void setDocumentUrl(const QUrl &url);
