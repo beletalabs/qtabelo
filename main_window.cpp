@@ -99,7 +99,7 @@ void MainWindow::setupActions()
     //
     // Application
 
-    m_actionAbout = new QAction(tr("About %1").arg(QApplication::applicationName()), this);
+    m_actionAbout = new QAction(tr("&About %1").arg(QApplication::applicationName()), this);
     m_actionAbout->setObjectName(QStringLiteral("actionAbout"));
     m_actionAbout->setIcon(QIcon(QStringLiteral(":/icons/apps/16/tabelo.svg")));
     m_actionAbout->setIconText(tr("About"));
@@ -107,20 +107,20 @@ void MainWindow::setupActions()
     m_actionAbout->setMenuRole(QAction::AboutRole);
     connect(m_actionAbout, &QAction::triggered, this, &MainWindow::onActionAboutTriggered);
 
-    m_actionColophon = new QAction(tr("Colophon"), this);
+    m_actionColophon = new QAction(tr("&Colophon"), this);
     m_actionColophon->setObjectName(QStringLiteral("actionColophon"));
     m_actionColophon->setToolTip(tr("Lengthy description of the application"));
     m_actionColophon->setMenuRole(QAction::ApplicationSpecificRole);
     connect(m_actionColophon, &QAction::triggered, this, &MainWindow::onActionColophonTriggered);
 
-    m_actionPreferences = new QAction(tr("Preferences…"), this);
+    m_actionPreferences = new QAction(tr("&Preferences…"), this);
     m_actionPreferences->setObjectName(QStringLiteral("actionPreferences"));
     m_actionPreferences->setIcon(QIcon::fromTheme(QStringLiteral("configure"), QIcon(QStringLiteral(":/icons/actions/16/configure.svg"))));
     m_actionPreferences->setToolTip(tr("Customize the appearance and behavior of the application"));
     m_actionPreferences->setMenuRole(QAction::PreferencesRole);
     connect(m_actionPreferences, &QAction::triggered, this, &MainWindow::onActionPreferencesTriggered);
 
-    m_actionQuit = new QAction(tr("Quit"), this);
+    m_actionQuit = new QAction(tr("&Quit"), this);
     m_actionQuit->setObjectName(QStringLiteral("actionQuit"));
     m_actionQuit->setIcon(QIcon::fromTheme(QStringLiteral("application-exit"), QIcon(QStringLiteral(":/icons/actions/16/application-exit.svg"))));
     m_actionQuit->setShortcut(QKeySequence::Quit);
@@ -129,7 +129,7 @@ void MainWindow::setupActions()
     connect(m_actionQuit, &QAction::triggered, this, &MainWindow::close);
     addAction(m_actionQuit);
 
-    auto *menuApplication = menuBar()->addMenu(tr("Application"));
+    auto *menuApplication = menuBar()->addMenu(tr("&Application"));
     menuApplication->setObjectName(QStringLiteral("menuApplication"));
     menuApplication->addAction(m_actionAbout);
     menuApplication->addAction(m_actionColophon);
@@ -150,7 +150,7 @@ void MainWindow::setupActions()
     //
     // File
 
-    m_actionNew = new QAction(tr("New"), this);
+    m_actionNew = new QAction(tr("&New"), this);
     m_actionNew->setObjectName(QStringLiteral("actionNew"));
     m_actionNew->setIcon(QIcon::fromTheme(QStringLiteral("document-new"), QIcon(QStringLiteral(":/icons/actions/16/document-new.svg"))));
     m_actionNew->setShortcut(QKeySequence::New);
@@ -158,7 +158,7 @@ void MainWindow::setupActions()
     connect(m_actionNew, &QAction::triggered, this, &MainWindow::onActionNewTriggered);
     addAction(m_actionNew);
 
-    m_actionOpen = new QAction(tr("Open…"), this);
+    m_actionOpen = new QAction(tr("&Open…"), this);
     m_actionOpen->setObjectName(QStringLiteral("actionOpen"));
     m_actionOpen->setIcon(QIcon::fromTheme(QStringLiteral("document-open"), QIcon(QStringLiteral(":/icons/actions/16/document-open.svg"))));
     m_actionOpen->setShortcut(QKeySequence::Open);
@@ -166,29 +166,29 @@ void MainWindow::setupActions()
     connect(m_actionOpen, &QAction::triggered, this, &MainWindow::onActionOpenTriggered);
     addAction(m_actionOpen);
 
-    m_actionSave = new QAction(tr("Save"), this);
+    m_actionSave = new QAction(tr("&Save"), this);
     m_actionSave->setObjectName(QStringLiteral("actionSave"));
     m_actionSave->setIcon(QIcon::fromTheme(QStringLiteral("document-save"), QIcon(QStringLiteral(":/icons/actions/16/document-save.svg"))));
     m_actionSave->setShortcut(QKeySequence::Save);
-    m_actionSave->setToolTip(QStringLiteral("Save document"));
+    m_actionSave->setToolTip(tr("Save document"));
     connect(m_actionSave, &QAction::triggered, this, &MainWindow::onActionSaveTriggered);
     addAction(m_actionSave);
 
-    m_actionSaveAs = new QAction(tr("Save As…"), this);
+    m_actionSaveAs = new QAction(tr("Save &As…"), this);
     m_actionSaveAs->setObjectName(QStringLiteral("actionSaveAs"));
     m_actionSaveAs->setIcon(QIcon::fromTheme(QStringLiteral("document-save-as"), QIcon(QStringLiteral(":/icons/actions/16/document-save-as.svg"))));
     m_actionSaveAs->setShortcut(QKeySequence::SaveAs);
-    m_actionSaveAs->setToolTip(QStringLiteral("Save document under a new name"));
+    m_actionSaveAs->setToolTip(tr("Save document under a new name"));
     connect(m_actionSaveAs, &QAction::triggered, this, &MainWindow::onActionSaveAsTriggered);
     addAction(m_actionSaveAs);
 
-    m_actionSaveCopyAs = new QAction(tr("Save Copy As…"), this);
+    m_actionSaveCopyAs = new QAction(tr("Save &Copy As…"), this);
     m_actionSaveCopyAs->setObjectName(QStringLiteral("actionSaveCopyAs"));
     m_actionSaveCopyAs->setIcon(QIcon::fromTheme(QStringLiteral("document-save-as"), QIcon(QStringLiteral(":/icons/actions/16/document-save-as.svg"))));
     m_actionSaveCopyAs->setToolTip(tr("Save copy of document under a new name"));
     connect(m_actionSaveCopyAs, &QAction::triggered, this, &MainWindow::onActionSaveCopyAsTriggered);
 
-    m_actionSaveAll = new QAction(tr("Save All"), this);
+    m_actionSaveAll = new QAction(tr("Save A&ll"), this);
     m_actionSaveAll->setObjectName(QStringLiteral("actionSaveAll"));
     m_actionSaveAll->setIcon(QIcon::fromTheme(QStringLiteral("document-save-all"), QIcon(QStringLiteral(":/icons/actions/16/document-save-all.svg"))));
     m_actionSaveAll->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_L));
@@ -196,7 +196,7 @@ void MainWindow::setupActions()
     connect(m_actionSaveAll, &QAction::triggered, this, &MainWindow::onActionSaveAllTriggered);
     addAction(m_actionSaveAll);
 
-    m_actionClose = new QAction(tr("Close"), this);
+    m_actionClose = new QAction(tr("&Close"), this);
     m_actionClose->setObjectName(QStringLiteral("actionClose"));
     m_actionClose->setIcon(QIcon::fromTheme(QStringLiteral("document-close"), QIcon(QStringLiteral(":/icons/actions/16/document-close.svg"))));
     m_actionClose->setShortcut(QKeySequence::Close);
@@ -204,17 +204,17 @@ void MainWindow::setupActions()
     connect(m_actionClose, &QAction::triggered, this, [=] () { onActionCloseTriggered(); });
     addAction(m_actionClose);
 
-    m_actionCloseOther = new QAction(tr("Close Other"), this);
+    m_actionCloseOther = new QAction(tr("Close Ot&her"), this);
     m_actionCloseOther->setObjectName(QStringLiteral("actionCloseOther"));
     m_actionCloseOther->setToolTip(tr("Close other open documents"));
     connect(m_actionCloseOther, &QAction::triggered, this, [=] () { onActionCloseOtherTriggered(); });
 
-    m_actionCloseAll = new QAction(tr("Close All"), this);
+    m_actionCloseAll = new QAction(tr("Clos&e All"), this);
     m_actionCloseAll->setObjectName(QStringLiteral("actionCloseAll"));
     m_actionCloseAll->setToolTip(tr("Close all open documents"));
     connect(m_actionCloseAll, &QAction::triggered, this, &MainWindow::onActionCloseAllTriggered);
 
-    auto *menuFile = menuBar()->addMenu(tr("File"));
+    auto *menuFile = menuBar()->addMenu(tr("&File"));
     menuFile->setObjectName(QStringLiteral("menuFile"));
     menuFile->addAction(m_actionNew);
     menuFile->addSeparator();
@@ -244,7 +244,7 @@ void MainWindow::setupActions()
     //
     // Edit
 
-    auto *menuEdit = menuBar()->addMenu(tr("Edit"));
+    auto *menuEdit = menuBar()->addMenu(tr("&Edit"));
     menuEdit->setObjectName(QStringLiteral("menuEdit"));
 
     m_toolbarEdit = addToolBar(tr("Edit Toolbar"));
@@ -255,7 +255,7 @@ void MainWindow::setupActions()
     //
     // View
 
-    auto *menuView = menuBar()->addMenu(tr("View"));
+    auto *menuView = menuBar()->addMenu(tr("&View"));
     menuView->setObjectName(QStringLiteral("menuView"));
 
     m_toolbarView = addToolBar(tr("View Toolbar"));
@@ -266,7 +266,7 @@ void MainWindow::setupActions()
     //
     // Format
 
-    auto *menuFormat = menuBar()->addMenu(tr("Format"));
+    auto *menuFormat = menuBar()->addMenu(tr("F&ormat"));
     menuFormat->setObjectName(QStringLiteral("menuFormat"));
 
     m_toolbarFormat = addToolBar(tr("Format Toolbar"));
@@ -277,7 +277,7 @@ void MainWindow::setupActions()
     //
     // Tools
 
-    auto *menuTools = menuBar()->addMenu(tr("Tools"));
+    auto *menuTools = menuBar()->addMenu(tr("&Tools"));
     menuTools->setObjectName(QStringLiteral("menuTools"));
 
     m_toolbarTools = addToolBar(tr("Tools Toolbar"));
@@ -288,13 +288,13 @@ void MainWindow::setupActions()
     //
     // Appearance
 
-    m_actionFullPath = new QAction(tr("Show Path in Titlebar"), this);
+    m_actionFullPath = new QAction(tr("Show &Path in Titlebar"), this);
     m_actionFullPath->setObjectName(QStringLiteral("actionFullPath"));
     m_actionFullPath->setCheckable(true);
     m_actionFullPath->setToolTip(tr("Show document path in the window caption"));
     connect(m_actionFullPath, &QAction::triggered, this, [=] () { updateWindowTitle(activeDocument()); });
 
-    m_actionMenubar = new QAction(tr("Show Menu Bar"), this);
+    m_actionMenubar = new QAction(tr("Show &Menu Bar"), this);
     m_actionMenubar->setObjectName(QStringLiteral("actionMenubar"));
     m_actionMenubar->setCheckable(true);
     m_actionMenubar->setIcon(QIcon::fromTheme(QStringLiteral("show-menu"), QIcon(QStringLiteral(":/icons/actions/16/show-menu.svg"))));
@@ -304,79 +304,79 @@ void MainWindow::setupActions()
     connect(m_actionMenubar, &QAction::toggled, this, [=] (const bool checked) { menuBar()->setVisible(checked); });
     addAction(m_actionMenubar);
 
-    m_actionToolbarApplication = new QAction(tr("Show Application Toolbar"), this);
+    m_actionToolbarApplication = new QAction(tr("Show &Application Toolbar"), this);
     m_actionToolbarApplication->setObjectName(QStringLiteral("actionToolbarApplication"));
     m_actionToolbarApplication->setCheckable(true);
     m_actionToolbarApplication->setToolTip(tr("Display the Application toolbar"));
     connect(m_actionToolbarApplication, &QAction::toggled, this, [=] (const bool checked) { m_toolbarApplication->setVisible(checked); });
 
-    m_actionToolbarFile = new QAction(tr("Show File Toolbar"), this);
+    m_actionToolbarFile = new QAction(tr("Show &File Toolbar"), this);
     m_actionToolbarFile->setObjectName(QStringLiteral("actionToolbarFile"));
     m_actionToolbarFile->setCheckable(true);
     m_actionToolbarFile->setToolTip(tr("Display the File toolbar"));
     connect(m_actionToolbarFile, &QAction::toggled, this, [=] (const bool checked) { m_toolbarFile->setVisible(checked); });
 
-    m_actionToolbarEdit = new QAction(tr("Show Edit Toolbar"), this);
+    m_actionToolbarEdit = new QAction(tr("Show &Edit Toolbar"), this);
     m_actionToolbarEdit->setObjectName(QStringLiteral("actionToolbarEdit"));
     m_actionToolbarEdit->setCheckable(true);
     m_actionToolbarEdit->setToolTip(tr("Display the Edit toolbar"));
     connect(m_actionToolbarEdit, &QAction::toggled, this, [=] (const bool checked) { m_toolbarEdit->setVisible(checked); });
 
-    m_actionToolbarView = new QAction(tr("Show View Toolbar"), this);
+    m_actionToolbarView = new QAction(tr("Show &View Toolbar"), this);
     m_actionToolbarView->setObjectName(QStringLiteral("actionToolbarView"));
     m_actionToolbarView->setCheckable(true);
     m_actionToolbarView->setToolTip(tr("Display the View toolbar"));
     connect(m_actionToolbarView, &QAction::toggled, this, [=] (const bool checked) { m_toolbarView->setVisible(checked); });
 
-    m_actionToolbarFormat = new QAction(tr("Show Format Toolbar"), this);
+    m_actionToolbarFormat = new QAction(tr("Show F&ormat Toolbar"), this);
     m_actionToolbarFormat->setObjectName(QStringLiteral("actionToolbarFormat"));
     m_actionToolbarFormat->setCheckable(true);
     m_actionToolbarFormat->setToolTip(tr("Display the Format toolbar"));
     connect(m_actionToolbarFormat, &QAction::toggled, this, [=] (const bool checked) { m_toolbarFormat->setVisible(checked); });
 
-    m_actionToolbarTools = new QAction(tr("Show Tools Toolbar"), this);
+    m_actionToolbarTools = new QAction(tr("Show &Tools Toolbar"), this);
     m_actionToolbarTools->setObjectName(QStringLiteral("actionToolbarTools"));
     m_actionToolbarTools->setCheckable(true);
     m_actionToolbarTools->setToolTip(tr("Display the Tools toolbar"));
     connect(m_actionToolbarTools, &QAction::toggled, this, [=] (const bool checked) { m_toolbarTools->setVisible(checked); });
 
-    m_actionToolbarAppearance = new QAction(tr("Show Appearance Toolbar"), this);
+    m_actionToolbarAppearance = new QAction(tr("Show Appea&rance Toolbar"), this);
     m_actionToolbarAppearance->setObjectName(QStringLiteral("actionToolbarAppearance"));
     m_actionToolbarAppearance->setCheckable(true);
     m_actionToolbarAppearance->setToolTip(tr("Display the Appearance toolbar"));
     connect(m_actionToolbarAppearance, &QAction::toggled, this, [=] (const bool checked) { m_toolbarAppearance->setVisible(checked); });
 
-    m_actionToolbarHelp = new QAction(tr("Show Help Toolbar"), this);
+    m_actionToolbarHelp = new QAction(tr("Show &Help Toolbar"), this);
     m_actionToolbarHelp->setObjectName(QStringLiteral("actionToolbarHelp"));
     m_actionToolbarHelp->setCheckable(true);
     m_actionToolbarHelp->setToolTip(tr("Display the Help toolbar"));
     connect(m_actionToolbarHelp, &QAction::toggled, this, [=] (const bool checked) { m_toolbarHelp->setVisible(checked); });
 
-    auto *actionToolButtonStyleIconOnly = new QAction(tr("Icon Only"), this);
+    auto *actionToolButtonStyleIconOnly = new QAction(tr("&Icon Only"), this);
     actionToolButtonStyleIconOnly->setObjectName(QStringLiteral("actionToolButtonStyleIconOnly"));
     actionToolButtonStyleIconOnly->setCheckable(true);
     actionToolButtonStyleIconOnly->setToolTip(tr("Only display the icon"));
     actionToolButtonStyleIconOnly->setData(static_cast<int>(Qt::ToolButtonIconOnly));
 
-    auto *actionToolButtonStyleTextOnly = new QAction(tr("Text Only"), this);
+    auto *actionToolButtonStyleTextOnly = new QAction(tr("&Text Only"), this);
     actionToolButtonStyleTextOnly->setObjectName(QStringLiteral("actionToolButtonStyleTextOnly"));
     actionToolButtonStyleTextOnly->setCheckable(true);
     actionToolButtonStyleTextOnly->setToolTip(tr("Only display the text"));
     actionToolButtonStyleTextOnly->setData(static_cast<int>(Qt::ToolButtonTextOnly));
 
-    auto *actionToolButtonStyleTextBesideIcon = new QAction(tr("Text Beside Icon"), this);
+    auto *actionToolButtonStyleTextBesideIcon = new QAction(tr("Text &Beside Icon"), this);
     actionToolButtonStyleTextBesideIcon->setObjectName(QStringLiteral("actionToolButtonStyleTextBesideIcon"));
     actionToolButtonStyleTextBesideIcon->setCheckable(true);
     actionToolButtonStyleTextBesideIcon->setToolTip(tr("The text appears beside the icon"));
     actionToolButtonStyleTextBesideIcon->setData(static_cast<int>(Qt::ToolButtonTextBesideIcon));
 
-    auto *actionToolButtonStyleTextUnderIcon = new QAction(tr("Text Under Icon"), this);
+    auto *actionToolButtonStyleTextUnderIcon = new QAction(tr("Text &Under Icon"), this);
     actionToolButtonStyleTextUnderIcon->setObjectName(QStringLiteral("actionToolButtonStyleTextUnderIcon"));
     actionToolButtonStyleTextUnderIcon->setCheckable(true);
     actionToolButtonStyleTextUnderIcon->setToolTip(tr("The text appears under the icon"));
     actionToolButtonStyleTextUnderIcon->setData(static_cast<int>(Qt::ToolButtonTextUnderIcon));
 
-    auto *actionToolButtonStyleFollowStyle = new QAction(tr("Follow Style"), this);
+    auto *actionToolButtonStyleFollowStyle = new QAction(tr("&Follow Style"), this);
     actionToolButtonStyleFollowStyle->setObjectName(QStringLiteral("actionToolButtonStyleFollowStyle"));
     actionToolButtonStyleFollowStyle->setCheckable(true);
     actionToolButtonStyleFollowStyle->setToolTip(tr("Follow the style"));
@@ -391,7 +391,7 @@ void MainWindow::setupActions()
     m_actionsToolButtonStyle->addAction(actionToolButtonStyleFollowStyle);
     connect(m_actionsToolButtonStyle, &QActionGroup::triggered, this, &MainWindow::onActionsToolButtonStyleTriggered);
 
-    m_actionStatusbar = new QAction(tr("Show Status Bar"), this);
+    m_actionStatusbar = new QAction(tr("Show Stat&us Bar"), this);
     m_actionStatusbar->setObjectName(QStringLiteral("actionStatusbar"));
     m_actionStatusbar->setCheckable(true);
     m_actionStatusbar->setToolTip(tr("Display the Status bar"));
@@ -405,11 +405,11 @@ void MainWindow::setupActions()
     connect(m_actionFullScreen, &QAction::triggered, this, &MainWindow::onActionFullScreenTriggered);
     addAction(m_actionFullScreen);
 
-    auto *menuToolButtonStyle = new QMenu(tr("Tool Button Style"), this);
+    auto *menuToolButtonStyle = new QMenu(tr("Tool Button St&yle"), this);
     menuToolButtonStyle->setObjectName(QStringLiteral("menuToolButtonStyle"));
     menuToolButtonStyle->addActions(m_actionsToolButtonStyle->actions());
 
-    auto *menuAppearance = menuBar()->addMenu(tr("Appearance"));
+    auto *menuAppearance = menuBar()->addMenu(tr("Appea&rance"));
     menuAppearance->setObjectName(QStringLiteral("menuAppearance"));
     menuAppearance->addAction(m_actionFullPath);
     menuAppearance->addSeparator();
@@ -440,7 +440,7 @@ void MainWindow::setupActions()
     //
     // Help
 
-    auto *menuHelp = menuBar()->addMenu(tr("Help"));
+    auto *menuHelp = menuBar()->addMenu(tr("&Help"));
     menuHelp->setObjectName(QStringLiteral("menuHelp"));
 
     m_toolbarHelp = addToolBar(tr("Help Toolbar"));
@@ -472,13 +472,13 @@ void MainWindow::updateActionsToolButtonStyle(const Qt::ToolButtonStyle toolButt
 void MainWindow::updateActionFullScreen()
 {
     if (!isFullScreen()) {
-        m_actionFullScreen->setText(tr("Full Screen Mode"));
+        m_actionFullScreen->setText(tr("Full &Screen Mode"));
         m_actionFullScreen->setChecked(false);
         m_actionFullScreen->setIcon(QIcon::fromTheme(QStringLiteral("view-fullscreen"), QIcon(QStringLiteral(":/icons/actions/16/view-fullscreen.svg"))));
         m_actionFullScreen->setToolTip(tr("Display the window in full screen"));
     }
     else {
-        m_actionFullScreen->setText(tr("Exit Full Screen Mode"));
+        m_actionFullScreen->setText(tr("Exit Full &Screen Mode"));
         m_actionFullScreen->setChecked(true);
         m_actionFullScreen->setIcon(QIcon::fromTheme(QStringLiteral("view-restore"), QIcon(QStringLiteral(":/icons/actions/16/view-restore.svg"))));
         m_actionFullScreen->setToolTip(tr("Exit the full screen mode"));
@@ -591,19 +591,19 @@ void MainWindow::setupSubWindowActions(QMdiSubWindow *subWindow, const MdiDocume
     if (!menuSubWindow)
         return;
 
-    auto *actionSubWindowClose = new QAction(tr("Close Document"), this);
+    auto *actionSubWindowClose = new QAction(tr("&Close Document"), this);
     actionSubWindowClose->setObjectName(QStringLiteral("actionSubWindowClose"));
     actionSubWindowClose->setIcon(QIcon::fromTheme(QStringLiteral("window-close"), QIcon(QStringLiteral(":/icons/actions/16/window-close.svg"))));
     actionSubWindowClose->setToolTip(tr("Close document"));
     connect(actionSubWindowClose, &QAction::triggered, this, [=] () { onActionCloseTriggered(subWindow); });
 
-    auto *actionSubWindowCloseOther = new QAction(tr("Close Other Documents"), this);
+    auto *actionSubWindowCloseOther = new QAction(tr("Close Ot&her Documents"), this);
     actionSubWindowCloseOther->setObjectName(QStringLiteral("actionSubWindowCloseOther"));
     actionSubWindowCloseOther->setIcon(QIcon::fromTheme(QStringLiteral("window-close"), QIcon(QStringLiteral(":/icons/actions/16/window-close.svg"))));
     actionSubWindowCloseOther->setToolTip(tr("Close all other documents"));
     connect(actionSubWindowCloseOther, &QAction::triggered, this, [=] () { onActionCloseOtherTriggered(subWindow); });
 
-    auto actionSubWindowFullPath = new QAction(tr("Show Document Path"), this);
+    auto actionSubWindowFullPath = new QAction(tr("Show Document &Path"), this);
     actionSubWindowFullPath->setObjectName(QStringLiteral("actionSubWindowFullPath"));
     actionSubWindowFullPath->setCheckable(true);
     actionSubWindowFullPath->setChecked(document->isPathVisibleInWindowTitle());
