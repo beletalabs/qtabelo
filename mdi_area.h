@@ -40,8 +40,8 @@ public:
     int subWindowCount() const;
 
 public slots:
-    void closeSpecificSubWindow(QMdiSubWindow *subWindow);
-    void closeOtherSubWindows(QMdiSubWindow *givenSubWindow = nullptr);
+    void closeSelectedSubWindow(QMdiSubWindow *subWindow);
+    void closeOtherSubWindows(QMdiSubWindow *subWindow);
 
     void updateFilenameSequenceNumber(MdiDocument *document);
 

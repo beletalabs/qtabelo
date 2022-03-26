@@ -57,7 +57,7 @@ int MdiArea::subWindowCount() const
 }
 
 
-void MdiArea::closeSpecificSubWindow(QMdiSubWindow *subWindow)
+void MdiArea::closeSelectedSubWindow(QMdiSubWindow *subWindow)
 {
     if (!subWindow)
         return;
@@ -66,25 +66,22 @@ void MdiArea::closeSpecificSubWindow(QMdiSubWindow *subWindow)
 }
 
 
-void MdiArea::closeOtherSubWindows(QMdiSubWindow *givenSubWindow)
+void MdiArea::closeOtherSubWindows(QMdiSubWindow *subWindow)
 {
     QList<QMdiSubWindow *> subWindows = subWindowList();
 
-    if (subWindows.isEmpty())
+    if (!subWindow || subWindows.isEmpty())
         return;
 
     // First remove the subwindow from the list that should not be closed
-    if (givenSubWindow)
-        if (subWindows.indexOf(givenSubWindow) >= 0)
-            subWindows.removeOne(givenSubWindow);
-        else
-            return;
+    if (subWindows.indexOf(subWindow) >= 0)
+        subWindows.removeOne(subWindow);
     else
-        subWindows.removeOne(activeSubWindow());
+        return;
 
     // Then close all other subwindows
     for (auto *subWindow : subWindows)
-        subWindow->close();
+        closeSelectedSubWindow(subWindow);
 }
 
 

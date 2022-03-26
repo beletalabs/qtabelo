@@ -201,7 +201,7 @@ void MainWindow::setupActions()
     m_actionClose->setIcon(QIcon::fromTheme(QStringLiteral("document-close"), QIcon(QStringLiteral(":/icons/actions/16/document-close.svg"))));
     m_actionClose->setShortcut(QKeySequence::Close);
     m_actionClose->setToolTip(tr("Close document"));
-    connect(m_actionClose, &QAction::triggered, m_documentsArea, &MdiArea::closeActiveSubWindow);
+    connect(m_actionClose, &QAction::triggered, this, [=] () { onActionCloseTriggered(); });
     addAction(m_actionClose);
 
     m_actionCloseOther = new QAction(tr("Close Other"), this);
@@ -595,7 +595,7 @@ void MainWindow::setupSubWindowActions(QMdiSubWindow *subWindow, const MdiDocume
     actionSubWindowClose->setObjectName(QStringLiteral("actionSubWindowClose"));
     actionSubWindowClose->setIcon(QIcon::fromTheme(QStringLiteral("window-close"), QIcon(QStringLiteral(":/icons/actions/16/window-close.svg"))));
     actionSubWindowClose->setToolTip(tr("Close document"));
-    connect(actionSubWindowClose, &QAction::triggered, m_documentsArea, [=] () { m_documentsArea->closeSpecificSubWindow(subWindow); });
+    connect(actionSubWindowClose, &QAction::triggered, this, [=] () { onActionCloseTriggered(subWindow); });
 
     auto *actionSubWindowCloseOther = new QAction(tr("Close Other Documents"), this);
     actionSubWindowCloseOther->setObjectName(QStringLiteral("actionSubWindowCloseOther"));
@@ -783,34 +783,51 @@ void MainWindow::onActionSaveAllTriggered()
 }
 
 
+void MainWindow::onActionCloseTriggered(QMdiSubWindow *subWindow)
+{
+    if (!subWindow)
+        subWindow = m_documentsArea->activeSubWindow();
+
+    m_documentsArea->closeSelectedSubWindow(subWindow);
+}
+
+
 void MainWindow::onActionCloseOtherTriggered(QMdiSubWindow *subWindow)
 {
-    if (m_documentsArea->subWindowCount() > 1
-        && QMessageBox::warning(this,
-                                tr("Close all documents beside current one"),
-                                tr("This will close all open documents beside the current one.\n"
-                                   "Are you sure you want to continue?"),
-                                QMessageBox::Yes | QMessageBox::Cancel,
-                                QMessageBox::Yes)
-            != QMessageBox::Cancel) {
+    if (m_documentsArea->subWindowCount() > 1) {
 
-        m_documentsArea->closeOtherSubWindows(subWindow);
+        QString title;
+        QString text;
+
+        if (!subWindow) {
+            // Current subwindow
+            subWindow = m_documentsArea->activeSubWindow();
+            title = tr("Close all documents beside current one");
+            text = tr("This will close all open documents beside the current one.\n"
+                      "Are you sure you want to continue?");
+        }
+        else {
+            title = tr("Close all documents beside selected one");
+            text = tr("This will close all open documents beside the selected one.\n"
+                      "Are you sure you want to continue?");
+        }
+
+        if (QMessageBox::warning(this, title, text, QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Yes) != QMessageBox::Cancel)
+            m_documentsArea->closeOtherSubWindows(subWindow);
     }
 }
 
 
 void MainWindow::onActionCloseAllTriggered()
 {
-    if (m_documentsArea->subWindowCount() > 0
-        && QMessageBox::warning(this,
-                                tr("Close all documents"),
-                                tr("This will close all open documents.\n"
-                                   "Are you sure you want to continue?"),
-                                QMessageBox::Yes | QMessageBox::Cancel,
-                                QMessageBox::Yes)
-            != QMessageBox::Cancel) {
+    if (m_documentsArea->subWindowCount() > 0) {
 
-        m_documentsArea->closeAllSubWindows();
+        QString title = tr("Close all documents");
+        QString text = tr("This will close all open documents.\n"
+                          "Are you sure you want to continue?");
+
+        if (QMessageBox::warning(this, title, text, QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Yes) != QMessageBox::Cancel)
+            m_documentsArea->closeAllSubWindows();
     }
 }
 

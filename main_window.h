@@ -76,6 +76,7 @@ private slots:
     void onActionSaveAsTriggered();
     void onActionSaveCopyAsTriggered();
     void onActionSaveAllTriggered();
+    void onActionCloseTriggered(QMdiSubWindow *subWindow = nullptr);
     void onActionCloseOtherTriggered(QMdiSubWindow *subWindow = nullptr);
     void onActionCloseAllTriggered();
 
