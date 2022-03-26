@@ -207,7 +207,7 @@ void MainWindow::setupActions()
     m_actionCloseOther = new QAction(tr("Close Other"), this);
     m_actionCloseOther->setObjectName(QStringLiteral("actionCloseOther"));
     m_actionCloseOther->setToolTip(tr("Close other open documents"));
-    connect(m_actionCloseOther, &QAction::triggered, this, &MainWindow::onActionCloseOtherTriggered);
+    connect(m_actionCloseOther, &QAction::triggered, this, [=] () { onActionCloseOtherTriggered(); });
 
     m_actionCloseAll = new QAction(tr("Close All"), this);
     m_actionCloseAll->setObjectName(QStringLiteral("actionCloseAll"));
@@ -597,6 +597,12 @@ void MainWindow::setupSubWindowActions(QMdiSubWindow *subWindow, const MdiDocume
     actionSubWindowClose->setToolTip(tr("Close document"));
     connect(actionSubWindowClose, &QAction::triggered, m_documentsArea, [=] () { m_documentsArea->closeSpecificSubWindow(subWindow); });
 
+    auto *actionSubWindowCloseOther = new QAction(tr("Close Other Documents"), this);
+    actionSubWindowCloseOther->setObjectName(QStringLiteral("actionSubWindowCloseOther"));
+    actionSubWindowCloseOther->setIcon(QIcon::fromTheme(QStringLiteral("window-close"), QIcon(QStringLiteral(":/icons/actions/16/window-close.svg"))));
+    actionSubWindowCloseOther->setToolTip(tr("Close all other documents"));
+    connect(actionSubWindowCloseOther, &QAction::triggered, this, [=] () { onActionCloseOtherTriggered(subWindow); });
+
     auto actionSubWindowFullPath = new QAction(tr("Show Document Path"), this);
     actionSubWindowFullPath->setObjectName(QStringLiteral("actionSubWindowFullPath"));
     actionSubWindowFullPath->setCheckable(true);
@@ -606,6 +612,7 @@ void MainWindow::setupSubWindowActions(QMdiSubWindow *subWindow, const MdiDocume
 
     menuSubWindow->clear();
     menuSubWindow->addAction(actionSubWindowClose);
+    menuSubWindow->addAction(actionSubWindowCloseOther);
     menuSubWindow->addSeparator();
     menuSubWindow->addAction(actionSubWindowFullPath);
 }
@@ -776,7 +783,7 @@ void MainWindow::onActionSaveAllTriggered()
 }
 
 
-void MainWindow::onActionCloseOtherTriggered()
+void MainWindow::onActionCloseOtherTriggered(QMdiSubWindow *subWindow)
 {
     if (m_documentsArea->subWindowCount() > 1
         && QMessageBox::warning(this,
@@ -787,7 +794,7 @@ void MainWindow::onActionCloseOtherTriggered()
                                 QMessageBox::Yes)
             != QMessageBox::Cancel) {
 
-        m_documentsArea->closeOtherSubWindows();
+        m_documentsArea->closeOtherSubWindows(subWindow);
     }
 }
 

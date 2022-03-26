@@ -76,7 +76,7 @@ private slots:
     void onActionSaveAsTriggered();
     void onActionSaveCopyAsTriggered();
     void onActionSaveAllTriggered();
-    void onActionCloseOtherTriggered();
+    void onActionCloseOtherTriggered(QMdiSubWindow *subWindow = nullptr);
     void onActionCloseAllTriggered();
 
     void onActionsToolButtonStyleTriggered(const QAction *actionToolButtonStyle);
