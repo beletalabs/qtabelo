@@ -31,7 +31,7 @@ class MdiDocument : public TabularDocument
 
     Q_PROPERTY(QUrl documentUrl MEMBER m_documentUrl READ documentUrl WRITE setDocumentUrl NOTIFY documentUrlChanged)
     Q_PROPERTY(int filenameSequenceNumber MEMBER m_filenameSequenceNumber READ filenameSequenceNumber WRITE setFilenameSequenceNumber RESET resetFilenameSequenceNumber)
-    Q_PROPERTY(bool pathVisibleInWindowTitle MEMBER m_pathVisibleInWindowTitle READ isPathVisibleInWindowTitle WRITE setPathVisibleInWindowTitle)
+    Q_PROPERTY(bool pathVisibleInWindowTitle MEMBER m_pathVisibleInWindowTitle READ isPathVisibleInWindowTitle WRITE setPathVisibleInWindowTitle NOTIFY pathVisibleInWindowTitleChanged)
 
 public:
     explicit MdiDocument(QWidget *parent = nullptr);
@@ -50,6 +50,7 @@ public slots:
 
 signals:
     void documentUrlChanged(const QUrl &url);
+    void pathVisibleInWindowTitleChanged(const bool visible);
 
 private:
     QUrl m_documentUrl;

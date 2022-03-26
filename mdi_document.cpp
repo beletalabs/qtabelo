@@ -76,8 +76,11 @@ bool MdiDocument::isPathVisibleInWindowTitle() const
 
 void MdiDocument::setPathVisibleInWindowTitle(const bool visible)
 {
-    if (visible != m_pathVisibleInWindowTitle)
+    if (visible != m_pathVisibleInWindowTitle) {
         m_pathVisibleInWindowTitle = visible;
+
+        emit pathVisibleInWindowTitleChanged(visible);
+    }
 }
 
 
