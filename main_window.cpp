@@ -574,6 +574,7 @@ MdiDocument *MainWindow::createDocument()
     auto *document = new MdiDocument;
     connect(document, &MdiDocument::documentUrlChanged, this, [=] () { m_documentsArea->updateFilenameSequenceNumber(document); });
     connect(document, &MdiDocument::documentUrlChanged, this, [=] () { updateWindowTitle(document); });
+    connect(document, &MdiDocument::documentUrlChanged, document, &MdiDocument::updateWindowTitle);
 
     QMdiSubWindow *subWindow = m_documentsArea->addSubWindow(document);
     subWindow->setWindowIcon(QIcon());

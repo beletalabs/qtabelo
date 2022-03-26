@@ -46,6 +46,7 @@ public slots:
     void setFilenameSequenceNumber(const int number);
     void resetFilenameSequenceNumber();
     void setPathVisibleInWindowTitle(const bool visible);
+    void updateWindowTitle();
 
 signals:
     void documentUrlChanged(const QUrl &url);

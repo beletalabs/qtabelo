@@ -27,6 +27,7 @@ MdiDocument::MdiDocument(QWidget *parent)
     : TabularDocument{parent}
     , m_documentUrl{"0"}
     , m_filenameSequenceNumber{0}
+    , m_pathVisibleInWindowTitle{false}
 {
 
 }
@@ -108,4 +109,10 @@ QString MdiDocument::windowCaption(const bool pathVisible) const
         caption = tr("%1 (%2)").arg(caption).arg(m_filenameSequenceNumber);
 
     return caption;
+}
+
+
+void MdiDocument::updateWindowTitle()
+{
+    setWindowTitle(windowCaption(m_pathVisibleInWindowTitle));
 }
