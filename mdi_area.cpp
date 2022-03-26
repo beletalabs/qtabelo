@@ -57,6 +57,15 @@ int MdiArea::subWindowCount() const
 }
 
 
+void MdiArea::closeSpecificSubWindow(QMdiSubWindow *subWindow)
+{
+    if (!subWindow)
+        return;
+
+    subWindow->close();
+}
+
+
 void MdiArea::closeOtherSubWindows(QMdiSubWindow *givenSubWindow)
 {
     QList<QMdiSubWindow *> subWindows = subWindowList();

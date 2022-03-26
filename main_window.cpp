@@ -585,11 +585,17 @@ MdiDocument *MainWindow::createDocument()
 }
 
 
-void MainWindow::setupSubWindowActions(const QMdiSubWindow *subWindow, const MdiDocument *document)
+void MainWindow::setupSubWindowActions(QMdiSubWindow *subWindow, const MdiDocument *document)
 {
     QMenu *menuSubWindow = subWindow->systemMenu();
     if (!menuSubWindow)
         return;
+
+    auto *actionSubWindowClose = new QAction(tr("Close Document"), this);
+    actionSubWindowClose->setObjectName(QStringLiteral("actionSubWindowClose"));
+    actionSubWindowClose->setIcon(QIcon::fromTheme(QStringLiteral("window-close"), QIcon(QStringLiteral(":/icons/actions/16/window-close.svg"))));
+    actionSubWindowClose->setToolTip(tr("Close document"));
+    connect(actionSubWindowClose, &QAction::triggered, m_documentsArea, [=] () { m_documentsArea->closeSpecificSubWindow(subWindow); });
 
     auto actionSubWindowFullPath = new QAction(tr("Show Document Path"), this);
     actionSubWindowFullPath->setObjectName(QStringLiteral("actionSubWindowFullPath"));
@@ -599,6 +605,8 @@ void MainWindow::setupSubWindowActions(const QMdiSubWindow *subWindow, const Mdi
     connect(actionSubWindowFullPath, &QAction::toggled, document, &MdiDocument::setPathVisibleInWindowTitle);
 
     menuSubWindow->clear();
+    menuSubWindow->addAction(actionSubWindowClose);
+    menuSubWindow->addSeparator();
     menuSubWindow->addAction(actionSubWindowFullPath);
 }
 

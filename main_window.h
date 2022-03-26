@@ -57,7 +57,7 @@ private:
     void saveSettings();
 
     MdiDocument *createDocument();
-    void setupSubWindowActions(const QMdiSubWindow *subWindow, const MdiDocument *document);
+    void setupSubWindowActions(QMdiSubWindow *subWindow, const MdiDocument *document);
     MdiDocument *extractDocument(const QMdiSubWindow *subWindow) const;
     MdiDocument *activeDocument() const;
     bool loadDocument(const QUrl &url);
