@@ -84,7 +84,7 @@ void MdiArea::updateFilenameSequenceNumber(MdiDocument *document)
     if (!document)
         return;
 
-    document->setFilenameSequenceNumber(0);
+    document->resetFilenameSequenceNumber();
     document->setFilenameSequenceNumber(latestFilenameSequenceNumber(document->documentUrl()) + 1);
 }
 

@@ -30,7 +30,7 @@ class MdiDocument : public TabularDocument
     Q_OBJECT
 
     Q_PROPERTY(QUrl documentUrl MEMBER m_documentUrl READ documentUrl WRITE setDocumentUrl NOTIFY documentUrlChanged)
-    Q_PROPERTY(int filenameSequenceNumber MEMBER m_filenameSequenceNumber READ filenameSequenceNumber WRITE setFilenameSequenceNumber)
+    Q_PROPERTY(int filenameSequenceNumber MEMBER m_filenameSequenceNumber READ filenameSequenceNumber WRITE setFilenameSequenceNumber RESET resetFilenameSequenceNumber)
     Q_PROPERTY(bool pathVisibleInWindowTitle MEMBER m_pathVisibleInWindowTitle READ isPathVisibleInWindowTitle WRITE setPathVisibleInWindowTitle)
 
 public:
@@ -44,6 +44,7 @@ public:
 public slots:
     void setDocumentUrl(const QUrl &url);
     void setFilenameSequenceNumber(const int number);
+    void resetFilenameSequenceNumber();
     void setPathVisibleInWindowTitle(const bool visible);
 
 signals:

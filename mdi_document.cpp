@@ -61,6 +61,12 @@ void MdiDocument::setFilenameSequenceNumber(const int number)
 }
 
 
+void MdiDocument::resetFilenameSequenceNumber()
+{
+    m_filenameSequenceNumber = 0;
+}
+
+
 bool MdiDocument::isPathVisibleInWindowTitle() const
 {
     return m_pathVisibleInWindowTitle;
