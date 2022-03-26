@@ -25,6 +25,8 @@
 class QMdiSubWindow;
 class QUrl;
 
+class MdiDocument;
+
 
 class MdiArea : public QMdiArea
 {
@@ -39,6 +41,11 @@ public:
 
 public slots:
     void closeOtherSubWindows(QMdiSubWindow *givenSubWindow = nullptr);
+
+    void updateFilenameSequenceNumber(MdiDocument *document);
+
+private:
+    int latestFilenameSequenceNumber(const QUrl &url) const;
 };
 
 #endif // MDI_AREA_H

@@ -19,12 +19,13 @@
 
 #include "mdi_document.h"
 
+#include <QDebug>
 #include <QDir>
 
 
 MdiDocument::MdiDocument(QWidget *parent)
     : TabularDocument{parent}
-    , m_documentUrl{QString()}
+    , m_documentUrl{"0"}
     , m_filenameSequenceNumber{0}
 {
 
@@ -98,7 +99,7 @@ QString MdiDocument::windowCaption(const bool pathVisible) const
 
     // Sequence number
     if (m_filenameSequenceNumber > 1 && (!pathVisible || m_documentUrl.isEmpty()))
-        caption = tr("%1 (%2)").arg(caption, m_filenameSequenceNumber);
+        caption = tr("%1 (%2)").arg(caption).arg(m_filenameSequenceNumber);
 
     return caption;
 }

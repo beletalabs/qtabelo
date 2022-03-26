@@ -50,8 +50,8 @@ MainWindow::MainWindow(QWidget *parent)
     m_documentsArea->setDocumentMode(true);
     m_documentsArea->setTabsClosable(true);
     m_documentsArea->setTabsMovable(true);
+    connect(m_documentsArea, &MdiArea::subWindowActivated, this, [=] () { updateWindowTitle(activeDocument()); });
     setCentralWidget(m_documentsArea);
-    connect(m_documentsArea, &MdiArea::subWindowActivated, this, &MainWindow::updateWindowTitle);
 
     setupActions();
 
@@ -292,7 +292,7 @@ void MainWindow::setupActions()
     m_actionFullPath->setObjectName(QStringLiteral("actionFullPath"));
     m_actionFullPath->setCheckable(true);
     m_actionFullPath->setToolTip(tr("Show document path in the window caption"));
-    connect(m_actionFullPath, &QAction::triggered, this, [=] () { updateWindowTitle(m_documentsArea->activeSubWindow()); });
+    connect(m_actionFullPath, &QAction::triggered, this, [=] () { updateWindowTitle(activeDocument()); });
 
     m_actionMenubar = new QAction(tr("Show Menu Bar"), this);
     m_actionMenubar->setObjectName(QStringLiteral("actionMenubar"));
@@ -572,6 +572,8 @@ void MainWindow::saveSettings()
 MdiDocument *MainWindow::createDocument()
 {
     auto *document = new MdiDocument;
+    connect(document, &MdiDocument::documentUrlChanged, this, [=] () { m_documentsArea->updateFilenameSequenceNumber(document); });
+    connect(document, &MdiDocument::documentUrlChanged, this, [=] () { updateWindowTitle(document); });
 
     QMdiSubWindow *subWindow = m_documentsArea->addSubWindow(document);
     subWindow->setWindowIcon(QIcon());
@@ -633,9 +635,8 @@ bool MainWindow::saveDocument(const MdiDocument *document, const QUrl &url)
 }
 
 
-void MainWindow::updateWindowTitle(const QMdiSubWindow *subWindow)
+void MainWindow::updateWindowTitle(const MdiDocument *document)
 {
-    MdiDocument *document = extractDocument(subWindow);
     if (document) {
         setWindowTitle(document->windowCaption(m_actionFullPath->isChecked()) + QStringLiteral(" [*]"));
         setWindowModified(document->isWindowModified());
@@ -671,6 +672,7 @@ void MainWindow::onActionPreferencesTriggered()
 void MainWindow::onActionNewTriggered()
 {
     MdiDocument *document = createDocument();
+    document->setDocumentUrl(QUrl());
     document->show();
 }
 

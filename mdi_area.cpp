@@ -19,6 +19,7 @@
 
 #include "mdi_area.h"
 
+#include <QDebug>
 #include <QList>
 #include <QMdiSubWindow>
 #include <QUrl>
@@ -75,4 +76,31 @@ void MdiArea::closeOtherSubWindows(QMdiSubWindow *givenSubWindow)
     // Then close all other subwindows
     for (auto *subWindow : subWindows)
         subWindow->close();
+}
+
+
+void MdiArea::updateFilenameSequenceNumber(MdiDocument *document)
+{
+    if (!document)
+        return;
+
+    document->setFilenameSequenceNumber(0);
+    document->setFilenameSequenceNumber(latestFilenameSequenceNumber(document->documentUrl()) + 1);
+}
+
+
+int MdiArea::latestFilenameSequenceNumber(const QUrl &url) const
+{
+    int number = 0;
+
+    const QList<QMdiSubWindow *> subWindows = subWindowList();
+    for (auto *subWindow : subWindows) {
+
+        auto *document = qobject_cast<MdiDocument *>(subWindow->widget());
+        if (document->documentUrl().fileName() == url.fileName())
+            if (document->filenameSequenceNumber() > number)
+                number = document->filenameSequenceNumber();
+    }
+
+    return number;
 }

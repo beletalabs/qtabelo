@@ -63,7 +63,7 @@ private:
     bool saveDocument(const MdiDocument *document, const QUrl &url);
 
 private slots:
-    void updateWindowTitle(const QMdiSubWindow *subWindow);
+    void updateWindowTitle(const MdiDocument *document);
 
     void onActionAboutTriggered();
     void onActionColophonTriggered();
