@@ -579,7 +579,27 @@ MdiDocument *MainWindow::createDocument()
     QMdiSubWindow *subWindow = m_documentsArea->addSubWindow(document);
     subWindow->setWindowIcon(QIcon());
 
+    setupSubWindowActions(subWindow, document);
+
     return document;
+}
+
+
+void MainWindow::setupSubWindowActions(const QMdiSubWindow *subWindow, const MdiDocument *document)
+{
+    QMenu *menuSubWindow = subWindow->systemMenu();
+    if (!menuSubWindow)
+        return;
+
+    auto actionSubWindowFullPath = new QAction(tr("Show Document Path"), this);
+    actionSubWindowFullPath->setObjectName(QStringLiteral("actionSubWindowFullPath"));
+    actionSubWindowFullPath->setCheckable(true);
+    actionSubWindowFullPath->setChecked(document->isPathVisibleInWindowTitle());
+    actionSubWindowFullPath->setToolTip(tr("Show document path in the tab caption"));
+    connect(actionSubWindowFullPath, &QAction::toggled, document, &MdiDocument::setPathVisibleInWindowTitle);
+
+    menuSubWindow->clear();
+    menuSubWindow->addAction(actionSubWindowFullPath);
 }
 
 

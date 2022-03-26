@@ -29,7 +29,7 @@ MdiDocument::MdiDocument(QWidget *parent)
     , m_filenameSequenceNumber{0}
     , m_pathVisibleInWindowTitle{false}
 {
-
+    connect(this, &MdiDocument::pathVisibleInWindowTitleChanged, this, &MdiDocument::updateWindowTitle);
 }
 
 
