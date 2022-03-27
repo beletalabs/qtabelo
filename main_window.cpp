@@ -68,29 +68,31 @@ MainWindow::~MainWindow()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+    if (m_documentsArea->subWindowCount() > 0) {
+
+        QString title = tr("Quit the application");
+        QString text = tr("This will close all open documents and quit the application.\n"
+                          "Are you sure you want to continue?");
+
+        if (QMessageBox::warning(this, title, text, QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Yes) != QMessageBox::Cancel) {
+
+            m_documentsArea->closeAllSubWindows();
+            saveSettings();
+
+            event->accept();
+            return;
+        }
+    }
+
     if (m_documentsArea->subWindowCount() == 0) {
 
         saveSettings();
 
         event->accept();
+        return;
     }
-    else if (m_documentsArea->subWindowCount() > 0
-             && QMessageBox::warning(this,
-                                     tr("Quit the application"),
-                                     tr("This will close all open documents and quit the application.\n"
-                                        "Are you sure you want to continue?"),
-                                     QMessageBox::Yes | QMessageBox::Cancel,
-                                     QMessageBox::Yes)
-                 != QMessageBox::Cancel) {
 
-        m_documentsArea->closeAllSubWindows();
-        saveSettings();
-
-        event->accept();
-    }
-    else {
-        event->ignore();
-    }
+    event->ignore();
 }
 
 
@@ -490,7 +492,10 @@ void MainWindow::loadSettings()
 {
     QSettings settings;
 
-    // Application property: Geometry
+
+    //
+    // Application properties
+
     const auto geometry = settings.value(QStringLiteral("Application/Geometry"), QByteArray()).toByteArray();
     if (!geometry.isEmpty()) {
         restoreGeometry(geometry);
@@ -502,7 +507,6 @@ void MainWindow::loadSettings()
         move((availableGeometry.width() - width()) / 2, (availableGeometry.height() - height()) / 2);
     }
 
-    // Application property: State
     const auto state = settings.value(QStringLiteral("Application/State"), QByteArray()).toByteArray();
     if (!state.isEmpty()) {
         restoreState(state);
@@ -519,21 +523,17 @@ void MainWindow::loadSettings()
         m_toolbarHelp->setVisible(false);
     }
 
-    // Application property: Full Path
-    const auto visibleFullPath = settings.value(QStringLiteral("Application/FullPath"), true).toBool();
-    m_actionFullPath->setChecked(visibleFullPath);
+    bool visible = settings.value(QStringLiteral("Application/ShowFullPath"), true).toBool();
+    m_actionFullPath->setChecked(visible);
 
-    // Application property: Menu Bar
-    const auto visibleMenuBar = settings.value(QStringLiteral("Application/MenuBar"), true).toBool();
-    menuBar()->setVisible(visibleMenuBar);
-    m_actionMenubar->setChecked(visibleMenuBar);
+    visible = settings.value(QStringLiteral("Application/ShowMenuBar"), true).toBool();
+    menuBar()->setVisible(visible);
+    m_actionMenubar->setChecked(visible);
 
-    // Application property: Status Bar
-    const auto visible = settings.value(QStringLiteral("Application/StatusBar"), true).toBool();
+    visible = settings.value(QStringLiteral("Application/ShowStatusBar"), true).toBool();
     m_statusbar->setVisible(visible);
     m_actionStatusbar->setChecked(visible);
 
-    // Application property: Tool Button Style
     const auto style = settings.value(QStringLiteral("Application/ToolButtonStyle"), static_cast<int>(Qt::ToolButtonFollowStyle)).toInt();
     updateActionsToolButtonStyle(static_cast<Qt::ToolButtonStyle>(style));
 }
@@ -543,27 +543,25 @@ void MainWindow::saveSettings()
 {
     QSettings settings;
 
-    // Application property: Geometry
+
+    //
+    // Application properties
+
     const auto geometry = saveGeometry();
     settings.setValue(QStringLiteral("Application/Geometry"), geometry);
 
-    // Application property: State
     const auto state = saveState();
     settings.setValue(QStringLiteral("Application/State"), state);
 
-    // Application property: Full Path
-    const auto visibleFullPath = m_actionFullPath->isChecked();
-    settings.setValue(QStringLiteral("Application/FullPath"), visibleFullPath);
+    bool visible = m_actionFullPath->isChecked();
+    settings.setValue(QStringLiteral("Application/ShowFullPath"), visible);
 
-    // Application property: Menu Bar
-    const auto visibleMenuBar = menuBar()->isVisible();
-    settings.setValue(QStringLiteral("Application/MenuBar"), visibleMenuBar);
+    visible = menuBar()->isVisible();
+    settings.setValue(QStringLiteral("Application/ShowMenuBar"), visible);
 
-    // Application property: Status Bar
-    const auto visible = m_statusbar->isVisible();
-    settings.setValue(QStringLiteral("Application/StatusBar"), visible);
+    visible = m_statusbar->isVisible();
+    settings.setValue(QStringLiteral("Application/ShowStatusBar"), visible);
 
-    // Application property: Tool Button Style
     const auto style = m_actionsToolButtonStyle->checkedAction()->data();
     settings.setValue(QStringLiteral("Application/ToolButtonStyle"), style);
 }
@@ -800,7 +798,7 @@ void MainWindow::onActionCloseOtherTriggered(QMdiSubWindow *subWindow)
         QString text;
 
         if (!subWindow) {
-            // Current subwindow
+            // Current document
             subWindow = m_documentsArea->activeSubWindow();
             title = tr("Close all documents beside current one");
             text = tr("This will close all open documents beside the current one.\n"

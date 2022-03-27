@@ -49,7 +49,6 @@ protected:
 
 private:
     void setupActions();
-
     void updateActionsToolButtonStyle(const Qt::ToolButtonStyle toolButtonStyle);
     void updateActionFullScreen();
 
