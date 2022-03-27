@@ -111,6 +111,7 @@ void MainWindow::setupActions()
 
     m_actionColophon = new QAction(tr("&Colophon"), this);
     m_actionColophon->setObjectName(QStringLiteral("actionColophon"));
+    m_actionColophon->setIcon(QIcon::fromTheme(QStringLiteral("help-about"), QIcon(QStringLiteral(":/icons/actions/16/help-about.svg"))));
     m_actionColophon->setToolTip(tr("Lengthy description of the application"));
     m_actionColophon->setMenuRole(QAction::ApplicationSpecificRole);
     connect(m_actionColophon, &QAction::triggered, this, &MainWindow::onActionColophonTriggered);
@@ -142,7 +143,7 @@ void MainWindow::setupActions()
 
     m_toolbarApplication = addToolBar(tr("Application Toolbar"));
     m_toolbarApplication->setObjectName(QStringLiteral("toolbarApplication"));
-    m_toolbarApplication->addAction(m_actionAbout);
+    m_toolbarApplication->addAction(m_actionColophon);
     m_toolbarApplication->addAction(m_actionPreferences);
     m_toolbarApplication->addSeparator();
     m_toolbarApplication->addAction(m_actionQuit);
