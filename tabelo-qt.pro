@@ -36,6 +36,7 @@ SOURCES += \
     main_window.cpp \
     mdi_area.cpp \
     mdi_document.cpp \
+    mdi_window.cpp \
     preferences_dialog.cpp \
     tabular_document.cpp
 
@@ -47,6 +48,7 @@ HEADERS += \
     main_window.h \
     mdi_area.h \
     mdi_document.h \
+    mdi_window.h \
     preferences_dialog.h \
     tabular_document.h
 

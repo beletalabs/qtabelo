@@ -39,6 +39,7 @@
 #include "colophon_dialog.h"
 #include "mdi_area.h"
 #include "mdi_document.h"
+#include "mdi_window.h"
 #include "preferences_dialog.h"
 
 
@@ -613,10 +614,13 @@ MdiDocument *MainWindow::createDocument()
     connect(document, &MdiDocument::documentUrlChanged, document, &MdiDocument::updateWindowTitle);
     connect(document, &MdiDocument::modifiedChanged, this, &MainWindow::setWindowModified);
 
-    QMdiSubWindow *subWindow = m_documentsArea->addSubWindow(document);
-    connect(document, &MdiDocument::modifiedChanged, this, [=] (const bool modified) { updateSubWindowIcon(subWindow, modified); });
+    MdiWindow *docWindow = new MdiWindow;
+    docWindow->setWidget(document);
+    docWindow->setAttribute(Qt::WA_DeleteOnClose);
+    connect(document, &MdiDocument::modifiedChanged, this, [=] (const bool modified) { updateSubWindowIcon(docWindow, modified); });
+    m_documentsArea->addSubWindow(docWindow);
 
-    setupSubWindowActions(subWindow, document);
+    setupSubWindowActions(docWindow, document);
 
     document->resetDocumentUrl();
     document->resetModified();
