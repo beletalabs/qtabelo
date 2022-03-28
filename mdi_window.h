@@ -29,6 +29,9 @@ class MdiWindow : public QMdiSubWindow
 
 public:
     explicit MdiWindow(QWidget *parent = nullptr);
+
+public slots:
+    void updateWindowIcon(const bool modified);
 };
 
 #endif // MDI_WINDOW_H

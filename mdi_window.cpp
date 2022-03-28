@@ -19,9 +19,19 @@
 
 #include "mdi_window.h"
 
+#include <QIcon>
+
 
 MdiWindow::MdiWindow(QWidget *parent)
     : QMdiSubWindow{parent}
 {
 
+}
+
+
+void MdiWindow::updateWindowIcon(const bool modified)
+{
+    QIcon icon = modified ? QIcon::fromTheme(QStringLiteral("document-save"), QIcon(QStringLiteral(":/icons/actions/16/document-save.svg"))) : QIcon();
+
+    setWindowIcon(icon);
 }

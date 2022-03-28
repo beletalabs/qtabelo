@@ -71,7 +71,6 @@ private slots:
     void enableActions(QMdiSubWindow *subWindow = nullptr);
 
     void updateWindowTitle(const MdiDocument *document);
-    void updateSubWindowIcon(QMdiSubWindow *subWindow, const bool modified);
 
     void onActionAboutTriggered();
     void onActionColophonTriggered();
