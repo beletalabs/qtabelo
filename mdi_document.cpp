@@ -29,6 +29,8 @@ MdiDocument::MdiDocument(QWidget *parent)
     , m_filenameSequenceNumber{0}
     , m_pathVisibleInWindowTitle{false}
 {
+    setAttribute(Qt::WA_DeleteOnClose);
+
     connect(this, &MdiDocument::pathVisibleInWindowTitleChanged, this, &MdiDocument::updateWindowTitle);
     connect(this, &MdiDocument::modifiedChanged, this, &MdiDocument::setWindowModified);
 }
