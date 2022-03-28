@@ -574,11 +574,14 @@ MdiDocument *MainWindow::createDocument()
     connect(document, &MdiDocument::documentUrlChanged, this, [=] () { m_documentsArea->updateFilenameSequenceNumber(document); });
     connect(document, &MdiDocument::documentUrlChanged, this, [=] () { updateWindowTitle(document); });
     connect(document, &MdiDocument::documentUrlChanged, document, &MdiDocument::updateWindowTitle);
+    connect(document, &MdiDocument::modifiedChanged, this, &MainWindow::setWindowModified);
 
     QMdiSubWindow *subWindow = m_documentsArea->addSubWindow(document);
     subWindow->setWindowIcon(QIcon());
 
     setupSubWindowActions(subWindow, document);
+
+    document->resetModified();
 
     return document;
 }
@@ -661,10 +664,11 @@ bool MainWindow::loadDocument(const QUrl &url)
 }
 
 
-bool MainWindow::saveDocument(const MdiDocument *document, const QUrl &url)
+bool MainWindow::saveDocument(MdiDocument *document, const QUrl &url)
 {
-    Q_UNUSED(document)
     Q_UNUSED(url)
+
+    document->setModified(false);
 
     return true;
 }

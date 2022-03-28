@@ -60,7 +60,7 @@ private:
     MdiDocument *extractDocument(const QMdiSubWindow *subWindow) const;
     MdiDocument *activeDocument() const;
     bool loadDocument(const QUrl &url);
-    bool saveDocument(const MdiDocument *document, const QUrl &url);
+    bool saveDocument(MdiDocument *document, const QUrl &url);
 
 private slots:
     void updateWindowTitle(const MdiDocument *document);

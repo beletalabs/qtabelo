@@ -30,6 +30,7 @@ MdiDocument::MdiDocument(QWidget *parent)
     , m_pathVisibleInWindowTitle{false}
 {
     connect(this, &MdiDocument::pathVisibleInWindowTitleChanged, this, &MdiDocument::updateWindowTitle);
+    connect(this, &MdiDocument::modifiedChanged, this, &MdiDocument::setWindowModified);
 }
 
 
