@@ -64,6 +64,7 @@ private:
 
 private slots:
     void updateWindowTitle(const MdiDocument *document);
+    void updateSubWindowIcon(QMdiSubWindow *subWindow, const bool modified);
 
     void onActionAboutTriggered();
     void onActionColophonTriggered();

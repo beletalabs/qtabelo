@@ -577,7 +577,7 @@ MdiDocument *MainWindow::createDocument()
     connect(document, &MdiDocument::modifiedChanged, this, &MainWindow::setWindowModified);
 
     QMdiSubWindow *subWindow = m_documentsArea->addSubWindow(document);
-    subWindow->setWindowIcon(QIcon());
+    connect(document, &MdiDocument::modifiedChanged, this, [=] (const bool modified) { updateSubWindowIcon(subWindow, modified); });
 
     setupSubWindowActions(subWindow, document);
 
@@ -684,6 +684,14 @@ void MainWindow::updateWindowTitle(const MdiDocument *document)
         setWindowTitle(QString());
         setWindowModified(false);
     }
+}
+
+
+void MainWindow::updateSubWindowIcon(QMdiSubWindow *subWindow, const bool modified)
+{
+    QIcon icon = modified ? QIcon::fromTheme(QStringLiteral("document-save"), QIcon(QStringLiteral(":/icons/actions/16/document-save.svg"))) : QIcon();
+
+    subWindow->setWindowIcon(icon);
 }
 
 
