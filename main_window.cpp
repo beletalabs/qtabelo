@@ -206,6 +206,13 @@ void MainWindow::setupActions()
     connect(m_actionSaveAll, &QAction::triggered, this, &MainWindow::onActionSaveAllTriggered);
     addAction(m_actionSaveAll);
 
+    m_actionCopyFilePath = new QAction(tr("Cop&y File Path"), this);
+    m_actionCopyFilePath->setObjectName(QStringLiteral("actionCopyFilePath"));
+    m_actionCopyFilePath->setIcon(QIcon::fromTheme(QStringLiteral("edit-copy"), QIcon(QStringLiteral(":/icons/actions/16/edit-copy.svg"))));
+    m_actionCopyFilePath->setToolTip(tr("Copy file path of the document to clipboard"));
+    connect(this, &MainWindow::enableActionCopyFilePath, m_actionCopyFilePath, &QAction::setEnabled);
+    connect(m_actionCopyFilePath, &QAction::triggered, this, [=] () { onActionCopyFilePathTriggered(); });
+
     m_actionClose = new QAction(tr("&Close"), this);
     m_actionClose->setObjectName(QStringLiteral("actionClose"));
     m_actionClose->setIcon(QIcon::fromTheme(QStringLiteral("document-close"), QIcon(QStringLiteral(":/icons/actions/16/document-close.svg"))));
@@ -237,6 +244,8 @@ void MainWindow::setupActions()
     menuFile->addAction(m_actionSaveAs);
     menuFile->addAction(m_actionSaveCopyAs);
     menuFile->addAction(m_actionSaveAll);
+    menuFile->addSeparator();
+    menuFile->addAction(m_actionCopyFilePath);
     menuFile->addSeparator();
     menuFile->addAction(m_actionClose);
     menuFile->addAction(m_actionCloseOther);
@@ -501,11 +510,16 @@ void MainWindow::updateActionFullScreen()
 
 void MainWindow::enableActions(QMdiSubWindow *subWindow)
 {
-    Q_UNUSED(subWindow)
+    MdiDocument *document = extractDocument(subWindow);
 
     const int count = m_documentsArea->subWindowCount();
 
+    bool isFile = false;
+    if (document)
+        isFile = !document->documentUrl().isEmpty();
+
     emit enableAction(count > 0);
+    emit enableActionCopyFilePath(isFile);
     emit enableActionCloseOther(count > 1);
 }
 
@@ -813,6 +827,12 @@ void MainWindow::onActionSaveAllTriggered()
             }
         }
     }
+}
+
+
+void MainWindow::onActionCopyFilePathTriggered(QMdiSubWindow *subWindow)
+{
+    Q_UNUSED(subWindow)
 }
 
 

@@ -46,6 +46,7 @@ public:
 
 signals:
     void enableAction(const bool enabled);
+    void enableActionCopyFilePath(const bool enabled);
     void enableActionCloseOther(const bool enabled);
 
 protected:
@@ -82,6 +83,7 @@ private slots:
     void onActionSaveAsTriggered();
     void onActionSaveCopyAsTriggered();
     void onActionSaveAllTriggered();
+    void onActionCopyFilePathTriggered(QMdiSubWindow *subWindow = nullptr);
     void onActionCloseTriggered(QMdiSubWindow *subWindow = nullptr);
     void onActionCloseOtherTriggered(QMdiSubWindow *subWindow = nullptr);
     void onActionCloseAllTriggered();
@@ -107,6 +109,7 @@ private:
     QAction *m_actionClose;
     QAction *m_actionCloseOther;
     QAction *m_actionCloseAll;
+    QAction *m_actionCopyFilePath;
     QToolBar *m_toolbarFile;
 
     QToolBar *m_toolbarEdit;
