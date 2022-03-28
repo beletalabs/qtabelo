@@ -581,6 +581,7 @@ MdiDocument *MainWindow::createDocument()
 
     setupSubWindowActions(subWindow, document);
 
+    document->resetDocumentUrl();
     document->resetModified();
 
     return document;
@@ -719,7 +720,6 @@ void MainWindow::onActionPreferencesTriggered()
 void MainWindow::onActionNewTriggered()
 {
     MdiDocument *document = createDocument();
-    document->setDocumentUrl(QUrl());
     document->show();
 }
 

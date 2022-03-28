@@ -25,7 +25,7 @@
 
 MdiDocument::MdiDocument(QWidget *parent)
     : TabularDocument{parent}
-    , m_documentUrl{"0"}
+    , m_documentUrl{""}
     , m_filenameSequenceNumber{0}
     , m_pathVisibleInWindowTitle{false}
 {
@@ -47,6 +47,14 @@ void MdiDocument::setDocumentUrl(const QUrl &url)
 
         emit documentUrlChanged(url);
     }
+}
+
+
+void MdiDocument::resetDocumentUrl()
+{
+    m_documentUrl = QUrl("");
+
+    emit documentUrlChanged(QUrl(""));
 }
 
 
