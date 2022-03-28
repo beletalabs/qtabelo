@@ -22,7 +22,9 @@
 #include <QAction>
 #include <QActionGroup>
 #include <QApplication>
+#include <QClipboard>
 #include <QCloseEvent>
+#include <QDebug>
 #include <QFileDialog>
 #include <QMdiSubWindow>
 #include <QMenuBar>
@@ -832,7 +834,12 @@ void MainWindow::onActionSaveAllTriggered()
 
 void MainWindow::onActionCopyFilePathTriggered(QMdiSubWindow *subWindow)
 {
-    Q_UNUSED(subWindow)
+    if (!subWindow)
+        subWindow = m_documentsArea->activeSubWindow();
+
+    MdiDocument *document = extractDocument(subWindow);
+    if (document && !document->documentUrl().isEmpty())
+        QApplication::clipboard()->setText(document->documentUrl().toDisplayString(QUrl::PreferLocalFile));
 }
 
 
