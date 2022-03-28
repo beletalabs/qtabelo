@@ -50,6 +50,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_documentsArea->setDocumentMode(true);
     m_documentsArea->setTabsClosable(true);
     m_documentsArea->setTabsMovable(true);
+    connect(m_documentsArea, &MdiArea::subWindowActivated, this, &MainWindow::enableActions);
     connect(m_documentsArea, &MdiArea::subWindowActivated, this, [=] () { updateWindowTitle(activeDocument()); });
     setCentralWidget(m_documentsArea);
 
@@ -58,6 +59,8 @@ MainWindow::MainWindow(QWidget *parent)
     loadSettings();
 
     updateActionFullScreen();
+
+    enableActions();
 }
 
 MainWindow::~MainWindow()
@@ -174,6 +177,7 @@ void MainWindow::setupActions()
     m_actionSave->setIcon(QIcon::fromTheme(QStringLiteral("document-save"), QIcon(QStringLiteral(":/icons/actions/16/document-save.svg"))));
     m_actionSave->setShortcut(QKeySequence::Save);
     m_actionSave->setToolTip(tr("Save document"));
+    connect(this, &MainWindow::enableAction, m_actionSave, &QAction::setEnabled);
     connect(m_actionSave, &QAction::triggered, this, &MainWindow::onActionSaveTriggered);
     addAction(m_actionSave);
 
@@ -182,6 +186,7 @@ void MainWindow::setupActions()
     m_actionSaveAs->setIcon(QIcon::fromTheme(QStringLiteral("document-save-as"), QIcon(QStringLiteral(":/icons/actions/16/document-save-as.svg"))));
     m_actionSaveAs->setShortcut(QKeySequence::SaveAs);
     m_actionSaveAs->setToolTip(tr("Save document under a new name"));
+    connect(this, &MainWindow::enableAction, m_actionSaveAs, &QAction::setEnabled);
     connect(m_actionSaveAs, &QAction::triggered, this, &MainWindow::onActionSaveAsTriggered);
     addAction(m_actionSaveAs);
 
@@ -189,6 +194,7 @@ void MainWindow::setupActions()
     m_actionSaveCopyAs->setObjectName(QStringLiteral("actionSaveCopyAs"));
     m_actionSaveCopyAs->setIcon(QIcon::fromTheme(QStringLiteral("document-save-as"), QIcon(QStringLiteral(":/icons/actions/16/document-save-as.svg"))));
     m_actionSaveCopyAs->setToolTip(tr("Save copy of document under a new name"));
+    connect(this, &MainWindow::enableAction, m_actionSaveCopyAs, &QAction::setEnabled);
     connect(m_actionSaveCopyAs, &QAction::triggered, this, &MainWindow::onActionSaveCopyAsTriggered);
 
     m_actionSaveAll = new QAction(tr("Save A&ll"), this);
@@ -196,6 +202,7 @@ void MainWindow::setupActions()
     m_actionSaveAll->setIcon(QIcon::fromTheme(QStringLiteral("document-save-all"), QIcon(QStringLiteral(":/icons/actions/16/document-save-all.svg"))));
     m_actionSaveAll->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_L));
     m_actionSaveAll->setToolTip(tr("Save all open documents"));
+    connect(this, &MainWindow::enableAction, m_actionSaveAll, &QAction::setEnabled);
     connect(m_actionSaveAll, &QAction::triggered, this, &MainWindow::onActionSaveAllTriggered);
     addAction(m_actionSaveAll);
 
@@ -204,17 +211,20 @@ void MainWindow::setupActions()
     m_actionClose->setIcon(QIcon::fromTheme(QStringLiteral("document-close"), QIcon(QStringLiteral(":/icons/actions/16/document-close.svg"))));
     m_actionClose->setShortcut(QKeySequence::Close);
     m_actionClose->setToolTip(tr("Close document"));
+    connect(this, &MainWindow::enableAction, m_actionClose, &QAction::setEnabled);
     connect(m_actionClose, &QAction::triggered, this, [=] () { onActionCloseTriggered(); });
     addAction(m_actionClose);
 
     m_actionCloseOther = new QAction(tr("Close Ot&her"), this);
     m_actionCloseOther->setObjectName(QStringLiteral("actionCloseOther"));
     m_actionCloseOther->setToolTip(tr("Close other open documents"));
+    connect(this, &MainWindow::enableActionCloseOther, m_actionCloseOther, &QAction::setEnabled);
     connect(m_actionCloseOther, &QAction::triggered, this, [=] () { onActionCloseOtherTriggered(); });
 
     m_actionCloseAll = new QAction(tr("Clos&e All"), this);
     m_actionCloseAll->setObjectName(QStringLiteral("actionCloseAll"));
     m_actionCloseAll->setToolTip(tr("Close all open documents"));
+    connect(this, &MainWindow::enableAction, m_actionCloseAll, &QAction::setEnabled);
     connect(m_actionCloseAll, &QAction::triggered, this, &MainWindow::onActionCloseAllTriggered);
 
     auto *menuFile = menuBar()->addMenu(tr("&File"));
@@ -489,6 +499,17 @@ void MainWindow::updateActionFullScreen()
 }
 
 
+void MainWindow::enableActions(QMdiSubWindow *subWindow)
+{
+    Q_UNUSED(subWindow)
+
+    const int count = m_documentsArea->subWindowCount();
+
+    emit enableAction(count > 0);
+    emit enableActionCloseOther(count > 1);
+}
+
+
 void MainWindow::loadSettings()
 {
     QSettings settings;
@@ -604,6 +625,7 @@ void MainWindow::setupSubWindowActions(QMdiSubWindow *subWindow, const MdiDocume
     actionSubWindowCloseOther->setObjectName(QStringLiteral("actionSubWindowCloseOther"));
     actionSubWindowCloseOther->setIcon(QIcon::fromTheme(QStringLiteral("window-close"), QIcon(QStringLiteral(":/icons/actions/16/window-close.svg"))));
     actionSubWindowCloseOther->setToolTip(tr("Close all other documents"));
+    connect(this, &MainWindow::enableActionCloseOther, actionSubWindowCloseOther, &QAction::setEnabled);
     connect(actionSubWindowCloseOther, &QAction::triggered, this, [=] () { onActionCloseOtherTriggered(subWindow); });
 
     auto actionSubWindowFullPath = new QAction(tr("Show Document &Path"), this);

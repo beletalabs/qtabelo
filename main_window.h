@@ -44,6 +44,10 @@ public:
 
     bool openDocument(const QUrl &url);
 
+signals:
+    void enableAction(const bool enabled);
+    void enableActionCloseOther(const bool enabled);
+
 protected:
     void closeEvent(QCloseEvent *event) override;
 
@@ -63,6 +67,8 @@ private:
     bool saveDocument(MdiDocument *document, const QUrl &url);
 
 private slots:
+    void enableActions(QMdiSubWindow *subWindow = nullptr);
+
     void updateWindowTitle(const MdiDocument *document);
     void updateSubWindowIcon(QMdiSubWindow *subWindow, const bool modified);
 
