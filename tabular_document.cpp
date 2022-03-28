@@ -22,6 +22,31 @@
 
 TabularDocument::TabularDocument(QWidget *parent)
     : QWidget{parent}
+    , m_modified{false}
 {
 
+}
+
+
+bool TabularDocument::isModified() const
+{
+    return m_modified;
+}
+
+
+void TabularDocument::setModified(bool modified)
+{
+    if (modified != m_modified) {
+        m_modified = modified;
+
+        emit modifiedChanged(modified);
+    }
+}
+
+
+void TabularDocument::resetModified()
+{
+    m_modified = false;
+
+    emit modifiedChanged(false);
 }
