@@ -617,49 +617,20 @@ MdiDocument *MainWindow::createDocument()
     MdiWindow *docWindow = new MdiWindow;
     docWindow->setWidget(document);
     docWindow->setAttribute(Qt::WA_DeleteOnClose);
+    connect(this, &MainWindow::enableActionCloseOther, docWindow, &MdiWindow::enableActionCloseOther);
+    connect(docWindow, &MdiWindow::onActionCloseOtherTriggered, this, [=] () { onActionCloseOtherTriggered(docWindow); });
+    connect(docWindow, &MdiWindow::onActionFullPathToggled, document, &MdiDocument::setPathVisibleInWindowTitle);
+    connect(document, &MdiDocument::documentUrlChanged, docWindow, [=] (const QUrl &url) { emit docWindow->enableActionCopyFilePath(!url.isEmpty()); });
+    connect(docWindow, &MdiWindow::onActionCopyFilePathTriggered, this, [=] () { onActionCopyFilePathTriggered(docWindow); });
     connect(document, &MdiDocument::modifiedChanged, docWindow, &MdiWindow::updateWindowIcon);
     m_documentsArea->addSubWindow(docWindow);
-
-    setupSubWindowActions(docWindow, document);
 
     document->resetDocumentUrl();
     document->resetModified();
 
+    emit docWindow->checkedActionFullPath(document->isPathVisibleInWindowTitle());
+
     return document;
-}
-
-
-void MainWindow::setupSubWindowActions(QMdiSubWindow *subWindow, const MdiDocument *document)
-{
-    QMenu *menuSubWindow = subWindow->systemMenu();
-    if (!menuSubWindow)
-        return;
-
-    auto *actionSubWindowClose = new QAction(tr("&Close Document"), this);
-    actionSubWindowClose->setObjectName(QStringLiteral("actionSubWindowClose"));
-    actionSubWindowClose->setIcon(QIcon::fromTheme(QStringLiteral("window-close"), QIcon(QStringLiteral(":/icons/actions/16/window-close.svg"))));
-    actionSubWindowClose->setToolTip(tr("Close document"));
-    connect(actionSubWindowClose, &QAction::triggered, this, [=] () { onActionCloseTriggered(subWindow); });
-
-    auto *actionSubWindowCloseOther = new QAction(tr("Close Ot&her Documents"), this);
-    actionSubWindowCloseOther->setObjectName(QStringLiteral("actionSubWindowCloseOther"));
-    actionSubWindowCloseOther->setIcon(QIcon::fromTheme(QStringLiteral("window-close"), QIcon(QStringLiteral(":/icons/actions/16/window-close.svg"))));
-    actionSubWindowCloseOther->setToolTip(tr("Close all other documents"));
-    connect(this, &MainWindow::enableActionCloseOther, actionSubWindowCloseOther, &QAction::setEnabled);
-    connect(actionSubWindowCloseOther, &QAction::triggered, this, [=] () { onActionCloseOtherTriggered(subWindow); });
-
-    auto actionSubWindowFullPath = new QAction(tr("Show Document &Path"), this);
-    actionSubWindowFullPath->setObjectName(QStringLiteral("actionSubWindowFullPath"));
-    actionSubWindowFullPath->setCheckable(true);
-    actionSubWindowFullPath->setChecked(document->isPathVisibleInWindowTitle());
-    actionSubWindowFullPath->setToolTip(tr("Show document path in the tab caption"));
-    connect(actionSubWindowFullPath, &QAction::toggled, document, &MdiDocument::setPathVisibleInWindowTitle);
-
-    menuSubWindow->clear();
-    menuSubWindow->addAction(actionSubWindowClose);
-    menuSubWindow->addAction(actionSubWindowCloseOther);
-    menuSubWindow->addSeparator();
-    menuSubWindow->addAction(actionSubWindowFullPath);
 }
 
 

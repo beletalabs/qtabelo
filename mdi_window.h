@@ -30,8 +30,21 @@ class MdiWindow : public QMdiSubWindow
 public:
     explicit MdiWindow(QWidget *parent = nullptr);
 
+signals:
+    void enableActionCloseOther(const bool enabled);
+    void onActionCloseOtherTriggered();
+
+    void checkedActionFullPath(const bool checked);
+    void onActionFullPathToggled(const bool checked);
+
+    void enableActionCopyFilePath(const bool enabled);
+    void onActionCopyFilePathTriggered();
+
 public slots:
     void updateWindowIcon(const bool modified);
+
+private:
+    void setupActions();
 };
 
 #endif // MDI_WINDOW_H
