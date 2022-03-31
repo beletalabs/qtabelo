@@ -24,8 +24,7 @@
 
 class QMdiSubWindow;
 class QUrl;
-
-class MdiDocument;
+class QWidget;
 
 
 class MdiArea : public QMdiArea
@@ -35,18 +34,13 @@ class MdiArea : public QMdiArea
 public:
     explicit MdiArea(QWidget *parent = nullptr);
 
-    QMdiSubWindow *findSubWindow(const QUrl &url) const;
-
     int subWindowCount() const;
+
+    QMdiSubWindow *findSubWindow(const QUrl &url) const;
 
 public slots:
     void closeSelectedSubWindow(QMdiSubWindow *subWindow);
     void closeOtherSubWindows(QMdiSubWindow *subWindow);
-
-    void updateFilenameSequenceNumber(MdiDocument *document);
-
-private:
-    int latestFilenameSequenceNumber(const QUrl &url) const;
 };
 
 #endif // MDI_AREA_H

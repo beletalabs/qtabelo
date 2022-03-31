@@ -19,18 +19,25 @@
 
 #include "mdi_area.h"
 
-#include <QDebug>
 #include <QList>
 #include <QMdiSubWindow>
 #include <QUrl>
+#include <QWidget>
 
 #include "mdi_document.h"
+#include "mdi_window.h"
 
 
 MdiArea::MdiArea(QWidget *parent)
     : QMdiArea{parent}
 {
 
+}
+
+
+int MdiArea::subWindowCount() const
+{
+    return subWindowList().size();
 }
 
 
@@ -51,12 +58,6 @@ QMdiSubWindow *MdiArea::findSubWindow(const QUrl &url) const
 }
 
 
-int MdiArea::subWindowCount() const
-{
-    return subWindowList().size();
-}
-
-
 void MdiArea::closeSelectedSubWindow(QMdiSubWindow *subWindow)
 {
     if (!subWindow)
@@ -69,8 +70,7 @@ void MdiArea::closeSelectedSubWindow(QMdiSubWindow *subWindow)
 void MdiArea::closeOtherSubWindows(QMdiSubWindow *subWindow)
 {
     QList<QMdiSubWindow *> subWindows = subWindowList();
-
-    if (!subWindow || subWindows.isEmpty())
+    if (subWindows.isEmpty() || !subWindow)
         return;
 
     // First remove the subwindow from the list that should not be closed
@@ -82,31 +82,4 @@ void MdiArea::closeOtherSubWindows(QMdiSubWindow *subWindow)
     // Then close all other subwindows
     for (auto *subWindow : subWindows)
         closeSelectedSubWindow(subWindow);
-}
-
-
-void MdiArea::updateFilenameSequenceNumber(MdiDocument *document)
-{
-    if (!document)
-        return;
-
-    document->resetFilenameSequenceNumber();
-    document->setFilenameSequenceNumber(latestFilenameSequenceNumber(document->documentUrl()) + 1);
-}
-
-
-int MdiArea::latestFilenameSequenceNumber(const QUrl &url) const
-{
-    int number = 0;
-
-    const QList<QMdiSubWindow *> subWindows = subWindowList();
-    for (auto *subWindow : subWindows) {
-
-        auto *document = qobject_cast<MdiDocument *>(subWindow->widget());
-        if (document->documentUrl().fileName() == url.fileName())
-            if (document->filenameSequenceNumber() > number)
-                number = document->filenameSequenceNumber();
-    }
-
-    return number;
 }

@@ -32,6 +32,7 @@ class QUrl;
 
 class MdiArea;
 class MdiDocument;
+class MdiWindow;
 
 
 class MainWindow : public QMainWindow
@@ -45,9 +46,9 @@ public:
     bool openDocument(const QUrl &url);
 
 signals:
-    void enableAction(const bool enabled);
-    void enableActionCopyFilePath(const bool enabled);
-    void enableActionCloseOther(const bool enabled);
+    void actionEnabled(const bool enabled);
+    void actionCopyPathEnabled(const bool enabled);
+    void actionCloseOtherEnabled(const bool enabled);
 
 protected:
     void closeEvent(QCloseEvent *event) override;
@@ -61,15 +62,21 @@ private:
     void saveSettings();
 
     MdiDocument *createDocument();
-    MdiDocument *extractDocument(const QMdiSubWindow *subWindow) const;
-    MdiDocument *activeDocument() const;
     bool loadDocument(const QUrl &url);
     bool saveDocument(MdiDocument *document, const QUrl &url);
 
+    MdiDocument *extractDocument(const QMdiSubWindow *subWindow) const;
+    MdiDocument *activeDocument() const;
+
+    MdiWindow *extractDocWindow(QMdiSubWindow *subWindow) const;
+    MdiWindow *activeDocWindow() const;
+
 private slots:
     void enableActions(QMdiSubWindow *subWindow = nullptr);
+    void enableActionCopyPath();
+    void enableActionCloseOther();
 
-    void updateWindowTitle(const MdiDocument *document);
+    void updateWindowTitle();
 
     void onActionAboutTriggered();
     void onActionColophonTriggered();
@@ -81,8 +88,7 @@ private slots:
     void onActionSaveAsTriggered();
     void onActionSaveCopyAsTriggered();
     void onActionSaveAllTriggered();
-    void onActionCopyFilePathTriggered(QMdiSubWindow *subWindow = nullptr);
-    void onActionCloseTriggered(QMdiSubWindow *subWindow = nullptr);
+    void onActionCopyPathTriggered();
     void onActionCloseOtherTriggered(QMdiSubWindow *subWindow = nullptr);
     void onActionCloseAllTriggered();
 
@@ -104,10 +110,10 @@ private:
     QAction *m_actionSaveAs;
     QAction *m_actionSaveCopyAs;
     QAction *m_actionSaveAll;
+    QAction *m_actionCopyPath;
     QAction *m_actionClose;
     QAction *m_actionCloseOther;
     QAction *m_actionCloseAll;
-    QAction *m_actionCopyFilePath;
     QToolBar *m_toolbarFile;
 
     QToolBar *m_toolbarEdit;

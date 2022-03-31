@@ -19,14 +19,26 @@
 
 #include "mdi_window.h"
 
+#include <QAction>
 #include <QDebug>
+#include <QDir>
 #include <QIcon>
+#include <QMdiArea>
 #include <QMenu>
+#include <QString>
+#include <QUrl>
+#include <QWidget>
+
+#include "mdi_area.h"
+#include "mdi_document.h"
 
 
 MdiWindow::MdiWindow(QWidget *parent)
     : QMdiSubWindow{parent}
+    , m_filenameSequenceNumber{0}
 {
+    setAttribute(Qt::WA_DeleteOnClose);
+
     setupActions();
 }
 
@@ -37,45 +49,163 @@ void MdiWindow::setupActions()
     if (!menu)
         return;
 
-    auto *actionClose = new QAction(tr("&Close Document"), this);
-    actionClose->setObjectName(QStringLiteral("actionClose"));
-    actionClose->setIcon(QIcon::fromTheme(QStringLiteral("window-close"), QIcon(QStringLiteral(":/icons/actions/16/window-close.svg"))));
-    actionClose->setToolTip(tr("Close document"));
-    connect(actionClose, &QAction::triggered, this, &MdiWindow::close);
+    m_actionClose = new QAction(tr("&Close"), this);
+    m_actionClose->setObjectName(QStringLiteral("actionClose"));
+    m_actionClose->setIcon(QIcon::fromTheme(QStringLiteral("window-close"), QIcon(QStringLiteral(":/icons/actions/16/window-close.svg"))));
+    m_actionClose->setToolTip(tr("Close document"));
+    connect(m_actionClose, &QAction::triggered, this, &MdiWindow::close);
 
-    auto *actionCloseOther = new QAction(tr("Close Ot&her Documents"), this);
-    actionCloseOther->setObjectName(QStringLiteral("actionCloseOther"));
-    actionCloseOther->setIcon(QIcon::fromTheme(QStringLiteral("window-close"), QIcon(QStringLiteral(":/icons/actions/16/window-close.svg"))));
-    actionCloseOther->setToolTip(tr("Close all other documents"));
-    connect(this, &MdiWindow::enableActionCloseOther, actionCloseOther, &QAction::setEnabled);
-    connect(actionCloseOther, &QAction::triggered, this, &MdiWindow::onActionCloseOtherTriggered);
+    m_actionCloseOther = new QAction(tr("Close Ot&her"), this);
+    m_actionCloseOther->setObjectName(QStringLiteral("actionCloseOther"));
+    m_actionCloseOther->setIcon(QIcon::fromTheme(QStringLiteral("window-close"), QIcon(QStringLiteral(":/icons/actions/16/window-close.svg"))));
+    m_actionCloseOther->setToolTip(tr("Close other open documents"));
+    connect(this, &MdiWindow::actionCloseOtherEnabled, m_actionCloseOther, &QAction::setEnabled);
+    connect(m_actionCloseOther, &QAction::triggered, this, &MdiWindow::onActionCloseOtherTriggered);
 
-    auto actionFullPath = new QAction(tr("Show Document &Path"), this);
-    actionFullPath->setObjectName(QStringLiteral("actionFullPath"));
-    actionFullPath->setCheckable(true);
-    actionFullPath->setToolTip(tr("Show document path in the tab caption"));
-    connect(this, &MdiWindow::checkedActionFullPath, actionFullPath, &QAction::setChecked);
-    connect(actionFullPath, &QAction::toggled, this, &MdiWindow::onActionFullPathToggled);
+    m_actionShowPath = new QAction(tr("Show &Path"), this);
+    m_actionShowPath->setObjectName(QStringLiteral("actionShowPath"));
+    m_actionShowPath->setCheckable(true);
+    m_actionShowPath->setChecked(false);
+    m_actionShowPath->setToolTip(tr("Show document path in the tab caption"));
+    connect(m_actionShowPath, &QAction::toggled, this, &MdiWindow::updateWindowTitle);
 
-    auto *actionCopyFilePath = new QAction(tr("Cop&y File Path"), this);
-    actionCopyFilePath->setObjectName(QStringLiteral("actionCopyFilePath"));
-    actionCopyFilePath->setIcon(QIcon::fromTheme(QStringLiteral("edit-copy"), QIcon(QStringLiteral(":/icons/actions/16/edit-copy.svg"))));
-    actionCopyFilePath->setToolTip(tr("Copy file path of the document to clipboard"));
-    connect(this, &MdiWindow::enableActionCopyFilePath, actionCopyFilePath, &QAction::setEnabled);
-    connect(actionCopyFilePath, &QAction::triggered, this, &MdiWindow::onActionCopyFilePathTriggered);
+    m_actionCopyPath = new QAction(tr("Cop&y Path"), this);
+    m_actionCopyPath->setObjectName(QStringLiteral("actionCopyPath"));
+    m_actionCopyPath->setIcon(QIcon::fromTheme(QStringLiteral("edit-copy"), QIcon(QStringLiteral(":/icons/actions/16/edit-copy.svg"))));
+    m_actionCopyPath->setToolTip(tr("Copy document path to clipboard"));
+    connect(m_actionCopyPath, &QAction::triggered, this, &MdiWindow::actionCopyPathTriggered);
 
     menu->clear();
-    menu->addAction(actionClose);
-    menu->addAction(actionCloseOther);
+    menu->addAction(m_actionClose);
+    menu->addAction(m_actionCloseOther);
     menu->addSeparator();
-    menu->addAction(actionFullPath);
-    menu->addAction(actionCopyFilePath);
+    menu->addAction(m_actionShowPath);
+    menu->addAction(m_actionCopyPath);
+}
+
+
+int MdiWindow::filenameSequenceNumber() const
+{
+    return m_filenameSequenceNumber;
+}
+
+
+void MdiWindow::setFilenameSequenceNumber(const int number)
+{
+    if (number != m_filenameSequenceNumber)
+        m_filenameSequenceNumber = number;
+}
+
+
+void MdiWindow::resetFilenameSequenceNumber()
+{
+    m_filenameSequenceNumber = 0;
+}
+
+
+int MdiWindow::latestFilenameSequenceNumber(const QUrl &url) const
+{
+    int number = 0;
+
+    const QList<QMdiSubWindow *> subWindows = mdiArea()->subWindowList();
+    for (auto *subWindow : subWindows) {
+
+        auto *document = qobject_cast<MdiDocument *>(subWindow->widget());
+        if (document->documentUrl().fileName() == url.fileName()) {
+
+            auto *docWindow = qobject_cast<MdiWindow *>(subWindow);
+            if (docWindow->filenameSequenceNumber() > number)
+                number = docWindow->filenameSequenceNumber();
+        }
+    }
+
+    return number;
+}
+
+
+bool MdiWindow::isPathVisibleInWindowTitle() const
+{
+    return m_actionShowPath->isChecked();
+}
+
+
+void MdiWindow::setPathVisibleInWindowTitle(const bool pathVisible)
+{
+    m_actionShowPath->setChecked(pathVisible);
+}
+
+
+QString MdiWindow::windowCaption(const bool pathVisible) const
+{
+    QString caption;
+    const QUrl &url = qobject_cast<MdiDocument *>(widget())->documentUrl();
+
+    // Name
+    if (!url.isEmpty()) {
+
+        if (pathVisible) {
+
+            caption = url.toString(QUrl::PreferLocalFile);
+
+            const QString homePath = QDir::homePath();
+            if (caption.startsWith(homePath))
+                caption.replace(0, homePath.length(), QLatin1Char('~'));
+        }
+        else {
+            caption = url.isLocalFile() ? url.fileName() : tr("Untitled");
+        }
+    }
+    else {
+        caption = tr("Untitled");
+    }
+
+    // Sequence number
+    if (m_filenameSequenceNumber > 1 && (!pathVisible || url.isEmpty()))
+        caption = tr("%1 (%2)").arg(caption).arg(m_filenameSequenceNumber);
+
+    return caption;
+}
+
+
+void MdiWindow::updateWindowTitle(const bool pathVisible)
+{
+    setWindowTitle(windowCaption(pathVisible));
 }
 
 
 void MdiWindow::updateWindowIcon(const bool modified)
 {
-    QIcon icon = modified ? QIcon::fromTheme(QStringLiteral("document-save"), QIcon(QStringLiteral(":/icons/actions/16/document-save.svg"))) : QIcon();
+    QIcon icon;
+
+    if (modified)
+        icon = QIcon::fromTheme(QStringLiteral("document-save"), QIcon(QStringLiteral(":/icons/actions/16/document-save.svg")));
 
     setWindowIcon(icon);
+}
+
+
+void MdiWindow::documentUrlChanged(const QUrl &url)
+{
+    resetFilenameSequenceNumber();
+    setFilenameSequenceNumber(latestFilenameSequenceNumber(url) + 1);
+
+    bool checked = false;
+    if (!url.isEmpty()) {
+        checked = m_actionShowPath->isChecked() || m_actionShowPath->data().toBool();
+        m_actionShowPath->data().clear();
+    }
+    else {
+        m_actionShowPath->setData(m_actionShowPath->isChecked());
+    }
+
+    updateWindowTitle(checked);
+    m_actionShowPath->setChecked(checked);
+
+    m_actionShowPath->setEnabled(!url.isEmpty());
+    m_actionCopyPath->setEnabled(!url.isEmpty());
+}
+
+void MdiWindow::onActionCloseOtherTriggered()
+{
+    emit actionCloseOtherTriggered(this);
 }

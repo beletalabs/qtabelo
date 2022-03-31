@@ -19,20 +19,17 @@
 
 #include "mdi_document.h"
 
+#include <QApplication>
+#include <QClipboard>
 #include <QDebug>
-#include <QDir>
+#include <QWidget>
 
 
 MdiDocument::MdiDocument(QWidget *parent)
     : TabularDocument{parent}
     , m_documentUrl{""}
-    , m_filenameSequenceNumber{0}
-    , m_pathVisibleInWindowTitle{false}
 {
     setAttribute(Qt::WA_DeleteOnClose);
-
-    connect(this, &MdiDocument::pathVisibleInWindowTitleChanged, this, &MdiDocument::updateWindowTitle);
-    connect(this, &MdiDocument::modifiedChanged, this, &MdiDocument::setWindowModified);
 }
 
 
@@ -47,7 +44,7 @@ void MdiDocument::setDocumentUrl(const QUrl &url)
     if (url != m_documentUrl) {
         m_documentUrl = url;
 
-        emit documentUrlChanged(url);
+        emit documentUrlChanged(m_documentUrl);
     }
 }
 
@@ -56,77 +53,12 @@ void MdiDocument::resetDocumentUrl()
 {
     m_documentUrl = QUrl("");
 
-    emit documentUrlChanged(QUrl(""));
+    emit documentUrlChanged(m_documentUrl);
 }
 
 
-int MdiDocument::filenameSequenceNumber() const
+void MdiDocument::copyDocumentUrlToClipboard()
 {
-    return m_filenameSequenceNumber;
-}
-
-
-void MdiDocument::setFilenameSequenceNumber(const int number)
-{
-    if (number != m_filenameSequenceNumber)
-        m_filenameSequenceNumber = number;
-}
-
-
-void MdiDocument::resetFilenameSequenceNumber()
-{
-    m_filenameSequenceNumber = 0;
-}
-
-
-bool MdiDocument::isPathVisibleInWindowTitle() const
-{
-    return m_pathVisibleInWindowTitle;
-}
-
-
-void MdiDocument::setPathVisibleInWindowTitle(const bool visible)
-{
-    if (visible != m_pathVisibleInWindowTitle) {
-        m_pathVisibleInWindowTitle = visible;
-
-        emit pathVisibleInWindowTitleChanged(visible);
-    }
-}
-
-
-QString MdiDocument::windowCaption(const bool pathVisible) const
-{
-    QString caption;
-
-    // Name
-    if (!m_documentUrl.isEmpty()) {
-
-        if (pathVisible) {
-
-            caption = m_documentUrl.toString(QUrl::PreferLocalFile);
-
-            const QString homePath = QDir::homePath();
-            if (caption.startsWith(homePath))
-                caption.replace(0, homePath.length(), QLatin1Char('~'));
-        }
-        else {
-            caption = m_documentUrl.isLocalFile() ? m_documentUrl.fileName() : tr("Untitled");
-        }
-    }
-    else {
-        caption = tr("Untitled");
-    }
-
-    // Sequence number
-    if (m_filenameSequenceNumber > 1 && (!pathVisible || m_documentUrl.isEmpty()))
-        caption = tr("%1 (%2)").arg(caption).arg(m_filenameSequenceNumber);
-
-    return caption;
-}
-
-
-void MdiDocument::updateWindowTitle()
-{
-    setWindowTitle(windowCaption(m_pathVisibleInWindowTitle));
+    if (!m_documentUrl.isEmpty())
+        QApplication::clipboard()->setText(m_documentUrl.toDisplayString(QUrl::PreferLocalFile));
 }

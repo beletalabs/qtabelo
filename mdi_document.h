@@ -24,39 +24,30 @@
 
 #include <QUrl>
 
+class QWidget;
+
 
 class MdiDocument : public TabularDocument
 {
     Q_OBJECT
 
     Q_PROPERTY(QUrl documentUrl MEMBER m_documentUrl READ documentUrl WRITE setDocumentUrl RESET resetDocumentUrl NOTIFY documentUrlChanged)
-    Q_PROPERTY(int filenameSequenceNumber MEMBER m_filenameSequenceNumber READ filenameSequenceNumber WRITE setFilenameSequenceNumber RESET resetFilenameSequenceNumber)
-    Q_PROPERTY(bool pathVisibleInWindowTitle MEMBER m_pathVisibleInWindowTitle READ isPathVisibleInWindowTitle WRITE setPathVisibleInWindowTitle NOTIFY pathVisibleInWindowTitleChanged)
 
 public:
     explicit MdiDocument(QWidget *parent = nullptr);
 
     QUrl documentUrl() const;
-    int filenameSequenceNumber() const;
-    bool isPathVisibleInWindowTitle() const;
-    QString windowCaption(const bool pathVisible) const;
+
+signals:
+    void documentUrlChanged(const QUrl &url);
 
 public slots:
     void setDocumentUrl(const QUrl &url);
     void resetDocumentUrl();
-    void setFilenameSequenceNumber(const int number);
-    void resetFilenameSequenceNumber();
-    void setPathVisibleInWindowTitle(const bool visible);
-    void updateWindowTitle();
-
-signals:
-    void documentUrlChanged(const QUrl &url);
-    void pathVisibleInWindowTitleChanged(const bool visible);
+    void copyDocumentUrlToClipboard();
 
 private:
     QUrl m_documentUrl;
-    int m_filenameSequenceNumber;
-    bool m_pathVisibleInWindowTitle;
 };
 
 #endif // MDI_DOCUMENT_H

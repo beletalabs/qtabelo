@@ -22,29 +22,59 @@
 
 #include <QMdiSubWindow>
 
+class QAction;
+class QString;
+class QUrl;
+class QWidget;
+
 
 class MdiWindow : public QMdiSubWindow
 {
     Q_OBJECT
 
+    Q_PROPERTY(int filenameSequenceNumber MEMBER m_filenameSequenceNumber READ filenameSequenceNumber WRITE setFilenameSequenceNumber RESET resetFilenameSequenceNumber)
+    Q_PROPERTY(bool pathVisibleInWindowTitle READ isPathVisibleInWindowTitle WRITE setPathVisibleInWindowTitle)
+
 public:
     explicit MdiWindow(QWidget *parent = nullptr);
 
+    int filenameSequenceNumber() const;
+
+    bool isPathVisibleInWindowTitle() const;
+
+    QString windowCaption(const bool pathVisible) const;
+
 signals:
-    void enableActionCloseOther(const bool enabled);
-    void onActionCloseOtherTriggered();
-
-    void checkedActionFullPath(const bool checked);
-    void onActionFullPathToggled(const bool checked);
-
-    void enableActionCopyFilePath(const bool enabled);
-    void onActionCopyFilePathTriggered();
+    void actionCloseOtherEnabled(const int enabled);
+    void actionCloseOtherTriggered(MdiWindow *window);
+    void actionCopyPathTriggered();
 
 public slots:
+    void setFilenameSequenceNumber(const int number);
+    void resetFilenameSequenceNumber();
+
+    void setPathVisibleInWindowTitle(const bool pathVisible);
+
+    void updateWindowTitle(const bool pathVisible);
     void updateWindowIcon(const bool modified);
+
+    void documentUrlChanged(const QUrl &url);
 
 private:
     void setupActions();
+
+    int latestFilenameSequenceNumber(const QUrl &url) const;
+
+private slots:
+    void onActionCloseOtherTriggered();
+
+private:
+    int m_filenameSequenceNumber;
+
+    QAction *m_actionClose;
+    QAction *m_actionCloseOther;
+    QAction *m_actionShowPath;
+    QAction *m_actionCopyPath;
 };
 
 #endif // MDI_WINDOW_H

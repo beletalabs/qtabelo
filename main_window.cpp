@@ -53,8 +53,8 @@ MainWindow::MainWindow(QWidget *parent)
     m_documentsArea->setDocumentMode(true);
     m_documentsArea->setTabsClosable(true);
     m_documentsArea->setTabsMovable(true);
+    connect(m_documentsArea, &MdiArea::subWindowActivated, this, &MainWindow::updateWindowTitle);
     connect(m_documentsArea, &MdiArea::subWindowActivated, this, &MainWindow::enableActions);
-    connect(m_documentsArea, &MdiArea::subWindowActivated, this, [=] () { updateWindowTitle(activeDocument()); });
     setCentralWidget(m_documentsArea);
 
     setupActions();
@@ -89,8 +89,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
             return;
         }
     }
-
-    if (m_documentsArea->subWindowCount() == 0) {
+    else if (m_documentsArea->subWindowCount() == 0) {
 
         saveSettings();
 
@@ -180,7 +179,7 @@ void MainWindow::setupActions()
     m_actionSave->setIcon(QIcon::fromTheme(QStringLiteral("document-save"), QIcon(QStringLiteral(":/icons/actions/16/document-save.svg"))));
     m_actionSave->setShortcut(QKeySequence::Save);
     m_actionSave->setToolTip(tr("Save document"));
-    connect(this, &MainWindow::enableAction, m_actionSave, &QAction::setEnabled);
+    connect(this, &MainWindow::actionEnabled, m_actionSave, &QAction::setEnabled);
     connect(m_actionSave, &QAction::triggered, this, &MainWindow::onActionSaveTriggered);
     addAction(m_actionSave);
 
@@ -189,7 +188,7 @@ void MainWindow::setupActions()
     m_actionSaveAs->setIcon(QIcon::fromTheme(QStringLiteral("document-save-as"), QIcon(QStringLiteral(":/icons/actions/16/document-save-as.svg"))));
     m_actionSaveAs->setShortcut(QKeySequence::SaveAs);
     m_actionSaveAs->setToolTip(tr("Save document under a new name"));
-    connect(this, &MainWindow::enableAction, m_actionSaveAs, &QAction::setEnabled);
+    connect(this, &MainWindow::actionEnabled, m_actionSaveAs, &QAction::setEnabled);
     connect(m_actionSaveAs, &QAction::triggered, this, &MainWindow::onActionSaveAsTriggered);
     addAction(m_actionSaveAs);
 
@@ -197,7 +196,7 @@ void MainWindow::setupActions()
     m_actionSaveCopyAs->setObjectName(QStringLiteral("actionSaveCopyAs"));
     m_actionSaveCopyAs->setIcon(QIcon::fromTheme(QStringLiteral("document-save-as"), QIcon(QStringLiteral(":/icons/actions/16/document-save-as.svg"))));
     m_actionSaveCopyAs->setToolTip(tr("Save copy of document under a new name"));
-    connect(this, &MainWindow::enableAction, m_actionSaveCopyAs, &QAction::setEnabled);
+    connect(this, &MainWindow::actionEnabled, m_actionSaveCopyAs, &QAction::setEnabled);
     connect(m_actionSaveCopyAs, &QAction::triggered, this, &MainWindow::onActionSaveCopyAsTriggered);
 
     m_actionSaveAll = new QAction(tr("Save A&ll"), this);
@@ -205,36 +204,36 @@ void MainWindow::setupActions()
     m_actionSaveAll->setIcon(QIcon::fromTheme(QStringLiteral("document-save-all"), QIcon(QStringLiteral(":/icons/actions/16/document-save-all.svg"))));
     m_actionSaveAll->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_L));
     m_actionSaveAll->setToolTip(tr("Save all open documents"));
-    connect(this, &MainWindow::enableAction, m_actionSaveAll, &QAction::setEnabled);
+    connect(this, &MainWindow::actionEnabled, m_actionSaveAll, &QAction::setEnabled);
     connect(m_actionSaveAll, &QAction::triggered, this, &MainWindow::onActionSaveAllTriggered);
     addAction(m_actionSaveAll);
 
-    m_actionCopyFilePath = new QAction(tr("Cop&y File Path"), this);
-    m_actionCopyFilePath->setObjectName(QStringLiteral("actionCopyFilePath"));
-    m_actionCopyFilePath->setIcon(QIcon::fromTheme(QStringLiteral("edit-copy"), QIcon(QStringLiteral(":/icons/actions/16/edit-copy.svg"))));
-    m_actionCopyFilePath->setToolTip(tr("Copy file path of the document to clipboard"));
-    connect(this, &MainWindow::enableActionCopyFilePath, m_actionCopyFilePath, &QAction::setEnabled);
-    connect(m_actionCopyFilePath, &QAction::triggered, this, [=] () { onActionCopyFilePathTriggered(); });
+    m_actionCopyPath = new QAction(tr("Cop&y Path"), this);
+    m_actionCopyPath->setObjectName(QStringLiteral("actionCopyPath"));
+    m_actionCopyPath->setIcon(QIcon::fromTheme(QStringLiteral("edit-copy"), QIcon(QStringLiteral(":/icons/actions/16/edit-copy.svg"))));
+    m_actionCopyPath->setToolTip(tr("Copy document path to clipboard"));
+    connect(this, &MainWindow::actionCopyPathEnabled, m_actionCopyPath, &QAction::setEnabled);
+    connect(m_actionCopyPath, &QAction::triggered, this, &MainWindow::onActionCopyPathTriggered);
 
     m_actionClose = new QAction(tr("&Close"), this);
     m_actionClose->setObjectName(QStringLiteral("actionClose"));
     m_actionClose->setIcon(QIcon::fromTheme(QStringLiteral("document-close"), QIcon(QStringLiteral(":/icons/actions/16/document-close.svg"))));
     m_actionClose->setShortcut(QKeySequence::Close);
     m_actionClose->setToolTip(tr("Close document"));
-    connect(this, &MainWindow::enableAction, m_actionClose, &QAction::setEnabled);
-    connect(m_actionClose, &QAction::triggered, this, [=] () { onActionCloseTriggered(); });
+    connect(this, &MainWindow::actionEnabled, m_actionClose, &QAction::setEnabled);
+    connect(m_actionClose, &QAction::triggered, m_documentsArea, &MdiArea::closeActiveSubWindow);
     addAction(m_actionClose);
 
     m_actionCloseOther = new QAction(tr("Close Ot&her"), this);
     m_actionCloseOther->setObjectName(QStringLiteral("actionCloseOther"));
     m_actionCloseOther->setToolTip(tr("Close other open documents"));
-    connect(this, &MainWindow::enableActionCloseOther, m_actionCloseOther, &QAction::setEnabled);
+    connect(this, &MainWindow::actionCloseOtherEnabled, m_actionCloseOther, &QAction::setEnabled);
     connect(m_actionCloseOther, &QAction::triggered, this, [=] () { onActionCloseOtherTriggered(); });
 
     m_actionCloseAll = new QAction(tr("Clos&e All"), this);
     m_actionCloseAll->setObjectName(QStringLiteral("actionCloseAll"));
     m_actionCloseAll->setToolTip(tr("Close all open documents"));
-    connect(this, &MainWindow::enableAction, m_actionCloseAll, &QAction::setEnabled);
+    connect(this, &MainWindow::actionEnabled, m_actionCloseAll, &QAction::setEnabled);
     connect(m_actionCloseAll, &QAction::triggered, this, &MainWindow::onActionCloseAllTriggered);
 
     auto *menuFile = menuBar()->addMenu(tr("&File"));
@@ -248,7 +247,7 @@ void MainWindow::setupActions()
     menuFile->addAction(m_actionSaveCopyAs);
     menuFile->addAction(m_actionSaveAll);
     menuFile->addSeparator();
-    menuFile->addAction(m_actionCopyFilePath);
+    menuFile->addAction(m_actionCopyPath);
     menuFile->addSeparator();
     menuFile->addAction(m_actionClose);
     menuFile->addAction(m_actionCloseOther);
@@ -317,7 +316,7 @@ void MainWindow::setupActions()
     m_actionFullPath->setObjectName(QStringLiteral("actionFullPath"));
     m_actionFullPath->setCheckable(true);
     m_actionFullPath->setToolTip(tr("Show document path in the window caption"));
-    connect(m_actionFullPath, &QAction::triggered, this, [=] () { updateWindowTitle(activeDocument()); });
+    connect(m_actionFullPath, &QAction::triggered, this, &MainWindow::updateWindowTitle);
 
     m_actionMenubar = new QAction(tr("Show &Menu Bar"), this);
     m_actionMenubar->setObjectName(QStringLiteral("actionMenubar"));
@@ -513,17 +512,25 @@ void MainWindow::updateActionFullScreen()
 
 void MainWindow::enableActions(QMdiSubWindow *subWindow)
 {
-    MdiDocument *document = extractDocument(subWindow);
+    emit actionEnabled(!!subWindow);
 
-    const int count = m_documentsArea->subWindowCount();
+    enableActionCopyPath();
+    enableActionCloseOther();
+}
 
-    bool isFile = false;
-    if (document)
-        isFile = !document->documentUrl().isEmpty();
 
-    emit enableAction(count > 0);
-    emit enableActionCopyFilePath(isFile);
-    emit enableActionCloseOther(count > 1);
+void MainWindow::enableActionCopyPath()
+{
+    MdiDocument *document = activeDocument();
+
+    const bool enabled = document ? !document->documentUrl().isEmpty() : false;
+    emit actionCopyPathEnabled(enabled);
+}
+
+
+void MainWindow::enableActionCloseOther()
+{
+    emit actionCloseOtherEnabled(m_documentsArea->subWindowCount() > 1);
 }
 
 
@@ -609,43 +616,23 @@ void MainWindow::saveSettings()
 MdiDocument *MainWindow::createDocument()
 {
     auto *document = new MdiDocument;
-    connect(document, &MdiDocument::documentUrlChanged, this, [=] () { m_documentsArea->updateFilenameSequenceNumber(document); });
-    connect(document, &MdiDocument::documentUrlChanged, this, [=] () { updateWindowTitle(document); });
-    connect(document, &MdiDocument::documentUrlChanged, document, &MdiDocument::updateWindowTitle);
-    connect(document, &MdiDocument::modifiedChanged, this, &MainWindow::setWindowModified);
-
-    MdiWindow *docWindow = new MdiWindow;
+    auto *docWindow = new MdiWindow;
     docWindow->setWidget(document);
-    docWindow->setAttribute(Qt::WA_DeleteOnClose);
-    connect(this, &MainWindow::enableActionCloseOther, docWindow, &MdiWindow::enableActionCloseOther);
-    connect(docWindow, &MdiWindow::onActionCloseOtherTriggered, this, [=] () { onActionCloseOtherTriggered(docWindow); });
-    connect(docWindow, &MdiWindow::onActionFullPathToggled, document, &MdiDocument::setPathVisibleInWindowTitle);
-    connect(document, &MdiDocument::documentUrlChanged, docWindow, [=] (const QUrl &url) { emit docWindow->enableActionCopyFilePath(!url.isEmpty()); });
-    connect(docWindow, &MdiWindow::onActionCopyFilePathTriggered, this, [=] () { onActionCopyFilePathTriggered(docWindow); });
+    connect(document, &MdiDocument::modifiedChanged, docWindow, &MdiWindow::setWindowModified);
     connect(document, &MdiDocument::modifiedChanged, docWindow, &MdiWindow::updateWindowIcon);
+    connect(document, &MdiDocument::modifiedChanged, this, &MainWindow::setWindowModified);
+    connect(document, &MdiDocument::documentUrlChanged, docWindow, &MdiWindow::documentUrlChanged);
+    connect(document, &MdiDocument::documentUrlChanged, this, &MainWindow::updateWindowTitle);
+    connect(docWindow, &MdiWindow::actionCloseOtherTriggered, this, &MainWindow::onActionCloseOtherTriggered);
+    connect(docWindow, &MdiWindow::actionCopyPathTriggered, document, &MdiDocument::copyDocumentUrlToClipboard);
+    connect(docWindow, &MdiWindow::destroyed, this, &MainWindow::enableActionCloseOther);
+    connect(this, &MainWindow::actionCloseOtherEnabled, docWindow, &MdiWindow::actionCloseOtherEnabled);
     m_documentsArea->addSubWindow(docWindow);
 
     document->resetDocumentUrl();
     document->resetModified();
 
-    emit docWindow->checkedActionFullPath(document->isPathVisibleInWindowTitle());
-
     return document;
-}
-
-
-MdiDocument *MainWindow::extractDocument(const QMdiSubWindow *subWindow) const
-{
-    if (subWindow)
-        return qobject_cast<MdiDocument *>(subWindow->widget());
-
-    return nullptr;
-}
-
-
-MdiDocument *MainWindow::activeDocument() const
-{
-    return extractDocument(m_documentsArea->activeSubWindow());
 }
 
 
@@ -688,11 +675,43 @@ bool MainWindow::saveDocument(MdiDocument *document, const QUrl &url)
 }
 
 
-void MainWindow::updateWindowTitle(const MdiDocument *document)
+MdiDocument *MainWindow::extractDocument(const QMdiSubWindow *subWindow) const
 {
-    if (document) {
-        setWindowTitle(document->windowCaption(m_actionFullPath->isChecked()) + QStringLiteral(" [*]"));
-        setWindowModified(document->isWindowModified());
+    if (subWindow)
+        return qobject_cast<MdiDocument *>(subWindow->widget());
+
+    return nullptr;
+}
+
+
+MdiDocument *MainWindow::activeDocument() const
+{
+    return extractDocument(m_documentsArea->activeSubWindow());
+}
+
+
+MdiWindow *MainWindow::extractDocWindow(QMdiSubWindow *subWindow) const
+{
+    if (subWindow)
+        return qobject_cast<MdiWindow *>(subWindow);
+
+    return nullptr;
+}
+
+
+MdiWindow *MainWindow::activeDocWindow() const
+{
+    return extractDocWindow(m_documentsArea->activeSubWindow());
+}
+
+
+void MainWindow::updateWindowTitle()
+{
+    MdiWindow * docWindow = qobject_cast<MdiWindow *>(m_documentsArea->activeSubWindow());
+
+    if (docWindow) {
+        setWindowTitle(docWindow->windowCaption(m_actionFullPath->isChecked()) + QStringLiteral(" [*]"));
+        setWindowModified(docWindow->isWindowModified());
     }
     else {
         setWindowTitle(QString());
@@ -799,23 +818,10 @@ void MainWindow::onActionSaveAllTriggered()
 }
 
 
-void MainWindow::onActionCopyFilePathTriggered(QMdiSubWindow *subWindow)
+void MainWindow::onActionCopyPathTriggered()
 {
-    if (!subWindow)
-        subWindow = m_documentsArea->activeSubWindow();
-
-    MdiDocument *document = extractDocument(subWindow);
-    if (document && !document->documentUrl().isEmpty())
-        QApplication::clipboard()->setText(document->documentUrl().toDisplayString(QUrl::PreferLocalFile));
-}
-
-
-void MainWindow::onActionCloseTriggered(QMdiSubWindow *subWindow)
-{
-    if (!subWindow)
-        subWindow = m_documentsArea->activeSubWindow();
-
-    m_documentsArea->closeSelectedSubWindow(subWindow);
+    MdiDocument *document = activeDocument();
+    document->copyDocumentUrlToClipboard();
 }
 
 
