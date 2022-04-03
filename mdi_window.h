@@ -45,7 +45,7 @@ public:
     QString windowCaption(const bool pathVisible) const;
 
 signals:
-    void actionCloseOtherEnabled(const int enabled);
+    void actionCloseOtherIsEnabled(const int enabled);
     void actionCloseOtherTriggered(MdiWindow *window);
     void actionCopyPathTriggered();
 

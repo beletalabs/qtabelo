@@ -59,7 +59,7 @@ void MdiWindow::setupActions()
     m_actionCloseOther->setObjectName(QStringLiteral("actionCloseOther"));
     m_actionCloseOther->setIcon(QIcon::fromTheme(QStringLiteral("window-close"), QIcon(QStringLiteral(":/icons/actions/16/window-close.svg"))));
     m_actionCloseOther->setToolTip(tr("Close other open documents"));
-    connect(this, &MdiWindow::actionCloseOtherEnabled, m_actionCloseOther, &QAction::setEnabled);
+    connect(this, &MdiWindow::actionCloseOtherIsEnabled, m_actionCloseOther, &QAction::setEnabled);
     connect(m_actionCloseOther, &QAction::triggered, this, &MdiWindow::onActionCloseOtherTriggered);
 
     m_actionShowPath = new QAction(tr("Show &Path"), this);
