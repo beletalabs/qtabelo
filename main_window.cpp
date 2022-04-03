@@ -214,6 +214,13 @@ void MainWindow::setupActions()
     connect(this, &MainWindow::actionsFileIsEnabled, m_actionCopyPath, &QAction::setEnabled);
     connect(m_actionCopyPath, &QAction::triggered, this, &MainWindow::onActionCopyPathTriggered);
 
+    m_actionRename = new QAction(tr("Re&name…"), this);
+    m_actionRename->setObjectName(QStringLiteral("actionRename"));
+    m_actionRename->setIcon(QIcon::fromTheme(QStringLiteral("edit-rename"), QIcon(QStringLiteral(":/icons/actions/16/edit-rename.svg"))));
+    m_actionRename->setToolTip(tr("Rename file name of the document"));
+    connect(this, &MainWindow::actionsFileIsEnabled, m_actionRename, &QAction::setEnabled);
+    connect(m_actionRename, &QAction::triggered, this, &MainWindow::onActionRenameTriggered);
+
     m_actionClose = new QAction(tr("&Close"), this);
     m_actionClose->setObjectName(QStringLiteral("actionClose"));
     m_actionClose->setIcon(QIcon::fromTheme(QStringLiteral("document-close"), QIcon(QStringLiteral(":/icons/actions/16/document-close.svg"))));
@@ -247,6 +254,8 @@ void MainWindow::setupActions()
     menuFile->addAction(m_actionSaveAll);
     menuFile->addSeparator();
     menuFile->addAction(m_actionCopyPath);
+    menuFile->addSeparator();
+    menuFile->addAction(m_actionRename);
     menuFile->addSeparator();
     menuFile->addAction(m_actionClose);
     menuFile->addAction(m_actionCloseOther);
@@ -815,6 +824,12 @@ void MainWindow::onActionCopyPathTriggered()
 {
     MdiDocument *document = activeDocument();
     document->copyDocumentUrlToClipboard();
+}
+
+
+void MainWindow::onActionRenameTriggered()
+{
+
 }
 
 

@@ -67,6 +67,7 @@ private:
 
 private slots:
     void onActionCloseOtherTriggered();
+    void onActionRenameTriggered();
 
 private:
     int m_filenameSequenceNumber;
@@ -75,6 +76,7 @@ private:
     QAction *m_actionCloseOther;
     QAction *m_actionShowPath;
     QAction *m_actionCopyPath;
+    QAction *m_actionRename;
 };
 
 #endif // MDI_WINDOW_H

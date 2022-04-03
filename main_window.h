@@ -87,6 +87,7 @@ private slots:
     void onActionSaveCopyAsTriggered();
     void onActionSaveAllTriggered();
     void onActionCopyPathTriggered();
+    void onActionRenameTriggered();
     void onActionCloseOtherTriggered(QMdiSubWindow *subWindow = nullptr);
     void onActionCloseAllTriggered();
 
@@ -109,6 +110,7 @@ private:
     QAction *m_actionSaveCopyAs;
     QAction *m_actionSaveAll;
     QAction *m_actionCopyPath;
+    QAction *m_actionRename;
     QAction *m_actionClose;
     QAction *m_actionCloseOther;
     QAction *m_actionCloseAll;

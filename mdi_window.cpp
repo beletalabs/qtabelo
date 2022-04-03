@@ -75,12 +75,20 @@ void MdiWindow::setupActions()
     m_actionCopyPath->setToolTip(tr("Copy document path to clipboard"));
     connect(m_actionCopyPath, &QAction::triggered, this, &MdiWindow::actionCopyPathTriggered);
 
+    m_actionRename = new QAction(tr("Re&name…"), this);
+    m_actionRename->setObjectName(QStringLiteral("actionRename"));
+    m_actionRename->setIcon(QIcon::fromTheme(QStringLiteral("edit-rename"), QIcon(QStringLiteral(":/icons/actions/16/edit-rename.svg"))));
+    m_actionRename->setToolTip(tr("Rename file name of the document"));
+    connect(m_actionRename, &QAction::triggered, this, &MdiWindow::onActionRenameTriggered);
+
     menu->clear();
     menu->addAction(m_actionClose);
     menu->addAction(m_actionCloseOther);
     menu->addSeparator();
     menu->addAction(m_actionShowPath);
     menu->addAction(m_actionCopyPath);
+    menu->addSeparator();
+    menu->addAction(m_actionRename);
 }
 
 
@@ -203,9 +211,17 @@ void MdiWindow::documentUrlChanged(const QUrl &url)
 
     m_actionShowPath->setEnabled(!url.isEmpty());
     m_actionCopyPath->setEnabled(!url.isEmpty());
+    m_actionRename->setEnabled(!url.isEmpty());
 }
+
 
 void MdiWindow::onActionCloseOtherTriggered()
 {
     emit actionCloseOtherTriggered(this);
+}
+
+
+void MdiWindow::onActionRenameTriggered()
+{
+
 }
