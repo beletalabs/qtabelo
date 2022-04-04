@@ -829,7 +829,9 @@ void MainWindow::onActionCopyPathTriggered()
 
 void MainWindow::onActionRenameTriggered()
 {
-
+    MdiDocument *document = activeDocument();
+    if (document)
+        document->renameDocumentFilename();
 }
 
 

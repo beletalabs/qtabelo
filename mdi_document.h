@@ -46,6 +46,8 @@ public slots:
     void resetDocumentUrl();
     void copyDocumentUrlToClipboard();
 
+    void renameDocumentFilename();
+
 private:
     QUrl m_documentUrl;
 };

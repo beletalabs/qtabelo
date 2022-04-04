@@ -223,5 +223,7 @@ void MdiWindow::onActionCloseOtherTriggered()
 
 void MdiWindow::onActionRenameTriggered()
 {
-
+    MdiDocument *document = qobject_cast<MdiDocument *>(widget());
+    if (document)
+        document->renameDocumentFilename();
 }

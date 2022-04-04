@@ -22,6 +22,10 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QDebug>
+#include <QFile>
+#include <QInputDialog>
+#include <QMessageBox>
+#include <QUrl>
 #include <QWidget>
 
 
@@ -61,4 +65,30 @@ void MdiDocument::copyDocumentUrlToClipboard()
 {
     if (!m_documentUrl.isEmpty())
         QApplication::clipboard()->setText(m_documentUrl.toDisplayString(QUrl::PreferLocalFile));
+}
+
+
+void MdiDocument::renameDocumentFilename()
+{
+    if (m_documentUrl.isEmpty() || !m_documentUrl.isLocalFile())
+        return;
+
+    bool ok = false;
+    const QString oldFileName = m_documentUrl.fileName();
+    const QString newFileName = QInputDialog::getText(this, tr("Rename file"), tr("New file name"), QLineEdit::Normal, oldFileName, &ok);
+    if (!ok || newFileName.isEmpty() || (newFileName == oldFileName))
+        return;
+
+    QUrl newUrl = m_documentUrl.adjusted(QUrl::RemoveFilename).toString() + newFileName;
+
+    if (!QFile::rename(m_documentUrl.toLocalFile(), newUrl.toLocalFile())) {
+
+        QString title = tr("File Already Exists");
+        QString text = tr("A file with the name <em>%1</em> already exists!").arg(newUrl.fileName());
+
+        QMessageBox::critical(this, title, text);
+        return;
+    }
+
+    setDocumentUrl(newUrl);
 }
