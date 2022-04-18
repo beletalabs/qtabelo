@@ -23,14 +23,14 @@
 #ifndef MDI_DOCUMENT_H
 #define MDI_DOCUMENT_H
 
-#include "tabular_document.h"
+#include "table_document.h"
 
 #include <QUrl>
 
 class QWidget;
 
 
-class MdiDocument : public TabularDocument
+class MdiDocument : public TableDocument
 {
     Q_OBJECT
 

@@ -32,7 +32,7 @@
 
 
 MdiDocument::MdiDocument(QWidget *parent)
-    : TabularDocument(parent)
+    : TableDocument(parent)
     , m_modified{false}
     , m_url{QUrl()}
 {

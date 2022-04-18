@@ -20,11 +20,18 @@
  * along with QTabelo.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "tabular_document.h"
+#ifndef TABLE_DOCUMENT_H
+#define TABLE_DOCUMENT_H
+
+#include <QWidget>
 
 
-TabularDocument::TabularDocument(QWidget *parent)
-    : QWidget(parent)
+class TableDocument : public QWidget
 {
+    Q_OBJECT
 
-}
+public:
+    explicit TableDocument(QWidget *parent = nullptr);
+};
+
+#endif // TABLE_DOCUMENT_H
