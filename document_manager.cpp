@@ -20,7 +20,7 @@
  * along with QTabelo.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "mdi_area.h"
+#include "document_manager.h"
 
 #include <QList>
 #include <QMdiSubWindow>
@@ -30,20 +30,20 @@
 #include "document_widget.h"
 
 
-MdiArea::MdiArea(QWidget *parent)
+DocumentManager::DocumentManager(QWidget *parent)
     : QMdiArea(parent)
 {
 
 }
 
 
-int MdiArea::subWindowCount() const
+int DocumentManager::subWindowCount() const
 {
     return subWindowList().size();
 }
 
 
-QMdiSubWindow *MdiArea::findSubWindow(const QUrl &url) const
+QMdiSubWindow *DocumentManager::findSubWindow(const QUrl &url) const
 {
     if (url.isEmpty())
         return nullptr;
@@ -60,7 +60,7 @@ QMdiSubWindow *MdiArea::findSubWindow(const QUrl &url) const
 }
 
 
-void MdiArea::closeSelectedSubWindow(QMdiSubWindow *subWindow)
+void DocumentManager::closeSelectedSubWindow(QMdiSubWindow *subWindow)
 {
     if (!subWindow)
         return;
@@ -69,7 +69,7 @@ void MdiArea::closeSelectedSubWindow(QMdiSubWindow *subWindow)
 }
 
 
-void MdiArea::closeOtherSubWindows(QMdiSubWindow *subWindow)
+void DocumentManager::closeOtherSubWindows(QMdiSubWindow *subWindow)
 {
     QList<QMdiSubWindow *> subWindows = subWindowList();
     if (!subWindow || subWindows.isEmpty() || subWindows.indexOf(subWindow) < 0)

@@ -41,25 +41,25 @@
 
 #include "about_dialog.h"
 #include "colophon_dialog.h"
+#include "document_manager.h"
 #include "document_widget.h"
 #include "document_window.h"
-#include "mdi_area.h"
 #include "preferences_dialog.h"
 
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , m_documentsArea{new MdiArea}
+    , m_documentManager{new DocumentManager}
 {
     setWindowIcon(QIcon(QStringLiteral(":/icons/apps/16/tabelo.svg")));
 
-    m_documentsArea->setViewMode(MdiArea::TabbedView);
-    m_documentsArea->setDocumentMode(true);
-    m_documentsArea->setTabsClosable(true);
-    m_documentsArea->setTabsMovable(true);
-    setCentralWidget(m_documentsArea);
+    m_documentManager->setViewMode(DocumentManager::TabbedView);
+    m_documentManager->setDocumentMode(true);
+    m_documentManager->setTabsClosable(true);
+    m_documentManager->setTabsMovable(true);
+    setCentralWidget(m_documentManager);
 
-    connect(m_documentsArea, &MdiArea::subWindowActivated, this, &MainWindow::documentActivated);
+    connect(m_documentManager, &DocumentManager::subWindowActivated, this, &MainWindow::documentActivated);
 
     setupActions();
     loadSettings();
@@ -193,7 +193,7 @@ void MainWindow::setupActions()
     m_actionClose->setIcon(QIcon::fromTheme(QStringLiteral("document-close"), QIcon(QStringLiteral(":/icons/actions/16/document-close.svg"))));
     m_actionClose->setShortcut(QKeySequence::Close);
     m_actionClose->setToolTip(tr("Close document"));
-    connect(m_actionClose, &QAction::triggered, m_documentsArea, &MdiArea::closeActiveSubWindow);
+    connect(m_actionClose, &QAction::triggered, m_documentManager, &DocumentManager::closeActiveSubWindow);
     addAction(m_actionClose);
 
     m_actionCloseOther = new QAction(tr("Close Ot&her"), this);
@@ -615,7 +615,7 @@ void MainWindow::saveSettings()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    if (m_documentsArea->subWindowCount() >= 1) {
+    if (m_documentManager->subWindowCount() >= 1) {
 
         const QString &title = tr("Quit the application");
         const QString &text = tr("This will close all open documents and quit the application.\n"
@@ -628,7 +628,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
             return;
         }
 
-        m_documentsArea->closeAllSubWindows();
+        m_documentManager->closeAllSubWindows();
     }
 
     saveSettings();
@@ -644,7 +644,7 @@ void MainWindow::updateWindowModified()
 {
     bool modified = false;
 
-    auto *docWindow = qobject_cast<DocumentWindow *>(m_documentsArea->activeSubWindow());
+    auto *docWindow = qobject_cast<DocumentWindow *>(m_documentManager->activeSubWindow());
     if (docWindow)
         modified = docWindow->isWindowModified();
 
@@ -656,7 +656,7 @@ void MainWindow::updateWindowTitle()
 {
     QString caption;
 
-    auto *docWindow = qobject_cast<DocumentWindow *>(m_documentsArea->activeSubWindow());
+    auto *docWindow = qobject_cast<DocumentWindow *>(m_documentManager->activeSubWindow());
     if (docWindow) {
         const bool pathVisible = m_actionShowPath->isChecked();
         caption = tr("%1 [*]").arg(docWindow->windowCaption(pathVisible));
@@ -675,7 +675,7 @@ DocumentWidget *MainWindow::createDocument()
     auto *document = new DocumentWidget;
     auto *docWindow = new DocumentWindow;
     docWindow->setWidget(document);
-    m_documentsArea->addSubWindow(docWindow);
+    m_documentManager->addSubWindow(docWindow);
 
     // Connections: Modified
     connect(document, &DocumentWidget::modifiedChanged, docWindow, &DocumentWindow::documentModifiedChanged);
@@ -684,7 +684,7 @@ DocumentWidget *MainWindow::createDocument()
     connect(document, &DocumentWidget::urlChanged, docWindow, &DocumentWindow::documentUrlChanged);
     connect(document, &DocumentWidget::urlChanged, this, &MainWindow::documentUrlChanged);
     // Connections: Actions
-    connect(docWindow, &DocumentWindow::actionCloseOther, m_documentsArea, &MdiArea::closeOtherSubWindows);
+    connect(docWindow, &DocumentWindow::actionCloseOther, m_documentManager, &DocumentManager::closeOtherSubWindows);
     connect(docWindow, &DocumentWindow::actionCopyPath, document, &DocumentWidget::copyPathToClipboard);
     connect(docWindow, &DocumentWindow::actionRenameFilename, document, &DocumentWidget::renameFilename);
     // Connections: Document count
@@ -705,10 +705,10 @@ bool MainWindow::openDocument(const QUrl &url)
     if (!url.isValid())
         return false;
 
-    QMdiSubWindow *subWindow = m_documentsArea->findSubWindow(url);
+    QMdiSubWindow *subWindow = m_documentManager->findSubWindow(url);
     if (subWindow) {
         // Given document is already loaded; activate the subwindow
-        m_documentsArea->setActiveSubWindow(subWindow);
+        m_documentManager->setActiveSubWindow(subWindow);
         return true;
     }
 
@@ -750,7 +750,7 @@ bool MainWindow::saveDocument(DocumentWidget *document, const QUrl &altUrl)
 
 void MainWindow::documentCreated()
 {
-    const int count = m_documentsArea->subWindowCount();
+    const int count = m_documentManager->subWindowCount();
 
     emit documentCountChanged(count);
     enableActionCloseOther(count >= 2);
@@ -800,7 +800,7 @@ void MainWindow::documentUrlChanged(const QUrl &url)
 
 void MainWindow::documentClosed()
 {
-    const int count = m_documentsArea->subWindowCount();
+    const int count = m_documentManager->subWindowCount();
 
     emit documentCountChanged(count);
     enableActionCloseOther(count >= 2);
@@ -822,7 +822,7 @@ DocumentWidget *MainWindow::extractDocument(const QMdiSubWindow *subWindow) cons
 
 DocumentWidget *MainWindow::activeDocument() const
 {
-    return extractDocument(m_documentsArea->activeSubWindow());
+    return extractDocument(m_documentManager->activeSubWindow());
 }
 
 
@@ -935,7 +935,7 @@ void MainWindow::slotSaveCopyAs()
 
 void MainWindow::slotSaveAll()
 {
-    const QList<QMdiSubWindow *> subWindows = m_documentsArea->subWindowList();
+    const QList<QMdiSubWindow *> subWindows = m_documentManager->subWindowList();
     for (auto *subWindow : subWindows) {
 
         DocumentWidget *document = extractDocument(subWindow);
@@ -978,7 +978,7 @@ void MainWindow::slotRenameFilename()
 
 void MainWindow::slotCloseOther()
 {
-    if (m_documentsArea->subWindowCount() >= 2) {
+    if (m_documentManager->subWindowCount() >= 2) {
 
         const QString &title = tr("Close all documents beside current one");
         const QString &text = tr("This will close all open documents beside the current one.\n"
@@ -987,14 +987,14 @@ void MainWindow::slotCloseOther()
         const QMessageBox::StandardButton defaultButton = QMessageBox::Yes;
 
         if (QMessageBox::warning(this, title, text, buttons, defaultButton) != QMessageBox::Cancel)
-            m_documentsArea->closeOtherSubWindows(m_documentsArea->activeSubWindow());
+            m_documentManager->closeOtherSubWindows(m_documentManager->activeSubWindow());
     }
 }
 
 
 void MainWindow::slotCloseAll()
 {
-    if (m_documentsArea->subWindowCount() >= 1) {
+    if (m_documentManager->subWindowCount() >= 1) {
 
         const QString &title = tr("Close all documents");
         const QString &text = tr("This will close all open documents.\n"
@@ -1003,7 +1003,7 @@ void MainWindow::slotCloseAll()
         const QMessageBox::StandardButton defaultButton = QMessageBox::Yes;
 
         if (QMessageBox::warning(this, title, text, buttons, defaultButton) != QMessageBox::Cancel)
-            m_documentsArea->closeAllSubWindows();
+            m_documentManager->closeAllSubWindows();
     }
 }
 

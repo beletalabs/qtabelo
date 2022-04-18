@@ -35,11 +35,11 @@ SOURCES += \
     colophon_dialog.cpp \
     colophon_pages.cpp \
     dialog_header_box.cpp \
+    document_manager.cpp \
     document_widget.cpp \
     document_window.cpp \
     main.cpp \
     main_window.cpp \
-    mdi_area.cpp \
     preferences_dialog.cpp \
     table_document.cpp
 
@@ -48,10 +48,10 @@ HEADERS += \
     colophon_dialog.h \
     colophon_pages.h \
     dialog_header_box.h \
+    document_manager.h \
     document_widget.h \
     document_window.h \
     main_window.h \
-    mdi_area.h \
     preferences_dialog.h \
     table_document.h
 

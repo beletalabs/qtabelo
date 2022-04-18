@@ -20,8 +20,8 @@
  * along with QTabelo.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MDI_AREA_H
-#define MDI_AREA_H
+#ifndef DOCUMENT_MANAGER_H
+#define DOCUMENT_MANAGER_H
 
 #include <QMdiArea>
 
@@ -30,12 +30,12 @@ class QUrl;
 class QWidget;
 
 
-class MdiArea : public QMdiArea
+class DocumentManager : public QMdiArea
 {
     Q_OBJECT
 
 public:
-    explicit MdiArea(QWidget *parent = nullptr);
+    explicit DocumentManager(QWidget *parent = nullptr);
 
     int subWindowCount() const;
 
@@ -46,4 +46,4 @@ public slots:
     void closeOtherSubWindows(QMdiSubWindow *subWindow);
 };
 
-#endif // MDI_AREA_H
+#endif // DOCUMENT_MANAGER_H

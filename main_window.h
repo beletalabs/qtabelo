@@ -33,7 +33,7 @@ class QStatusBar;
 class QToolBar;
 class QUrl;
 
-class MdiArea;
+class DocumentManager;
 class DocumentWidget;
 
 
@@ -107,7 +107,7 @@ private slots:
     void slotFullScreen(const bool checked);
 
 private:
-    MdiArea *m_documentsArea;
+    DocumentManager *m_documentManager;
 
     QAction *m_actionAbout;
     QAction *m_actionColophon;

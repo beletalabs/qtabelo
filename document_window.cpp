@@ -33,7 +33,6 @@
 #include <QUrl>
 #include <QWidget>
 
-#include "mdi_area.h"
 #include "document_widget.h"
 
 
