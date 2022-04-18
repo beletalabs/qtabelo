@@ -32,6 +32,7 @@ CONFIG += c++17
 
 SOURCES += \
     about_dialog.cpp \
+    application_window.cpp \
     colophon_dialog.cpp \
     colophon_pages.cpp \
     dialog_header_box.cpp \
@@ -39,19 +40,18 @@ SOURCES += \
     document_widget.cpp \
     document_window.cpp \
     main.cpp \
-    main_window.cpp \
     preferences_dialog.cpp \
     table_document.cpp
 
 HEADERS += \
     about_dialog.h \
+    application_window.h \
     colophon_dialog.h \
     colophon_pages.h \
     dialog_header_box.h \
     document_manager.h \
     document_widget.h \
     document_window.h \
-    main_window.h \
     preferences_dialog.h \
     table_document.h
 

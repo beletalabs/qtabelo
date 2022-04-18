@@ -25,7 +25,7 @@
 #include <QDir>
 #include <QUrl>
 
-#include "main_window.h"
+#include "application_window.h"
 
 
 int main(int argc, char *argv[])
@@ -47,9 +47,9 @@ int main(int argc, char *argv[])
 
 
     //
-    // Main window
+    // Application window
 
-    MainWindow window;
+    ApplicationWindow window;
     window.show();
 
     const QStringList urls = parser.positionalArguments();

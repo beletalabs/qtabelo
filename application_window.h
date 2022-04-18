@@ -20,8 +20,8 @@
  * along with QTabelo.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MAIN_WINDOW_H
-#define MAIN_WINDOW_H
+#ifndef APPLICATION_WINDOW_H
+#define APPLICATION_WINDOW_H
 
 #include <QMainWindow>
 
@@ -37,13 +37,13 @@ class DocumentManager;
 class DocumentWidget;
 
 
-class MainWindow : public QMainWindow
+class ApplicationWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    ApplicationWindow(QWidget *parent = nullptr);
+    ~ApplicationWindow();
 
     bool openDocument(const QUrl &url);
 
@@ -154,4 +154,4 @@ private:
     QToolBar *m_toolbarHelp;
 };
 
-#endif // MAIN_WINDOW_H
+#endif // APPLICATION_WINDOW_H

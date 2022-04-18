@@ -20,7 +20,7 @@
  * along with QTabelo.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "main_window.h"
+#include "application_window.h"
 
 #include <QAction>
 #include <QActionGroup>
@@ -47,7 +47,7 @@
 #include "preferences_dialog.h"
 
 
-MainWindow::MainWindow(QWidget *parent)
+ApplicationWindow::ApplicationWindow(QWidget *parent)
     : QMainWindow(parent)
     , m_documentManager{new DocumentManager}
 {
@@ -59,7 +59,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_documentManager->setTabsMovable(true);
     setCentralWidget(m_documentManager);
 
-    connect(m_documentManager, &DocumentManager::subWindowActivated, this, &MainWindow::documentActivated);
+    connect(m_documentManager, &DocumentManager::subWindowActivated, this, &ApplicationWindow::documentActivated);
 
     setupActions();
     loadSettings();
@@ -68,13 +68,13 @@ MainWindow::MainWindow(QWidget *parent)
     documentClosed();
 }
 
-MainWindow::~MainWindow()
+ApplicationWindow::~ApplicationWindow()
 {
 
 }
 
 
-void MainWindow::setupActions()
+void ApplicationWindow::setupActions()
 {
     //
     // Application
@@ -85,21 +85,21 @@ void MainWindow::setupActions()
     m_actionAbout->setIconText(tr("About"));
     m_actionAbout->setToolTip(tr("Brief description of the application"));
     m_actionAbout->setMenuRole(QAction::AboutRole);
-    connect(m_actionAbout, &QAction::triggered, this, &MainWindow::slotAbout);
+    connect(m_actionAbout, &QAction::triggered, this, &ApplicationWindow::slotAbout);
 
     m_actionColophon = new QAction(tr("&Colophon"), this);
     m_actionColophon->setObjectName(QStringLiteral("actionColophon"));
     m_actionColophon->setIcon(QIcon::fromTheme(QStringLiteral("help-about"), QIcon(QStringLiteral(":/icons/actions/16/help-about.svg"))));
     m_actionColophon->setToolTip(tr("Lengthy description of the application"));
     m_actionColophon->setMenuRole(QAction::ApplicationSpecificRole);
-    connect(m_actionColophon, &QAction::triggered, this, &MainWindow::slotColophon);
+    connect(m_actionColophon, &QAction::triggered, this, &ApplicationWindow::slotColophon);
 
     m_actionPreferences = new QAction(tr("&Preferences..."), this);
     m_actionPreferences->setObjectName(QStringLiteral("actionPreferences"));
     m_actionPreferences->setIcon(QIcon::fromTheme(QStringLiteral("configure"), QIcon(QStringLiteral(":/icons/actions/16/configure.svg"))));
     m_actionPreferences->setToolTip(tr("Customize the appearance and behavior of the application"));
     m_actionPreferences->setMenuRole(QAction::PreferencesRole);
-    connect(m_actionPreferences, &QAction::triggered, this, &MainWindow::slotPreferences);
+    connect(m_actionPreferences, &QAction::triggered, this, &ApplicationWindow::slotPreferences);
 
     m_actionQuit = new QAction(tr("&Quit"), this);
     m_actionQuit->setObjectName(QStringLiteral("actionQuit"));
@@ -107,7 +107,7 @@ void MainWindow::setupActions()
     m_actionQuit->setShortcut(QKeySequence::Quit);
     m_actionQuit->setToolTip(tr("Quit the application"));
     m_actionQuit->setMenuRole(QAction::QuitRole);
-    connect(m_actionQuit, &QAction::triggered, this, &MainWindow::close);
+    connect(m_actionQuit, &QAction::triggered, this, &ApplicationWindow::close);
     addAction(m_actionQuit);
 
     auto *menuApplication = menuBar()->addMenu(tr("&Application"));
@@ -135,7 +135,7 @@ void MainWindow::setupActions()
     m_actionNew->setIcon(QIcon::fromTheme(QStringLiteral("document-new"), QIcon(QStringLiteral(":/icons/actions/16/document-new.svg"))));
     m_actionNew->setShortcut(QKeySequence::New);
     m_actionNew->setToolTip(tr("Create new document"));
-    connect(m_actionNew, &QAction::triggered, this, &MainWindow::slotNew);
+    connect(m_actionNew, &QAction::triggered, this, &ApplicationWindow::slotNew);
     addAction(m_actionNew);
 
     m_actionOpen = new QAction(tr("&Open..."), this);
@@ -143,7 +143,7 @@ void MainWindow::setupActions()
     m_actionOpen->setIcon(QIcon::fromTheme(QStringLiteral("document-open"), QIcon(QStringLiteral(":/icons/actions/16/document-open.svg"))));
     m_actionOpen->setShortcut(QKeySequence::Open);
     m_actionOpen->setToolTip(tr("Open an existing document"));
-    connect(m_actionOpen, &QAction::triggered, this, &MainWindow::slotOpen);
+    connect(m_actionOpen, &QAction::triggered, this, &ApplicationWindow::slotOpen);
     addAction(m_actionOpen);
 
     m_actionSave = new QAction(tr("&Save"), this);
@@ -151,7 +151,7 @@ void MainWindow::setupActions()
     m_actionSave->setIcon(QIcon::fromTheme(QStringLiteral("document-save"), QIcon(QStringLiteral(":/icons/actions/16/document-save.svg"))));
     m_actionSave->setShortcut(QKeySequence::Save);
     m_actionSave->setToolTip(tr("Save document"));
-    connect(m_actionSave, &QAction::triggered, this, &MainWindow::slotSave);
+    connect(m_actionSave, &QAction::triggered, this, &ApplicationWindow::slotSave);
     addAction(m_actionSave);
 
     m_actionSaveAs = new QAction(tr("Save &As..."), this);
@@ -159,34 +159,34 @@ void MainWindow::setupActions()
     m_actionSaveAs->setIcon(QIcon::fromTheme(QStringLiteral("document-save-as"), QIcon(QStringLiteral(":/icons/actions/16/document-save-as.svg"))));
     m_actionSaveAs->setShortcut(QKeySequence::SaveAs);
     m_actionSaveAs->setToolTip(tr("Save document under a new name"));
-    connect(m_actionSaveAs, &QAction::triggered, this, &MainWindow::slotSaveAs);
+    connect(m_actionSaveAs, &QAction::triggered, this, &ApplicationWindow::slotSaveAs);
     addAction(m_actionSaveAs);
 
     m_actionSaveCopyAs = new QAction(tr("Save &Copy As..."), this);
     m_actionSaveCopyAs->setObjectName(QStringLiteral("actionSaveCopyAs"));
     m_actionSaveCopyAs->setIcon(QIcon::fromTheme(QStringLiteral("document-save-as"), QIcon(QStringLiteral(":/icons/actions/16/document-save-as.svg"))));
     m_actionSaveCopyAs->setToolTip(tr("Save copy of document under a new name"));
-    connect(m_actionSaveCopyAs, &QAction::triggered, this, &MainWindow::slotSaveCopyAs);
+    connect(m_actionSaveCopyAs, &QAction::triggered, this, &ApplicationWindow::slotSaveCopyAs);
 
     m_actionSaveAll = new QAction(tr("Save A&ll"), this);
     m_actionSaveAll->setObjectName(QStringLiteral("actionSaveAll"));
     m_actionSaveAll->setIcon(QIcon::fromTheme(QStringLiteral("document-save-all"), QIcon(QStringLiteral(":/icons/actions/16/document-save-all.svg"))));
     m_actionSaveAll->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_L));
     m_actionSaveAll->setToolTip(tr("Save all open documents"));
-    connect(m_actionSaveAll, &QAction::triggered, this, &MainWindow::slotSaveAll);
+    connect(m_actionSaveAll, &QAction::triggered, this, &ApplicationWindow::slotSaveAll);
     addAction(m_actionSaveAll);
 
     m_actionCopyPath = new QAction(tr("Cop&y Path"), this);
     m_actionCopyPath->setObjectName(QStringLiteral("actionCopyPath"));
     m_actionCopyPath->setIcon(QIcon::fromTheme(QStringLiteral("edit-copy-path"), QIcon(QStringLiteral(":/icons/actions/16/edit-copy-path.svg"))));
     m_actionCopyPath->setToolTip(tr("Copy document path to clipboard"));
-    connect(m_actionCopyPath, &QAction::triggered, this, &MainWindow::slotCopyPath);
+    connect(m_actionCopyPath, &QAction::triggered, this, &ApplicationWindow::slotCopyPath);
 
     m_actionRenameFilename = new QAction(tr("Re&name..."), this);
     m_actionRenameFilename->setObjectName(QStringLiteral("actionRenameFilename"));
     m_actionRenameFilename->setIcon(QIcon::fromTheme(QStringLiteral("edit-rename"), QIcon(QStringLiteral(":/icons/actions/16/edit-rename.svg"))));
     m_actionRenameFilename->setToolTip(tr("Rename file name of the document"));
-    connect(m_actionRenameFilename, &QAction::triggered, this, &MainWindow::slotRenameFilename);
+    connect(m_actionRenameFilename, &QAction::triggered, this, &ApplicationWindow::slotRenameFilename);
 
     m_actionClose = new QAction(tr("&Close"), this);
     m_actionClose->setObjectName(QStringLiteral("actionClose"));
@@ -199,12 +199,12 @@ void MainWindow::setupActions()
     m_actionCloseOther = new QAction(tr("Close Ot&her"), this);
     m_actionCloseOther->setObjectName(QStringLiteral("actionCloseOther"));
     m_actionCloseOther->setToolTip(tr("Close other open documents"));
-    connect(m_actionCloseOther, &QAction::triggered, this, &MainWindow::slotCloseOther);
+    connect(m_actionCloseOther, &QAction::triggered, this, &ApplicationWindow::slotCloseOther);
 
     m_actionCloseAll = new QAction(tr("Clos&e All"), this);
     m_actionCloseAll->setObjectName(QStringLiteral("actionCloseAll"));
     m_actionCloseAll->setToolTip(tr("Close all open documents"));
-    connect(m_actionCloseAll, &QAction::triggered, this, &MainWindow::slotCloseAll);
+    connect(m_actionCloseAll, &QAction::triggered, this, &ApplicationWindow::slotCloseAll);
 
     auto *menuDocument = menuBar()->addMenu(tr("&Document"));
     menuDocument->setObjectName(QStringLiteral("menuDocument"));
@@ -286,7 +286,7 @@ void MainWindow::setupActions()
     m_actionShowPath->setIcon(QIcon::fromTheme(QStringLiteral("show-path"), QIcon(QStringLiteral(":/icons/actions/16/show-path.svg"))));
     m_actionShowPath->setIconText(tr("Path"));
     m_actionShowPath->setToolTip(tr("Show document path in the window caption"));
-    connect(m_actionShowPath, &QAction::toggled, this, &MainWindow::updateWindowTitle);
+    connect(m_actionShowPath, &QAction::toggled, this, &ApplicationWindow::updateWindowTitle);
 
     m_actionShowMenubar = new QAction(tr("Show &Menubar"), this);
     m_actionShowMenubar->setObjectName(QStringLiteral("actionShowMenubar"));
@@ -376,7 +376,7 @@ void MainWindow::setupActions()
     m_actionsToolButtonStyle->addAction(actionToolButtonStyleTextBesideIcon);
     m_actionsToolButtonStyle->addAction(actionToolButtonStyleTextUnderIcon);
     m_actionsToolButtonStyle->addAction(actionToolButtonStyleDefault);
-    connect(m_actionsToolButtonStyle, &QActionGroup::triggered, this, &MainWindow::slotToolButtonStyle);
+    connect(m_actionsToolButtonStyle, &QActionGroup::triggered, this, &ApplicationWindow::slotToolButtonStyle);
 
     m_actionShowStatusbar = new QAction(tr("Show Stat&usbar"), this);
     m_actionShowStatusbar->setObjectName(QStringLiteral("actionShowStatusbar"));
@@ -391,7 +391,7 @@ void MainWindow::setupActions()
     m_actionFullScreen->setObjectName(QStringLiteral("actionViewFullScreen"));
     m_actionFullScreen->setCheckable(true);
     m_actionFullScreen->setShortcuts(QList<QKeySequence>() << QKeySequence(Qt::Key_F11) << QKeySequence::FullScreen);
-    connect(m_actionFullScreen, &QAction::toggled, this, &MainWindow::slotFullScreen);
+    connect(m_actionFullScreen, &QAction::toggled, this, &ApplicationWindow::slotFullScreen);
     addAction(m_actionFullScreen);
     updateActionFullScreen();
 
@@ -464,7 +464,7 @@ void MainWindow::setupActions()
 }
 
 
-void MainWindow::updateActionsToolButtonStyle(const Qt::ToolButtonStyle style)
+void ApplicationWindow::updateActionsToolButtonStyle(const Qt::ToolButtonStyle style)
 {
     const QList<QAction *> actions = m_actionsToolButtonStyle->actions();
     for (auto *action : actions) {
@@ -476,7 +476,7 @@ void MainWindow::updateActionsToolButtonStyle(const Qt::ToolButtonStyle style)
 }
 
 
-void MainWindow::updateActionFullScreen()
+void ApplicationWindow::updateActionFullScreen()
 {
     if (!m_actionFullScreen->isChecked()) {
         m_actionFullScreen->setText(tr("Full S&creen Mode"));
@@ -493,7 +493,7 @@ void MainWindow::updateActionFullScreen()
 }
 
 
-void MainWindow::enableActions(const bool enabled)
+void ApplicationWindow::enableActions(const bool enabled)
 {
     m_actionSave->setEnabled(enabled);
     m_actionSaveAs->setEnabled(enabled);
@@ -504,25 +504,25 @@ void MainWindow::enableActions(const bool enabled)
 }
 
 
-void MainWindow::enableActionCloseOther(const bool enabled)
+void ApplicationWindow::enableActionCloseOther(const bool enabled)
 {
     m_actionCloseOther->setEnabled(enabled);
 }
 
 
-void MainWindow::enableUrlActions(const bool enabled)
+void ApplicationWindow::enableUrlActions(const bool enabled)
 {
     m_actionCopyPath->setEnabled(enabled);
 }
 
 
-void MainWindow::enableFileActions(const bool enabled)
+void ApplicationWindow::enableFileActions(const bool enabled)
 {
     m_actionRenameFilename->setEnabled(enabled);
 }
 
 
-void MainWindow::loadSettings()
+void ApplicationWindow::loadSettings()
 {
     QSettings settings;
 
@@ -585,7 +585,7 @@ void MainWindow::loadSettings()
 }
 
 
-void MainWindow::saveSettings()
+void ApplicationWindow::saveSettings()
 {
     QSettings settings;
 
@@ -613,7 +613,7 @@ void MainWindow::saveSettings()
 }
 
 
-void MainWindow::closeEvent(QCloseEvent *event)
+void ApplicationWindow::closeEvent(QCloseEvent *event)
 {
     if (m_documentManager->subWindowCount() >= 1) {
 
@@ -640,7 +640,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 // Application window
 //
 
-void MainWindow::updateWindowModified()
+void ApplicationWindow::updateWindowModified()
 {
     bool modified = false;
 
@@ -652,7 +652,7 @@ void MainWindow::updateWindowModified()
 }
 
 
-void MainWindow::updateWindowTitle()
+void ApplicationWindow::updateWindowTitle()
 {
     QString caption;
 
@@ -670,7 +670,7 @@ void MainWindow::updateWindowTitle()
 // Document
 //
 
-DocumentWidget *MainWindow::createDocument()
+DocumentWidget *ApplicationWindow::createDocument()
 {
     auto *document = new DocumentWidget;
     auto *docWindow = new DocumentWindow;
@@ -679,18 +679,18 @@ DocumentWidget *MainWindow::createDocument()
 
     // Connections: Modified
     connect(document, &DocumentWidget::modifiedChanged, docWindow, &DocumentWindow::documentModifiedChanged);
-    connect(document, &DocumentWidget::modifiedChanged, this, &MainWindow::documentModifiedChanged);
+    connect(document, &DocumentWidget::modifiedChanged, this, &ApplicationWindow::documentModifiedChanged);
     // Connections: Url
     connect(document, &DocumentWidget::urlChanged, docWindow, &DocumentWindow::documentUrlChanged);
-    connect(document, &DocumentWidget::urlChanged, this, &MainWindow::documentUrlChanged);
+    connect(document, &DocumentWidget::urlChanged, this, &ApplicationWindow::documentUrlChanged);
     // Connections: Actions
     connect(docWindow, &DocumentWindow::actionCloseOther, m_documentManager, &DocumentManager::closeOtherSubWindows);
     connect(docWindow, &DocumentWindow::actionCopyPath, document, &DocumentWidget::copyPathToClipboard);
     connect(docWindow, &DocumentWindow::actionRenameFilename, document, &DocumentWidget::renameFilename);
     // Connections: Document count
-    connect(docWindow, &DocumentWindow::destroyed, this, &MainWindow::documentClosed);
-    connect(this, &MainWindow::documentCountChanged, document, &DocumentWidget::documentCountChanged);
-    connect(this, &MainWindow::documentCountChanged, docWindow, &DocumentWindow::documentCountChanged);
+    connect(docWindow, &DocumentWindow::destroyed, this, &ApplicationWindow::documentClosed);
+    connect(this, &ApplicationWindow::documentCountChanged, document, &DocumentWidget::documentCountChanged);
+    connect(this, &ApplicationWindow::documentCountChanged, docWindow, &DocumentWindow::documentCountChanged);
 
     // Initialize
     document->initModified();
@@ -700,7 +700,7 @@ DocumentWidget *MainWindow::createDocument()
 }
 
 
-bool MainWindow::openDocument(const QUrl &url)
+bool ApplicationWindow::openDocument(const QUrl &url)
 {
     if (!url.isValid())
         return false;
@@ -716,7 +716,7 @@ bool MainWindow::openDocument(const QUrl &url)
 }
 
 
-bool MainWindow::loadDocument(const QUrl &url)
+bool ApplicationWindow::loadDocument(const QUrl &url)
 {
     DocumentWidget *document = createDocument();
     if (!true) {
@@ -734,7 +734,7 @@ bool MainWindow::loadDocument(const QUrl &url)
 }
 
 
-bool MainWindow::saveDocument(DocumentWidget *document, const QUrl &altUrl)
+bool ApplicationWindow::saveDocument(DocumentWidget *document, const QUrl &altUrl)
 {
     Q_UNUSED(altUrl)
 
@@ -748,7 +748,7 @@ bool MainWindow::saveDocument(DocumentWidget *document, const QUrl &altUrl)
 //
 //
 
-void MainWindow::documentCreated()
+void ApplicationWindow::documentCreated()
 {
     const int count = m_documentManager->subWindowCount();
 
@@ -757,7 +757,7 @@ void MainWindow::documentCreated()
 }
 
 
-void MainWindow::documentActivated(QMdiSubWindow *subWindow)
+void ApplicationWindow::documentActivated(QMdiSubWindow *subWindow)
 {
     updateWindowModified();
     updateWindowTitle();
@@ -776,7 +776,7 @@ void MainWindow::documentActivated(QMdiSubWindow *subWindow)
 }
 
 
-void MainWindow::documentModifiedChanged(const bool modified)
+void ApplicationWindow::documentModifiedChanged(const bool modified)
 {
     Q_UNUSED(modified)
 
@@ -785,7 +785,7 @@ void MainWindow::documentModifiedChanged(const bool modified)
 }
 
 
-void MainWindow::documentUrlChanged(const QUrl &url)
+void ApplicationWindow::documentUrlChanged(const QUrl &url)
 {
     Q_UNUSED(url)
 
@@ -798,7 +798,7 @@ void MainWindow::documentUrlChanged(const QUrl &url)
 }
 
 
-void MainWindow::documentClosed()
+void ApplicationWindow::documentClosed()
 {
     const int count = m_documentManager->subWindowCount();
 
@@ -811,7 +811,7 @@ void MainWindow::documentClosed()
 //
 //
 
-DocumentWidget *MainWindow::extractDocument(const QMdiSubWindow *subWindow) const
+DocumentWidget *ApplicationWindow::extractDocument(const QMdiSubWindow *subWindow) const
 {
     if (!subWindow)
         return nullptr;
@@ -820,19 +820,19 @@ DocumentWidget *MainWindow::extractDocument(const QMdiSubWindow *subWindow) cons
 }
 
 
-DocumentWidget *MainWindow::activeDocument() const
+DocumentWidget *ApplicationWindow::activeDocument() const
 {
     return extractDocument(m_documentManager->activeSubWindow());
 }
 
 
-bool MainWindow::hasActiveDocument() const
+bool ApplicationWindow::hasActiveDocument() const
 {
     return !!activeDocument();
 }
 
 
-bool MainWindow::hasActiveDocumentUrl() const
+bool ApplicationWindow::hasActiveDocumentUrl() const
 {
     auto *document = activeDocument();
     if (!document)
@@ -842,7 +842,7 @@ bool MainWindow::hasActiveDocumentUrl() const
 }
 
 
-bool MainWindow::hasActiveDocumentUrlFile() const
+bool ApplicationWindow::hasActiveDocumentUrlFile() const
 {
     auto *document = activeDocument();
     if (!document)
@@ -856,28 +856,28 @@ bool MainWindow::hasActiveDocumentUrlFile() const
 // Action slots
 //
 
-void MainWindow::slotAbout()
+void ApplicationWindow::slotAbout()
 {
     auto *dialog = new AboutDialog(this);
     dialog->open();
 }
 
 
-void MainWindow::slotColophon()
+void ApplicationWindow::slotColophon()
 {
     auto *dialog = new ColophonDialog(this);
     dialog->open();
 }
 
 
-void MainWindow::slotPreferences()
+void ApplicationWindow::slotPreferences()
 {
     auto *dialog = new PreferencesDialog(this);
     dialog->open();
 }
 
 
-void MainWindow::slotNew()
+void ApplicationWindow::slotNew()
 {
     DocumentWidget *document = createDocument();
     document->show();
@@ -886,7 +886,7 @@ void MainWindow::slotNew()
 }
 
 
-void MainWindow::slotOpen()
+void ApplicationWindow::slotOpen()
 {
     const QList<QUrl> urls = QFileDialog::getOpenFileUrls(this, tr("Open Documents"));
     for (const QUrl &url : urls)
@@ -894,7 +894,7 @@ void MainWindow::slotOpen()
 }
 
 
-void MainWindow::slotSave()
+void ApplicationWindow::slotSave()
 {
     DocumentWidget *document = activeDocument();
     if (!document)
@@ -907,7 +907,7 @@ void MainWindow::slotSave()
 }
 
 
-void MainWindow::slotSaveAs()
+void ApplicationWindow::slotSaveAs()
 {
     DocumentWidget *document = activeDocument();
     if (!document)
@@ -921,7 +921,7 @@ void MainWindow::slotSaveAs()
 }
 
 
-void MainWindow::slotSaveCopyAs()
+void ApplicationWindow::slotSaveCopyAs()
 {
     DocumentWidget *document = activeDocument();
     if (!document)
@@ -933,7 +933,7 @@ void MainWindow::slotSaveCopyAs()
 }
 
 
-void MainWindow::slotSaveAll()
+void ApplicationWindow::slotSaveAll()
 {
     const QList<QMdiSubWindow *> subWindows = m_documentManager->subWindowList();
     for (auto *subWindow : subWindows) {
@@ -956,7 +956,7 @@ void MainWindow::slotSaveAll()
 }
 
 
-void MainWindow::slotCopyPath()
+void ApplicationWindow::slotCopyPath()
 {
     DocumentWidget *document = activeDocument();
     if (!document)
@@ -966,7 +966,7 @@ void MainWindow::slotCopyPath()
 }
 
 
-void MainWindow::slotRenameFilename()
+void ApplicationWindow::slotRenameFilename()
 {
     DocumentWidget *document = activeDocument();
     if (!document)
@@ -976,7 +976,7 @@ void MainWindow::slotRenameFilename()
 }
 
 
-void MainWindow::slotCloseOther()
+void ApplicationWindow::slotCloseOther()
 {
     if (m_documentManager->subWindowCount() >= 2) {
 
@@ -992,7 +992,7 @@ void MainWindow::slotCloseOther()
 }
 
 
-void MainWindow::slotCloseAll()
+void ApplicationWindow::slotCloseAll()
 {
     if (m_documentManager->subWindowCount() >= 1) {
 
@@ -1008,7 +1008,7 @@ void MainWindow::slotCloseAll()
 }
 
 
-void MainWindow::slotToolButtonStyle(const QAction *action)
+void ApplicationWindow::slotToolButtonStyle(const QAction *action)
 {
     const auto style = static_cast<Qt::ToolButtonStyle>(action->data().toInt());
 
@@ -1023,7 +1023,7 @@ void MainWindow::slotToolButtonStyle(const QAction *action)
 }
 
 
-void MainWindow::slotFullScreen(const bool checked)
+void ApplicationWindow::slotFullScreen(const bool checked)
 {
     updateActionFullScreen();
 
