@@ -35,6 +35,7 @@ SOURCES += \
     application_window.cpp \
     colophon_dialog.cpp \
     colophon_pages.cpp \
+    confirmation_dialog.cpp \
     dialog_header_box.cpp \
     document_manager.cpp \
     document_widget.cpp \
@@ -48,6 +49,7 @@ HEADERS += \
     application_window.h \
     colophon_dialog.h \
     colophon_pages.h \
+    confirmation_dialog.h \
     dialog_header_box.h \
     document_manager.h \
     document_widget.h \
