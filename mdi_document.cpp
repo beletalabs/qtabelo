@@ -28,63 +28,117 @@
 #include <QFile>
 #include <QInputDialog>
 #include <QMessageBox>
-#include <QUrl>
 #include <QWidget>
 
 
 MdiDocument::MdiDocument(QWidget *parent)
-    : TabularDocument{parent}
-    , m_documentUrl{""}
+    : TabularDocument(parent)
+    , m_modified{false}
+    , m_url{QUrl()}
 {
     setAttribute(Qt::WA_DeleteOnClose);
 }
 
 
-QUrl MdiDocument::documentUrl() const
+//
+// Property: modified
+//
+
+bool MdiDocument::modified() const
 {
-    return m_documentUrl;
+    return m_modified;
 }
 
 
-void MdiDocument::setDocumentUrl(const QUrl &url)
+void MdiDocument::setModified(const bool modified)
 {
-    if (url != m_documentUrl) {
-        m_documentUrl = url;
-
-        emit documentUrlChanged(m_documentUrl);
+    if (modified != m_modified) {
+        m_modified = modified;
+        emit modifiedChanged(modified);
     }
 }
 
 
-void MdiDocument::resetDocumentUrl()
+void MdiDocument::resetModified()
 {
-    m_documentUrl = QUrl("");
-
-    emit documentUrlChanged(m_documentUrl);
+    m_modified = false;
+    emit modifiedChanged(false);
 }
 
 
-void MdiDocument::copyDocumentUrlToClipboard()
+void MdiDocument::initModified()
 {
-    if (!m_documentUrl.isEmpty())
-        QApplication::clipboard()->setText(m_documentUrl.toDisplayString(QUrl::PreferLocalFile));
+    emit modifiedChanged(m_modified);
 }
 
 
-void MdiDocument::renameDocumentFilename()
+//
+// Property: url
+//
+
+QUrl MdiDocument::url() const
 {
-    if (m_documentUrl.isEmpty() || !m_documentUrl.isLocalFile())
+    return m_url;
+}
+
+
+void MdiDocument::setUrl(const QUrl &url)
+{
+    if (url != m_url) {
+        m_url = url;
+        emit urlChanged(url);
+    }
+}
+
+
+void MdiDocument::resetUrl()
+{
+    m_url = QUrl();
+    emit urlChanged(QUrl());
+}
+
+
+void MdiDocument::initUrl()
+{
+    emit urlChanged(m_url);
+}
+
+
+//
+// Document
+//
+
+void MdiDocument::documentCountChanged(const int count)
+{
+    Q_UNUSED(count)
+}
+
+
+//
+// Slots
+//
+
+void MdiDocument::copyPathToClipboard()
+{
+    if (!m_url.isEmpty())
+        QApplication::clipboard()->setText(m_url.toDisplayString(QUrl::PreferLocalFile));
+}
+
+
+void MdiDocument::renameFilename()
+{
+    if (!m_url.isLocalFile())
         return;
 
     bool ok = false;
-    const QString oldFileName = m_documentUrl.fileName();
+    const QString oldFileName = m_url.fileName();
     const QString newFileName = QInputDialog::getText(this, tr("Rename file"), tr("New file name"), QLineEdit::Normal, oldFileName, &ok);
     if (!ok || newFileName.isEmpty() || (newFileName == oldFileName))
         return;
 
-    QUrl newUrl = m_documentUrl.adjusted(QUrl::RemoveFilename).toString() + newFileName;
+    QUrl newUrl = m_url.adjusted(QUrl::RemoveFilename).toString() + newFileName;
 
-    if (!QFile::rename(m_documentUrl.toLocalFile(), newUrl.toLocalFile())) {
+    if (!QFile::rename(m_url.toLocalFile(), newUrl.toLocalFile())) {
 
         QString title = tr("File Already Exists");
         QString text = tr("A file with the name <em>%1</em> already exists!").arg(newUrl.fileName());
@@ -93,5 +147,5 @@ void MdiDocument::renameDocumentFilename()
         return;
     }
 
-    setDocumentUrl(newUrl);
+    setUrl(newUrl);
 }

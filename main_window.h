@@ -49,53 +49,63 @@ public:
     bool openDocument(const QUrl &url);
 
 signals:
-    void actionsIsEnabled(const bool enabled);
-    void actionsFileIsEnabled(const bool enabled);
-    void actionCloseOtherIsEnabled(const bool enabled);
+    void documentCountChanged(const int count);
 
 protected:
     void closeEvent(QCloseEvent *event) override;
 
 private:
     void setupActions();
-    void updateActionsToolButtonStyle(const Qt::ToolButtonStyle toolButtonStyle);
-    void updateActionViewFullScreen();
+    void updateActionsToolButtonStyle(const Qt::ToolButtonStyle style);
+    void updateActionFullScreen();
+
+    void enableActions(const bool enabled);
+    void enableActionCloseOther(const bool enabled);
+    void enableUrlActions(const bool enabled);
+    void enableFileActions(const bool enabled);
 
     void loadSettings();
     void saveSettings();
 
-    MdiDocument *createDocument();
-    MdiDocument *extractDocument(const QMdiSubWindow *subWindow) const;
-    MdiDocument *activeDocument() const;
-    bool loadDocument(const QUrl &url);
-    bool saveDocument(MdiDocument *document, const QUrl &url);
-
-private slots:
-    void enableActions(QMdiSubWindow *subWindow = nullptr);
-    void enableActionsFile();
-    void enableActionCloseOther();
-
-    void activateDocument(QMdiSubWindow *subWindow);
-
+    void updateWindowModified();
     void updateWindowTitle();
 
-    void onActionAboutTriggered();
-    void onActionColophonTriggered();
-    void onActionPreferencesTriggered();
+    MdiDocument *createDocument();
+    bool loadDocument(const QUrl &url);
+    bool saveDocument(MdiDocument *document, const QUrl &altUrl);
 
-    void onActionNewTriggered();
-    void onActionOpenTriggered();
-    void onActionSaveTriggered();
-    void onActionSaveAsTriggered();
-    void onActionSaveCopyAsTriggered();
-    void onActionSaveAllTriggered();
-    void onActionCopyPathTriggered();
-    void onActionRenameTriggered();
-    void onActionCloseOtherTriggered(QMdiSubWindow *subWindow = nullptr);
-    void onActionCloseAllTriggered();
+private slots:
+    void documentCreated();
+    void documentActivated(QMdiSubWindow *subWindow);
+    void documentModifiedChanged(const bool modified);
+    void documentUrlChanged(const QUrl &url);
+    void documentClosed();
 
-    void onActionsToolButtonStyleTriggered(const QAction *actionToolButtonStyle);
-    void onActionViewFullScreenTriggered(const bool checked);
+private:
+    MdiDocument *extractDocument(const QMdiSubWindow *subWindow) const;
+    MdiDocument *activeDocument() const;
+    bool hasActiveDocument() const;
+    bool hasActiveDocumentUrl() const;
+    bool hasActiveDocumentUrlFile() const;
+
+private slots:
+    void slotAbout();
+    void slotColophon();
+    void slotPreferences();
+
+    void slotNew();
+    void slotOpen();
+    void slotSave();
+    void slotSaveAs();
+    void slotSaveCopyAs();
+    void slotSaveAll();
+    void slotCopyPath();
+    void slotRenameFilename();
+    void slotCloseOther();
+    void slotCloseAll();
+
+    void slotToolButtonStyle(const QAction *action);
+    void slotFullScreen(const bool checked);
 
 private:
     MdiArea *m_documentsArea;
@@ -113,11 +123,11 @@ private:
     QAction *m_actionSaveCopyAs;
     QAction *m_actionSaveAll;
     QAction *m_actionCopyPath;
-    QAction *m_actionRename;
+    QAction *m_actionRenameFilename;
     QAction *m_actionClose;
     QAction *m_actionCloseOther;
     QAction *m_actionCloseAll;
-    QToolBar *m_toolbarFile;
+    QToolBar *m_toolbarDocument;
 
     QToolBar *m_toolbarEdit;
 
@@ -130,17 +140,17 @@ private:
     QAction *m_actionShowPath;
     QAction *m_actionShowMenubar;
     QAction *m_actionShowToolbarApplication;
-    QAction *m_actionShowToolbarFile;
+    QAction *m_actionShowToolbarDocument;
     QAction *m_actionShowToolbarEdit;
     QAction *m_actionShowToolbarView;
     QAction *m_actionShowToolbarFormat;
     QAction *m_actionShowToolbarTools;
-    QAction *m_actionShowToolbarAppearance;
+    QAction *m_actionShowToolbarSettings;
     QAction *m_actionShowToolbarHelp;
     QActionGroup *m_actionsToolButtonStyle;
     QAction *m_actionShowStatusbar;
-    QAction *m_actionViewFullScreen;
-    QToolBar *m_toolbarAppearance;
+    QAction *m_actionFullScreen;
+    QToolBar *m_toolbarSettings;
 
     QToolBar *m_toolbarHelp;
 };

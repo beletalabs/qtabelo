@@ -28,6 +28,7 @@
 #include <QIcon>
 #include <QMdiArea>
 #include <QMenu>
+#include <QMessageBox>
 #include <QString>
 #include <QUrl>
 #include <QWidget>
@@ -37,7 +38,7 @@
 
 
 MdiWindow::MdiWindow(QWidget *parent)
-    : QMdiSubWindow{parent}
+    : QMdiSubWindow(parent)
     , m_filenameSequenceNumber{0}
 {
     setAttribute(Qt::WA_DeleteOnClose);
@@ -62,27 +63,26 @@ void MdiWindow::setupActions()
     m_actionCloseOther->setObjectName(QStringLiteral("actionCloseOther"));
     m_actionCloseOther->setIcon(QIcon::fromTheme(QStringLiteral("window-close"), QIcon(QStringLiteral(":/icons/actions/16/window-close.svg"))));
     m_actionCloseOther->setToolTip(tr("Close other open documents"));
-    connect(this, &MdiWindow::actionCloseOtherIsEnabled, m_actionCloseOther, &QAction::setEnabled);
-    connect(m_actionCloseOther, &QAction::triggered, this, &MdiWindow::onActionCloseOtherTriggered);
+    connect(m_actionCloseOther, &QAction::triggered, this, &MdiWindow::slotCloseOther);
 
     m_actionShowPath = new QAction(tr("Show &Path"), this);
     m_actionShowPath->setObjectName(QStringLiteral("actionShowPath"));
     m_actionShowPath->setCheckable(true);
-    m_actionShowPath->setChecked(false);
+    m_actionShowPath->setIcon(QIcon::fromTheme(QStringLiteral("show-path"), QIcon(QStringLiteral(":/icons/actions/16/show-path.svg"))));
     m_actionShowPath->setToolTip(tr("Show document path in the tab caption"));
     connect(m_actionShowPath, &QAction::toggled, this, &MdiWindow::updateWindowTitle);
 
     m_actionCopyPath = new QAction(tr("Cop&y Path"), this);
     m_actionCopyPath->setObjectName(QStringLiteral("actionCopyPath"));
-    m_actionCopyPath->setIcon(QIcon::fromTheme(QStringLiteral("edit-copy"), QIcon(QStringLiteral(":/icons/actions/16/edit-copy.svg"))));
+    m_actionCopyPath->setIcon(QIcon::fromTheme(QStringLiteral("edit-copy-path"), QIcon(QStringLiteral(":/icons/actions/16/edit-copy-path.svg"))));
     m_actionCopyPath->setToolTip(tr("Copy document path to clipboard"));
-    connect(m_actionCopyPath, &QAction::triggered, this, &MdiWindow::actionCopyPathTriggered);
+    connect(m_actionCopyPath, &QAction::triggered, this, &MdiWindow::actionCopyPath);
 
-    m_actionRename = new QAction(tr("Re&name…"), this);
-    m_actionRename->setObjectName(QStringLiteral("actionRename"));
-    m_actionRename->setIcon(QIcon::fromTheme(QStringLiteral("edit-rename"), QIcon(QStringLiteral(":/icons/actions/16/edit-rename.svg"))));
-    m_actionRename->setToolTip(tr("Rename file name of the document"));
-    connect(m_actionRename, &QAction::triggered, this, &MdiWindow::onActionRenameTriggered);
+    m_actionRenameFilename = new QAction(tr("Re&name..."), this);
+    m_actionRenameFilename->setObjectName(QStringLiteral("actionRename"));
+    m_actionRenameFilename->setIcon(QIcon::fromTheme(QStringLiteral("edit-rename"), QIcon(QStringLiteral(":/icons/actions/16/edit-rename.svg"))));
+    m_actionRenameFilename->setToolTip(tr("Rename file name of the document"));
+    connect(m_actionRenameFilename, &QAction::triggered, this, &MdiWindow::actionRenameFilename);
 
     menu->clear();
     menu->addAction(m_actionClose);
@@ -91,9 +91,19 @@ void MdiWindow::setupActions()
     menu->addAction(m_actionShowPath);
     menu->addAction(m_actionCopyPath);
     menu->addSeparator();
-    menu->addAction(m_actionRename);
+    menu->addAction(m_actionRenameFilename);
 }
 
+
+void MdiWindow::enableActionCloseOther(const bool enabled)
+{
+    m_actionCloseOther->setEnabled(enabled);
+}
+
+
+//
+// Property: filenameSequenceNumber
+//
 
 int MdiWindow::filenameSequenceNumber() const
 {
@@ -118,15 +128,17 @@ int MdiWindow::latestFilenameSequenceNumber(const QUrl &url) const
 {
     int number = 0;
 
-    const QList<QMdiSubWindow *> subWindows = mdiArea()->subWindowList();
-    for (auto *subWindow : subWindows) {
+    if (mdiArea()) {
+        const QList<QMdiSubWindow *> subWindows = mdiArea()->subWindowList();
+        for (auto *subWindow : subWindows) {
 
-        auto *document = qobject_cast<MdiDocument *>(subWindow->widget());
-        if (document->documentUrl().fileName() == url.fileName()) {
+            auto *document = qobject_cast<MdiDocument *>(subWindow->widget());
+            if (document->url().fileName() == url.fileName()) {
 
-            auto *docWindow = qobject_cast<MdiWindow *>(subWindow);
-            if (docWindow->filenameSequenceNumber() > number)
-                number = docWindow->filenameSequenceNumber();
+                auto *docWindow = qobject_cast<MdiWindow *>(subWindow);
+                if (docWindow->filenameSequenceNumber() > number)
+                    number = docWindow->filenameSequenceNumber();
+            }
         }
     }
 
@@ -134,44 +146,35 @@ int MdiWindow::latestFilenameSequenceNumber(const QUrl &url) const
 }
 
 
-bool MdiWindow::isPathVisibleInWindowTitle() const
-{
-    return m_actionShowPath->isChecked();
-}
-
-
-void MdiWindow::setPathVisibleInWindowTitle(const bool pathVisible)
-{
-    m_actionShowPath->setChecked(pathVisible);
-}
-
+//
+// Document window
+//
 
 QString MdiWindow::windowCaption(const bool pathVisible) const
 {
-    QString caption;
-    const QUrl &url = qobject_cast<MdiDocument *>(widget())->documentUrl();
+    if (!widget())
+        return QString();
+
+    QString caption = tr("Untitled");
+    const QUrl &url = qobject_cast<MdiDocument *>(widget())->url();
 
     // Name
     if (!url.isEmpty()) {
 
         if (pathVisible) {
-
             caption = url.toString(QUrl::PreferLocalFile);
 
-            const QString homePath = QDir::homePath();
+            const QString &homePath = QDir::homePath();
             if (caption.startsWith(homePath))
                 caption.replace(0, homePath.length(), QLatin1Char('~'));
         }
-        else {
-            caption = url.isLocalFile() ? url.fileName() : tr("Untitled");
+        else if (!url.fileName().isEmpty()) {
+            caption = url.fileName();
         }
-    }
-    else {
-        caption = tr("Untitled");
     }
 
     // Sequence number
-    if (m_filenameSequenceNumber > 1 && (!pathVisible || url.isEmpty()))
+    if ((!pathVisible || url.isEmpty()) && m_filenameSequenceNumber > 1)
         caption = tr("%1 (%2)").arg(caption).arg(m_filenameSequenceNumber);
 
     return caption;
@@ -195,38 +198,51 @@ void MdiWindow::updateWindowIcon(const bool modified)
 }
 
 
+//
+// Document
+//
+
+void MdiWindow::documentCountChanged(const int count)
+{
+    enableActionCloseOther(count >= 2);
+}
+
+
+void MdiWindow::documentModifiedChanged(const bool modified)
+{
+    setWindowModified(modified);
+    updateWindowIcon(modified);
+}
+
+
 void MdiWindow::documentUrlChanged(const QUrl &url)
 {
     resetFilenameSequenceNumber();
     setFilenameSequenceNumber(latestFilenameSequenceNumber(url) + 1);
 
-    bool checked = false;
-    if (!url.isEmpty()) {
-        checked = m_actionShowPath->isChecked() || m_actionShowPath->data().toBool();
-        m_actionShowPath->data().clear();
-    }
-    else {
-        m_actionShowPath->setData(m_actionShowPath->isChecked());
-    }
-
-    updateWindowTitle(checked);
-    m_actionShowPath->setChecked(checked);
+    updateWindowTitle(m_actionShowPath->isChecked());
 
     m_actionShowPath->setEnabled(!url.isEmpty());
     m_actionCopyPath->setEnabled(!url.isEmpty());
-    m_actionRename->setEnabled(!url.isEmpty());
+    m_actionRenameFilename->setEnabled(url.isLocalFile());
 }
 
 
-void MdiWindow::onActionCloseOtherTriggered()
-{
-    emit actionCloseOtherTriggered(this);
-}
+//
+// Action slots
+//
 
-
-void MdiWindow::onActionRenameTriggered()
+void MdiWindow::slotCloseOther()
 {
-    MdiDocument *document = qobject_cast<MdiDocument *>(widget());
-    if (document)
-        document->renameDocumentFilename();
+    if (mdiArea() && mdiArea()->subWindowList().size() >= 2) {
+
+        const QString &title = tr("Close all documents except this one");
+        const QString &text = tr("This will close all open documents except this one.\n"
+                                 "Are you sure you want to continue?");
+        const QMessageBox::StandardButtons buttons = QMessageBox::Yes | QMessageBox::Cancel;
+        const QMessageBox::StandardButton defaultButton = QMessageBox::Yes;
+
+        if (QMessageBox::warning(this, title, text, buttons, defaultButton) != QMessageBox::Cancel)
+            emit actionCloseOther(this);
+    }
 }

@@ -32,7 +32,7 @@
 
 
 MdiArea::MdiArea(QWidget *parent)
-    : QMdiArea{parent}
+    : QMdiArea(parent)
 {
 
 }
@@ -53,7 +53,7 @@ QMdiSubWindow *MdiArea::findSubWindow(const QUrl &url) const
     for (auto *subWindow : subWindows) {
 
         auto *document = qobject_cast<MdiDocument *>(subWindow->widget());
-        if (document->documentUrl() == url)
+        if (document && document->url() == url)
             return subWindow;
     }
 
@@ -73,14 +73,11 @@ void MdiArea::closeSelectedSubWindow(QMdiSubWindow *subWindow)
 void MdiArea::closeOtherSubWindows(QMdiSubWindow *subWindow)
 {
     QList<QMdiSubWindow *> subWindows = subWindowList();
-    if (subWindows.isEmpty() || !subWindow)
+    if (!subWindow || subWindows.isEmpty() || subWindows.indexOf(subWindow) < 0)
         return;
 
     // First remove the subwindow from the list that should not be closed
-    if (subWindows.indexOf(subWindow) >= 0)
-        subWindows.removeOne(subWindow);
-    else
-        return;
+    subWindows.removeOne(subWindow);
 
     // Then close all other subwindows
     for (auto *subWindow : subWindows)

@@ -34,25 +34,37 @@ class MdiDocument : public TabularDocument
 {
     Q_OBJECT
 
-    Q_PROPERTY(QUrl documentUrl MEMBER m_documentUrl READ documentUrl WRITE setDocumentUrl RESET resetDocumentUrl NOTIFY documentUrlChanged)
+    Q_PROPERTY(bool modified MEMBER m_modified READ modified WRITE setModified RESET resetModified NOTIFY modifiedChanged)
+    Q_PROPERTY(QUrl url MEMBER m_url READ url WRITE setUrl RESET resetUrl NOTIFY urlChanged)
 
 public:
     explicit MdiDocument(QWidget *parent = nullptr);
 
-    QUrl documentUrl() const;
+    bool modified() const;
+    void initModified();
+
+    QUrl url() const;
+    void initUrl();
 
 signals:
-    void documentUrlChanged(const QUrl &url);
+    void modifiedChanged(const bool modified);
+    void urlChanged(const QUrl &url);
 
 public slots:
-    void setDocumentUrl(const QUrl &url);
-    void resetDocumentUrl();
-    void copyDocumentUrlToClipboard();
+    void setModified(const bool modified);
+    void resetModified();
 
-    void renameDocumentFilename();
+    void setUrl(const QUrl &url);
+    void resetUrl();
+
+    void documentCountChanged(const int count);
+
+    void copyPathToClipboard();
+    void renameFilename();
 
 private:
-    QUrl m_documentUrl;
+    bool m_modified;
+    QUrl m_url;
 };
 
 #endif // MDI_DOCUMENT_H

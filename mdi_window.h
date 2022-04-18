@@ -36,41 +36,39 @@ class MdiWindow : public QMdiSubWindow
     Q_OBJECT
 
     Q_PROPERTY(int filenameSequenceNumber MEMBER m_filenameSequenceNumber READ filenameSequenceNumber WRITE setFilenameSequenceNumber RESET resetFilenameSequenceNumber)
-    Q_PROPERTY(bool pathVisibleInWindowTitle READ isPathVisibleInWindowTitle WRITE setPathVisibleInWindowTitle)
 
 public:
     explicit MdiWindow(QWidget *parent = nullptr);
 
     int filenameSequenceNumber() const;
-
-    bool isPathVisibleInWindowTitle() const;
+    void initFilenameSequenceNumber();
 
     QString windowCaption(const bool pathVisible) const;
 
 signals:
-    void actionCloseOtherIsEnabled(const int enabled);
-    void actionCloseOtherTriggered(MdiWindow *window);
-    void actionCopyPathTriggered();
+    void actionCloseOther(MdiWindow *window);
+    void actionCopyPath();
+    void actionRenameFilename();
 
 public slots:
     void setFilenameSequenceNumber(const int number);
     void resetFilenameSequenceNumber();
 
-    void setPathVisibleInWindowTitle(const bool pathVisible);
-
-    void updateWindowTitle(const bool pathVisible);
-    void updateWindowIcon(const bool modified);
-
+    void documentCountChanged(const int count);
+    void documentModifiedChanged(const bool modified);
     void documentUrlChanged(const QUrl &url);
 
 private:
     void setupActions();
+    void enableActionCloseOther(const bool enabled);
 
     int latestFilenameSequenceNumber(const QUrl &url) const;
 
+    void updateWindowTitle(const bool pathVisible);
+    void updateWindowIcon(const bool modified);
+
 private slots:
-    void onActionCloseOtherTriggered();
-    void onActionRenameTriggered();
+    void slotCloseOther();
 
 private:
     int m_filenameSequenceNumber;
@@ -79,7 +77,7 @@ private:
     QAction *m_actionCloseOther;
     QAction *m_actionShowPath;
     QAction *m_actionCopyPath;
-    QAction *m_actionRename;
+    QAction *m_actionRenameFilename;
 };
 
 #endif // MDI_WINDOW_H

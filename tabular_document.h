@@ -30,22 +30,8 @@ class TabularDocument : public QWidget
 {
     Q_OBJECT
 
-    Q_PROPERTY(bool modified MEMBER m_modified READ isModified WRITE setModified RESET resetModified NOTIFY modifiedChanged)
-
 public:
     explicit TabularDocument(QWidget *parent = nullptr);
-
-    bool isModified() const;
-    void resetModified();
-
-public slots:
-    void setModified(bool modified = true);
-
-signals:
-    void modifiedChanged(const bool modified);
-
-private:
-    bool m_modified;
 };
 
 #endif // TABULAR_DOCUMENT_H

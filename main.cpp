@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
 
     const QStringList urls = parser.positionalArguments();
     for(const QString &url : urls)
-        window.openDocument(QUrl::fromUserInput(url, QDir::currentPath()));
+        window.openDocument(QUrl::fromUserInput(url, QDir::currentPath(), QUrl::AssumeLocalFile));
 
 
     return app.exec();
