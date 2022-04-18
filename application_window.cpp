@@ -379,6 +379,45 @@ void ApplicationWindow::setupActions()
     m_actionsToolButtonStyle->addAction(actionToolButtonStyleDefault);
     connect(m_actionsToolButtonStyle, &QActionGroup::triggered, this, &ApplicationWindow::slotToolButtonStyle);
 
+    auto *actionToolButtonSizeSmall = new QAction(tr("&Small (16x16)"), this);
+    actionToolButtonSizeSmall->setObjectName(QStringLiteral("actionToolButtonSizeSmall"));
+    actionToolButtonSizeSmall->setCheckable(true);
+    actionToolButtonSizeSmall->setToolTip(tr("Show icons in small size"));
+    actionToolButtonSizeSmall->setData(16);
+
+    auto *actionToolButtonSizeMedium = new QAction(tr("&Medium (22x22)"), this);
+    actionToolButtonSizeMedium->setObjectName(QStringLiteral("actionToolButtonSizeMedium"));
+    actionToolButtonSizeMedium->setCheckable(true);
+    actionToolButtonSizeMedium->setToolTip(tr("Show icons in medium size"));
+    actionToolButtonSizeMedium->setData(22);
+
+    auto *actionToolButtonSizeLarge = new QAction(tr("&Large (32x32)"), this);
+    actionToolButtonSizeLarge->setObjectName(QStringLiteral("actionToolButtonSizeLarge"));
+    actionToolButtonSizeLarge->setCheckable(true);
+    actionToolButtonSizeLarge->setToolTip(tr("Show icons in large size"));
+    actionToolButtonSizeLarge->setData(32);
+
+    auto *actionToolButtonSizeHuge = new QAction(tr("&Huge (48x48)"), this);
+    actionToolButtonSizeHuge->setObjectName(QStringLiteral("actionToolButtonSizeHuge"));
+    actionToolButtonSizeHuge->setCheckable(true);
+    actionToolButtonSizeHuge->setToolTip(tr("Show icons in huge size"));
+    actionToolButtonSizeHuge->setData(48);
+
+    auto *actionToolButtonSizeDefault = new QAction(tr("De&fault"), this);
+    actionToolButtonSizeDefault->setObjectName(QStringLiteral("actionToolButtonSizeDefault"));
+    actionToolButtonSizeDefault->setCheckable(true);
+    actionToolButtonSizeDefault->setToolTip(tr("Show icons in theme size"));
+    actionToolButtonSizeDefault->setData(0);
+
+    m_actionsToolButtonSize = new QActionGroup(this);
+    m_actionsToolButtonSize->setObjectName(QStringLiteral("actionsToolButtonSize"));
+    m_actionsToolButtonSize->addAction(actionToolButtonSizeSmall);
+    m_actionsToolButtonSize->addAction(actionToolButtonSizeMedium);
+    m_actionsToolButtonSize->addAction(actionToolButtonSizeLarge);
+    m_actionsToolButtonSize->addAction(actionToolButtonSizeHuge);
+    m_actionsToolButtonSize->addAction(actionToolButtonSizeDefault);
+    connect(m_actionsToolButtonSize, &QActionGroup::triggered, this, &ApplicationWindow::slotToolButtonSize);
+
     m_actionShowStatusbar = new QAction(tr("Show Stat&usbar"), this);
     m_actionShowStatusbar->setObjectName(QStringLiteral("actionShowStatusbar"));
     m_actionShowStatusbar->setCheckable(true);
@@ -400,6 +439,8 @@ void ApplicationWindow::setupActions()
     menuToolButtonStyle->setObjectName(QStringLiteral("menuToolButtonStyle"));
     menuToolButtonStyle->addSection(tr("Text Position"));
     menuToolButtonStyle->addActions(m_actionsToolButtonStyle->actions());
+    menuToolButtonStyle->addSection(tr("Icon Size"));
+    menuToolButtonStyle->addActions(m_actionsToolButtonSize->actions());
 
     auto *menuSettings = menuBar()->addMenu(tr("&Settings"));
     menuSettings->setObjectName(QStringLiteral("menuSettings"));
@@ -470,6 +511,18 @@ void ApplicationWindow::updateActionsToolButtonStyle(const Qt::ToolButtonStyle s
     const QList<QAction *> actions = m_actionsToolButtonStyle->actions();
     for (auto *action : actions) {
         if (static_cast<Qt::ToolButtonStyle>(action->data().toInt()) == style) {
+            action->trigger();
+            break;
+        }
+    }
+}
+
+
+void ApplicationWindow::updateActionsToolButtonSize(const int pixel)
+{
+    const QList<QAction *> actions = m_actionsToolButtonSize->actions();
+    for (auto *action : actions) {
+        if (action->data().toInt() == pixel) {
             action->trigger();
             break;
         }
@@ -579,10 +632,16 @@ void ApplicationWindow::loadSettings()
         m_actionShowStatusbar->toggle();
 
     // Tool Button Style
-    const auto value = settings.value(QStringLiteral("Application/ToolButtonStyle"), static_cast<int>(Qt::ToolButtonFollowStyle)).toInt();
+    int value = settings.value(QStringLiteral("Application/ToolButtonStyle"), static_cast<int>(Qt::ToolButtonFollowStyle)).toInt();
     const QMetaEnum styles(QMetaEnum::fromType<Qt::ToolButtonStyle>());
     const auto style = !!styles.valueToKey(value) ? static_cast<Qt::ToolButtonStyle>(value) : Qt::ToolButtonFollowStyle;
     updateActionsToolButtonStyle(style);
+
+    // Tool Button Size
+    value = settings.value(QStringLiteral("Application/ToolButtonSize"), 0).toInt();
+    const QList<int> pixels = {0, 16, 22, 32, 48};
+    const int pixel = pixels.contains(value) ? value : 0;
+    updateActionsToolButtonSize(pixel);
 }
 
 
@@ -609,8 +668,11 @@ void ApplicationWindow::saveSettings()
     visible = m_actionShowStatusbar->isChecked();
     settings.setValue(QStringLiteral("Application/ShowStatusbar"), visible);
 
-    const int value = m_actionsToolButtonStyle->checkedAction()->data().toInt();
+    int value = m_actionsToolButtonStyle->checkedAction()->data().toInt();
     settings.setValue(QStringLiteral("Application/ToolButtonStyle"), value);
+
+    value = m_actionsToolButtonSize->checkedAction()->data().toInt();
+    settings.setValue(QStringLiteral("Application/ToolButtonSize"), value);
 }
 
 
@@ -1024,6 +1086,22 @@ void ApplicationWindow::slotToolButtonStyle(const QAction *action)
     m_toolbarTools->setToolButtonStyle(style);
     m_toolbarSettings->setToolButtonStyle(style);
     m_toolbarHelp->setToolButtonStyle(style);
+}
+
+
+void ApplicationWindow::slotToolButtonSize(const QAction *action)
+{
+    const int pixel = action->data().toInt();
+    const auto size = pixel ? QSize(pixel, pixel) : QSize(-1, -1);
+
+    m_toolbarApplication->setIconSize(size);
+    m_toolbarDocument->setIconSize(size);
+    m_toolbarEdit->setIconSize(size);
+    m_toolbarView->setIconSize(size);
+    m_toolbarFormat->setIconSize(size);
+    m_toolbarTools->setIconSize(size);
+    m_toolbarSettings->setIconSize(size);
+    m_toolbarHelp->setIconSize(size);
 }
 
 

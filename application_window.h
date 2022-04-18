@@ -56,6 +56,7 @@ protected:
 private:
     void setupActions();
     void updateActionsToolButtonStyle(const Qt::ToolButtonStyle style);
+    void updateActionsToolButtonSize(const int pixel);
     void updateActionFullScreen();
 
     void enableActions(const bool enabled);
@@ -104,6 +105,7 @@ private slots:
     void slotCloseAll();
 
     void slotToolButtonStyle(const QAction *action);
+    void slotToolButtonSize(const QAction *action);
     void slotFullScreen(const bool checked);
 
 private:
@@ -147,6 +149,7 @@ private:
     QAction *m_actionShowToolbarSettings;
     QAction *m_actionShowToolbarHelp;
     QActionGroup *m_actionsToolButtonStyle;
+    QActionGroup *m_actionsToolButtonSize;
     QAction *m_actionShowStatusbar;
     QAction *m_actionFullScreen;
     QToolBar *m_toolbarSettings;
