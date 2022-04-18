@@ -20,8 +20,8 @@
  * along with QTabelo.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MDI_DOCUMENT_H
-#define MDI_DOCUMENT_H
+#ifndef DOCUMENT_WIDGET_H
+#define DOCUMENT_WIDGET_H
 
 #include "table_document.h"
 
@@ -30,7 +30,7 @@
 class QWidget;
 
 
-class MdiDocument : public TableDocument
+class DocumentWidget : public TableDocument
 {
     Q_OBJECT
 
@@ -38,7 +38,7 @@ class MdiDocument : public TableDocument
     Q_PROPERTY(QUrl url MEMBER m_url READ url WRITE setUrl RESET resetUrl NOTIFY urlChanged)
 
 public:
-    explicit MdiDocument(QWidget *parent = nullptr);
+    explicit DocumentWidget(QWidget *parent = nullptr);
 
     bool modified() const;
     void initModified();
@@ -67,4 +67,4 @@ private:
     QUrl m_url;
 };
 
-#endif // MDI_DOCUMENT_H
+#endif // DOCUMENT_WIDGET_H

@@ -41,8 +41,8 @@
 
 #include "about_dialog.h"
 #include "colophon_dialog.h"
+#include "document_widget.h"
 #include "mdi_area.h"
-#include "mdi_document.h"
 #include "mdi_window.h"
 #include "preferences_dialog.h"
 
@@ -670,26 +670,26 @@ void MainWindow::updateWindowTitle()
 // Document
 //
 
-MdiDocument *MainWindow::createDocument()
+DocumentWidget *MainWindow::createDocument()
 {
-    auto *document = new MdiDocument;
+    auto *document = new DocumentWidget;
     auto *docWindow = new MdiWindow;
     docWindow->setWidget(document);
     m_documentsArea->addSubWindow(docWindow);
 
     // Connections: Modified
-    connect(document, &MdiDocument::modifiedChanged, docWindow, &MdiWindow::documentModifiedChanged);
-    connect(document, &MdiDocument::modifiedChanged, this, &MainWindow::documentModifiedChanged);
+    connect(document, &DocumentWidget::modifiedChanged, docWindow, &MdiWindow::documentModifiedChanged);
+    connect(document, &DocumentWidget::modifiedChanged, this, &MainWindow::documentModifiedChanged);
     // Connections: Url
-    connect(document, &MdiDocument::urlChanged, docWindow, &MdiWindow::documentUrlChanged);
-    connect(document, &MdiDocument::urlChanged, this, &MainWindow::documentUrlChanged);
+    connect(document, &DocumentWidget::urlChanged, docWindow, &MdiWindow::documentUrlChanged);
+    connect(document, &DocumentWidget::urlChanged, this, &MainWindow::documentUrlChanged);
     // Connections: Actions
     connect(docWindow, &MdiWindow::actionCloseOther, m_documentsArea, &MdiArea::closeOtherSubWindows);
-    connect(docWindow, &MdiWindow::actionCopyPath, document, &MdiDocument::copyPathToClipboard);
-    connect(docWindow, &MdiWindow::actionRenameFilename, document, &MdiDocument::renameFilename);
+    connect(docWindow, &MdiWindow::actionCopyPath, document, &DocumentWidget::copyPathToClipboard);
+    connect(docWindow, &MdiWindow::actionRenameFilename, document, &DocumentWidget::renameFilename);
     // Connections: Document count
     connect(docWindow, &MdiWindow::destroyed, this, &MainWindow::documentClosed);
-    connect(this, &MainWindow::documentCountChanged, document, &MdiDocument::documentCountChanged);
+    connect(this, &MainWindow::documentCountChanged, document, &DocumentWidget::documentCountChanged);
     connect(this, &MainWindow::documentCountChanged, docWindow, &MdiWindow::documentCountChanged);
 
     // Initialize
@@ -718,7 +718,7 @@ bool MainWindow::openDocument(const QUrl &url)
 
 bool MainWindow::loadDocument(const QUrl &url)
 {
-    MdiDocument *document = createDocument();
+    DocumentWidget *document = createDocument();
     if (!true) {
         // Given document could not be loaded
         document->close();
@@ -734,7 +734,7 @@ bool MainWindow::loadDocument(const QUrl &url)
 }
 
 
-bool MainWindow::saveDocument(MdiDocument *document, const QUrl &altUrl)
+bool MainWindow::saveDocument(DocumentWidget *document, const QUrl &altUrl)
 {
     Q_UNUSED(altUrl)
 
@@ -762,7 +762,7 @@ void MainWindow::documentActivated(QMdiSubWindow *subWindow)
     updateWindowModified();
     updateWindowTitle();
 
-    MdiDocument *document = extractDocument(subWindow);
+    DocumentWidget *document = extractDocument(subWindow);
     if (document) {
 
     }
@@ -811,16 +811,16 @@ void MainWindow::documentClosed()
 //
 //
 
-MdiDocument *MainWindow::extractDocument(const QMdiSubWindow *subWindow) const
+DocumentWidget *MainWindow::extractDocument(const QMdiSubWindow *subWindow) const
 {
     if (!subWindow)
         return nullptr;
 
-    return qobject_cast<MdiDocument *>(subWindow->widget());
+    return qobject_cast<DocumentWidget *>(subWindow->widget());
 }
 
 
-MdiDocument *MainWindow::activeDocument() const
+DocumentWidget *MainWindow::activeDocument() const
 {
     return extractDocument(m_documentsArea->activeSubWindow());
 }
@@ -879,7 +879,7 @@ void MainWindow::slotPreferences()
 
 void MainWindow::slotNew()
 {
-    MdiDocument *document = createDocument();
+    DocumentWidget *document = createDocument();
     document->show();
 
     documentCreated();
@@ -896,7 +896,7 @@ void MainWindow::slotOpen()
 
 void MainWindow::slotSave()
 {
-    MdiDocument *document = activeDocument();
+    DocumentWidget *document = activeDocument();
     if (!document)
         return;
 
@@ -909,7 +909,7 @@ void MainWindow::slotSave()
 
 void MainWindow::slotSaveAs()
 {
-    MdiDocument *document = activeDocument();
+    DocumentWidget *document = activeDocument();
     if (!document)
         return;
 
@@ -923,7 +923,7 @@ void MainWindow::slotSaveAs()
 
 void MainWindow::slotSaveCopyAs()
 {
-    MdiDocument *document = activeDocument();
+    DocumentWidget *document = activeDocument();
     if (!document)
         return;
 
@@ -938,7 +938,7 @@ void MainWindow::slotSaveAll()
     const QList<QMdiSubWindow *> subWindows = m_documentsArea->subWindowList();
     for (auto *subWindow : subWindows) {
 
-        MdiDocument *document = extractDocument(subWindow);
+        DocumentWidget *document = extractDocument(subWindow);
         if (!document)
             continue;
 
@@ -958,7 +958,7 @@ void MainWindow::slotSaveAll()
 
 void MainWindow::slotCopyPath()
 {
-    MdiDocument *document = activeDocument();
+    DocumentWidget *document = activeDocument();
     if (!document)
         return;
 
@@ -968,7 +968,7 @@ void MainWindow::slotCopyPath()
 
 void MainWindow::slotRenameFilename()
 {
-    MdiDocument *document = activeDocument();
+    DocumentWidget *document = activeDocument();
     if (!document)
         return;
 

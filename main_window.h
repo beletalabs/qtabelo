@@ -34,7 +34,7 @@ class QToolBar;
 class QUrl;
 
 class MdiArea;
-class MdiDocument;
+class DocumentWidget;
 class MdiWindow;
 
 
@@ -70,9 +70,9 @@ private:
     void updateWindowModified();
     void updateWindowTitle();
 
-    MdiDocument *createDocument();
+    DocumentWidget *createDocument();
     bool loadDocument(const QUrl &url);
-    bool saveDocument(MdiDocument *document, const QUrl &altUrl);
+    bool saveDocument(DocumentWidget *document, const QUrl &altUrl);
 
 private slots:
     void documentCreated();
@@ -82,8 +82,8 @@ private slots:
     void documentClosed();
 
 private:
-    MdiDocument *extractDocument(const QMdiSubWindow *subWindow) const;
-    MdiDocument *activeDocument() const;
+    DocumentWidget *extractDocument(const QMdiSubWindow *subWindow) const;
+    DocumentWidget *activeDocument() const;
     bool hasActiveDocument() const;
     bool hasActiveDocumentUrl() const;
     bool hasActiveDocumentUrlFile() const;

@@ -34,7 +34,7 @@
 #include <QWidget>
 
 #include "mdi_area.h"
-#include "mdi_document.h"
+#include "document_widget.h"
 
 
 MdiWindow::MdiWindow(QWidget *parent)
@@ -132,7 +132,7 @@ int MdiWindow::latestFilenameSequenceNumber(const QUrl &url) const
         const QList<QMdiSubWindow *> subWindows = mdiArea()->subWindowList();
         for (auto *subWindow : subWindows) {
 
-            auto *document = qobject_cast<MdiDocument *>(subWindow->widget());
+            auto *document = qobject_cast<DocumentWidget *>(subWindow->widget());
             if (document->url().fileName() == url.fileName()) {
 
                 auto *docWindow = qobject_cast<MdiWindow *>(subWindow);
@@ -156,7 +156,7 @@ QString MdiWindow::windowCaption(const bool pathVisible) const
         return QString();
 
     QString caption = tr("Untitled");
-    const QUrl &url = qobject_cast<MdiDocument *>(widget())->url();
+    const QUrl &url = qobject_cast<DocumentWidget *>(widget())->url();
 
     // Name
     if (!url.isEmpty()) {

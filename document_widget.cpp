@@ -20,7 +20,7 @@
  * along with QTabelo.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "mdi_document.h"
+#include "document_widget.h"
 
 #include <QApplication>
 #include <QClipboard>
@@ -31,7 +31,7 @@
 #include <QWidget>
 
 
-MdiDocument::MdiDocument(QWidget *parent)
+DocumentWidget::DocumentWidget(QWidget *parent)
     : TableDocument(parent)
     , m_modified{false}
     , m_url{QUrl()}
@@ -44,13 +44,13 @@ MdiDocument::MdiDocument(QWidget *parent)
 // Property: modified
 //
 
-bool MdiDocument::modified() const
+bool DocumentWidget::modified() const
 {
     return m_modified;
 }
 
 
-void MdiDocument::setModified(const bool modified)
+void DocumentWidget::setModified(const bool modified)
 {
     if (modified != m_modified) {
         m_modified = modified;
@@ -59,14 +59,14 @@ void MdiDocument::setModified(const bool modified)
 }
 
 
-void MdiDocument::resetModified()
+void DocumentWidget::resetModified()
 {
     m_modified = false;
     emit modifiedChanged(false);
 }
 
 
-void MdiDocument::initModified()
+void DocumentWidget::initModified()
 {
     emit modifiedChanged(m_modified);
 }
@@ -76,13 +76,13 @@ void MdiDocument::initModified()
 // Property: url
 //
 
-QUrl MdiDocument::url() const
+QUrl DocumentWidget::url() const
 {
     return m_url;
 }
 
 
-void MdiDocument::setUrl(const QUrl &url)
+void DocumentWidget::setUrl(const QUrl &url)
 {
     if (url != m_url) {
         m_url = url;
@@ -91,14 +91,14 @@ void MdiDocument::setUrl(const QUrl &url)
 }
 
 
-void MdiDocument::resetUrl()
+void DocumentWidget::resetUrl()
 {
     m_url = QUrl();
     emit urlChanged(QUrl());
 }
 
 
-void MdiDocument::initUrl()
+void DocumentWidget::initUrl()
 {
     emit urlChanged(m_url);
 }
@@ -108,7 +108,7 @@ void MdiDocument::initUrl()
 // Document
 //
 
-void MdiDocument::documentCountChanged(const int count)
+void DocumentWidget::documentCountChanged(const int count)
 {
     Q_UNUSED(count)
 }
@@ -118,14 +118,14 @@ void MdiDocument::documentCountChanged(const int count)
 // Slots
 //
 
-void MdiDocument::copyPathToClipboard()
+void DocumentWidget::copyPathToClipboard()
 {
     if (!m_url.isEmpty())
         QApplication::clipboard()->setText(m_url.toDisplayString(QUrl::PreferLocalFile));
 }
 
 
-void MdiDocument::renameFilename()
+void DocumentWidget::renameFilename()
 {
     if (!m_url.isLocalFile())
         return;

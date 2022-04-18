@@ -27,7 +27,7 @@
 #include <QUrl>
 #include <QWidget>
 
-#include "mdi_document.h"
+#include "document_widget.h"
 #include "mdi_window.h"
 
 
@@ -52,7 +52,7 @@ QMdiSubWindow *MdiArea::findSubWindow(const QUrl &url) const
     const QList<QMdiSubWindow *> subWindows = subWindowList();
     for (auto *subWindow : subWindows) {
 
-        auto *document = qobject_cast<MdiDocument *>(subWindow->widget());
+        auto *document = qobject_cast<DocumentWidget *>(subWindow->widget());
         if (document && document->url() == url)
             return subWindow;
     }
