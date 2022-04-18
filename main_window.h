@@ -35,7 +35,6 @@ class QUrl;
 
 class MdiArea;
 class DocumentWidget;
-class MdiWindow;
 
 
 class MainWindow : public QMainWindow

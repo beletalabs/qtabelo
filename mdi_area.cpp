@@ -28,7 +28,6 @@
 #include <QWidget>
 
 #include "document_widget.h"
-#include "mdi_window.h"
 
 
 MdiArea::MdiArea(QWidget *parent)

@@ -20,7 +20,7 @@
  * along with QTabelo.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "mdi_window.h"
+#include "document_window.h"
 
 #include <QAction>
 #include <QDebug>
@@ -37,7 +37,7 @@
 #include "document_widget.h"
 
 
-MdiWindow::MdiWindow(QWidget *parent)
+DocumentWindow::DocumentWindow(QWidget *parent)
     : QMdiSubWindow(parent)
     , m_filenameSequenceNumber{0}
 {
@@ -47,7 +47,7 @@ MdiWindow::MdiWindow(QWidget *parent)
 }
 
 
-void MdiWindow::setupActions()
+void DocumentWindow::setupActions()
 {
     QMenu *menu = systemMenu();
     if (!menu)
@@ -57,32 +57,32 @@ void MdiWindow::setupActions()
     m_actionClose->setObjectName(QStringLiteral("actionClose"));
     m_actionClose->setIcon(QIcon::fromTheme(QStringLiteral("window-close"), QIcon(QStringLiteral(":/icons/actions/16/window-close.svg"))));
     m_actionClose->setToolTip(tr("Close document"));
-    connect(m_actionClose, &QAction::triggered, this, &MdiWindow::close);
+    connect(m_actionClose, &QAction::triggered, this, &DocumentWindow::close);
 
     m_actionCloseOther = new QAction(tr("Close Ot&her"), this);
     m_actionCloseOther->setObjectName(QStringLiteral("actionCloseOther"));
     m_actionCloseOther->setIcon(QIcon::fromTheme(QStringLiteral("window-close"), QIcon(QStringLiteral(":/icons/actions/16/window-close.svg"))));
     m_actionCloseOther->setToolTip(tr("Close other open documents"));
-    connect(m_actionCloseOther, &QAction::triggered, this, &MdiWindow::slotCloseOther);
+    connect(m_actionCloseOther, &QAction::triggered, this, &DocumentWindow::slotCloseOther);
 
     m_actionShowPath = new QAction(tr("Show &Path"), this);
     m_actionShowPath->setObjectName(QStringLiteral("actionShowPath"));
     m_actionShowPath->setCheckable(true);
     m_actionShowPath->setIcon(QIcon::fromTheme(QStringLiteral("show-path"), QIcon(QStringLiteral(":/icons/actions/16/show-path.svg"))));
     m_actionShowPath->setToolTip(tr("Show document path in the tab caption"));
-    connect(m_actionShowPath, &QAction::toggled, this, &MdiWindow::updateWindowTitle);
+    connect(m_actionShowPath, &QAction::toggled, this, &DocumentWindow::updateWindowTitle);
 
     m_actionCopyPath = new QAction(tr("Cop&y Path"), this);
     m_actionCopyPath->setObjectName(QStringLiteral("actionCopyPath"));
     m_actionCopyPath->setIcon(QIcon::fromTheme(QStringLiteral("edit-copy-path"), QIcon(QStringLiteral(":/icons/actions/16/edit-copy-path.svg"))));
     m_actionCopyPath->setToolTip(tr("Copy document path to clipboard"));
-    connect(m_actionCopyPath, &QAction::triggered, this, &MdiWindow::actionCopyPath);
+    connect(m_actionCopyPath, &QAction::triggered, this, &DocumentWindow::actionCopyPath);
 
     m_actionRenameFilename = new QAction(tr("Re&name..."), this);
     m_actionRenameFilename->setObjectName(QStringLiteral("actionRename"));
     m_actionRenameFilename->setIcon(QIcon::fromTheme(QStringLiteral("edit-rename"), QIcon(QStringLiteral(":/icons/actions/16/edit-rename.svg"))));
     m_actionRenameFilename->setToolTip(tr("Rename file name of the document"));
-    connect(m_actionRenameFilename, &QAction::triggered, this, &MdiWindow::actionRenameFilename);
+    connect(m_actionRenameFilename, &QAction::triggered, this, &DocumentWindow::actionRenameFilename);
 
     menu->clear();
     menu->addAction(m_actionClose);
@@ -95,7 +95,7 @@ void MdiWindow::setupActions()
 }
 
 
-void MdiWindow::enableActionCloseOther(const bool enabled)
+void DocumentWindow::enableActionCloseOther(const bool enabled)
 {
     m_actionCloseOther->setEnabled(enabled);
 }
@@ -105,26 +105,26 @@ void MdiWindow::enableActionCloseOther(const bool enabled)
 // Property: filenameSequenceNumber
 //
 
-int MdiWindow::filenameSequenceNumber() const
+int DocumentWindow::filenameSequenceNumber() const
 {
     return m_filenameSequenceNumber;
 }
 
 
-void MdiWindow::setFilenameSequenceNumber(const int number)
+void DocumentWindow::setFilenameSequenceNumber(const int number)
 {
     if (number != m_filenameSequenceNumber)
         m_filenameSequenceNumber = number;
 }
 
 
-void MdiWindow::resetFilenameSequenceNumber()
+void DocumentWindow::resetFilenameSequenceNumber()
 {
     m_filenameSequenceNumber = 0;
 }
 
 
-int MdiWindow::latestFilenameSequenceNumber(const QUrl &url) const
+int DocumentWindow::latestFilenameSequenceNumber(const QUrl &url) const
 {
     int number = 0;
 
@@ -135,7 +135,7 @@ int MdiWindow::latestFilenameSequenceNumber(const QUrl &url) const
             auto *document = qobject_cast<DocumentWidget *>(subWindow->widget());
             if (document->url().fileName() == url.fileName()) {
 
-                auto *docWindow = qobject_cast<MdiWindow *>(subWindow);
+                auto *docWindow = qobject_cast<DocumentWindow *>(subWindow);
                 if (docWindow->filenameSequenceNumber() > number)
                     number = docWindow->filenameSequenceNumber();
             }
@@ -150,7 +150,7 @@ int MdiWindow::latestFilenameSequenceNumber(const QUrl &url) const
 // Document window
 //
 
-QString MdiWindow::windowCaption(const bool pathVisible) const
+QString DocumentWindow::windowCaption(const bool pathVisible) const
 {
     if (!widget())
         return QString();
@@ -181,13 +181,13 @@ QString MdiWindow::windowCaption(const bool pathVisible) const
 }
 
 
-void MdiWindow::updateWindowTitle(const bool pathVisible)
+void DocumentWindow::updateWindowTitle(const bool pathVisible)
 {
     setWindowTitle(windowCaption(pathVisible));
 }
 
 
-void MdiWindow::updateWindowIcon(const bool modified)
+void DocumentWindow::updateWindowIcon(const bool modified)
 {
     QIcon icon;
 
@@ -202,20 +202,20 @@ void MdiWindow::updateWindowIcon(const bool modified)
 // Document
 //
 
-void MdiWindow::documentCountChanged(const int count)
+void DocumentWindow::documentCountChanged(const int count)
 {
     enableActionCloseOther(count >= 2);
 }
 
 
-void MdiWindow::documentModifiedChanged(const bool modified)
+void DocumentWindow::documentModifiedChanged(const bool modified)
 {
     setWindowModified(modified);
     updateWindowIcon(modified);
 }
 
 
-void MdiWindow::documentUrlChanged(const QUrl &url)
+void DocumentWindow::documentUrlChanged(const QUrl &url)
 {
     resetFilenameSequenceNumber();
     setFilenameSequenceNumber(latestFilenameSequenceNumber(url) + 1);
@@ -232,7 +232,7 @@ void MdiWindow::documentUrlChanged(const QUrl &url)
 // Action slots
 //
 
-void MdiWindow::slotCloseOther()
+void DocumentWindow::slotCloseOther()
 {
     if (mdiArea() && mdiArea()->subWindowList().size() >= 2) {
 

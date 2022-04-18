@@ -42,8 +42,8 @@
 #include "about_dialog.h"
 #include "colophon_dialog.h"
 #include "document_widget.h"
+#include "document_window.h"
 #include "mdi_area.h"
-#include "mdi_window.h"
 #include "preferences_dialog.h"
 
 
@@ -644,7 +644,7 @@ void MainWindow::updateWindowModified()
 {
     bool modified = false;
 
-    auto *docWindow = qobject_cast<MdiWindow *>(m_documentsArea->activeSubWindow());
+    auto *docWindow = qobject_cast<DocumentWindow *>(m_documentsArea->activeSubWindow());
     if (docWindow)
         modified = docWindow->isWindowModified();
 
@@ -656,7 +656,7 @@ void MainWindow::updateWindowTitle()
 {
     QString caption;
 
-    auto *docWindow = qobject_cast<MdiWindow *>(m_documentsArea->activeSubWindow());
+    auto *docWindow = qobject_cast<DocumentWindow *>(m_documentsArea->activeSubWindow());
     if (docWindow) {
         const bool pathVisible = m_actionShowPath->isChecked();
         caption = tr("%1 [*]").arg(docWindow->windowCaption(pathVisible));
@@ -673,24 +673,24 @@ void MainWindow::updateWindowTitle()
 DocumentWidget *MainWindow::createDocument()
 {
     auto *document = new DocumentWidget;
-    auto *docWindow = new MdiWindow;
+    auto *docWindow = new DocumentWindow;
     docWindow->setWidget(document);
     m_documentsArea->addSubWindow(docWindow);
 
     // Connections: Modified
-    connect(document, &DocumentWidget::modifiedChanged, docWindow, &MdiWindow::documentModifiedChanged);
+    connect(document, &DocumentWidget::modifiedChanged, docWindow, &DocumentWindow::documentModifiedChanged);
     connect(document, &DocumentWidget::modifiedChanged, this, &MainWindow::documentModifiedChanged);
     // Connections: Url
-    connect(document, &DocumentWidget::urlChanged, docWindow, &MdiWindow::documentUrlChanged);
+    connect(document, &DocumentWidget::urlChanged, docWindow, &DocumentWindow::documentUrlChanged);
     connect(document, &DocumentWidget::urlChanged, this, &MainWindow::documentUrlChanged);
     // Connections: Actions
-    connect(docWindow, &MdiWindow::actionCloseOther, m_documentsArea, &MdiArea::closeOtherSubWindows);
-    connect(docWindow, &MdiWindow::actionCopyPath, document, &DocumentWidget::copyPathToClipboard);
-    connect(docWindow, &MdiWindow::actionRenameFilename, document, &DocumentWidget::renameFilename);
+    connect(docWindow, &DocumentWindow::actionCloseOther, m_documentsArea, &MdiArea::closeOtherSubWindows);
+    connect(docWindow, &DocumentWindow::actionCopyPath, document, &DocumentWidget::copyPathToClipboard);
+    connect(docWindow, &DocumentWindow::actionRenameFilename, document, &DocumentWidget::renameFilename);
     // Connections: Document count
-    connect(docWindow, &MdiWindow::destroyed, this, &MainWindow::documentClosed);
+    connect(docWindow, &DocumentWindow::destroyed, this, &MainWindow::documentClosed);
     connect(this, &MainWindow::documentCountChanged, document, &DocumentWidget::documentCountChanged);
-    connect(this, &MainWindow::documentCountChanged, docWindow, &MdiWindow::documentCountChanged);
+    connect(this, &MainWindow::documentCountChanged, docWindow, &DocumentWindow::documentCountChanged);
 
     // Initialize
     document->initModified();

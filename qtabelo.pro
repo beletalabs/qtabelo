@@ -36,10 +36,10 @@ SOURCES += \
     colophon_pages.cpp \
     dialog_header_box.cpp \
     document_widget.cpp \
+    document_window.cpp \
     main.cpp \
     main_window.cpp \
     mdi_area.cpp \
-    mdi_window.cpp \
     preferences_dialog.cpp \
     table_document.cpp
 
@@ -49,9 +49,9 @@ HEADERS += \
     colophon_pages.h \
     dialog_header_box.h \
     document_widget.h \
+    document_window.h \
     main_window.h \
     mdi_area.h \
-    mdi_window.h \
     preferences_dialog.h \
     table_document.h
 

@@ -20,8 +20,8 @@
  * along with QTabelo.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MDI_WINDOW_H
-#define MDI_WINDOW_H
+#ifndef DOCUMENT_WINDOW_H
+#define DOCUMENT_WINDOW_H
 
 #include <QMdiSubWindow>
 
@@ -31,14 +31,14 @@ class QUrl;
 class QWidget;
 
 
-class MdiWindow : public QMdiSubWindow
+class DocumentWindow : public QMdiSubWindow
 {
     Q_OBJECT
 
     Q_PROPERTY(int filenameSequenceNumber MEMBER m_filenameSequenceNumber READ filenameSequenceNumber WRITE setFilenameSequenceNumber RESET resetFilenameSequenceNumber)
 
 public:
-    explicit MdiWindow(QWidget *parent = nullptr);
+    explicit DocumentWindow(QWidget *parent = nullptr);
 
     int filenameSequenceNumber() const;
     void initFilenameSequenceNumber();
@@ -46,7 +46,7 @@ public:
     QString windowCaption(const bool pathVisible) const;
 
 signals:
-    void actionCloseOther(MdiWindow *window);
+    void actionCloseOther(DocumentWindow *window);
     void actionCopyPath();
     void actionRenameFilename();
 
@@ -80,4 +80,4 @@ private:
     QAction *m_actionRenameFilename;
 };
 
-#endif // MDI_WINDOW_H
+#endif // DOCUMENT_WINDOW_H
