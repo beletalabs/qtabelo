@@ -33,6 +33,7 @@
 #include <QUrl>
 #include <QWidget>
 
+#include "confirmation_dialog.h"
 #include "document_widget.h"
 
 
@@ -240,8 +241,9 @@ void DocumentWindow::slotCloseOther()
                                  "Are you sure you want to continue?");
         const QMessageBox::StandardButtons buttons = QMessageBox::Yes | QMessageBox::Cancel;
         const QMessageBox::StandardButton defaultButton = QMessageBox::Yes;
+        const QString &confirmationKey = QStringLiteral("ConfirmCloseOtherDocuments");
 
-        if (QMessageBox::warning(this, title, text, buttons, defaultButton) != QMessageBox::Cancel)
+        if (ConfirmationDialog::warning(this, title, text, buttons, defaultButton, confirmationKey) != QMessageBox::Cancel)
             emit actionCloseOther(this);
     }
 }

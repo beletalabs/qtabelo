@@ -41,6 +41,7 @@
 
 #include "about_dialog.h"
 #include "colophon_dialog.h"
+#include "confirmation_dialog.h"
 #include "document_manager.h"
 #include "document_widget.h"
 #include "document_window.h"
@@ -622,8 +623,9 @@ void ApplicationWindow::closeEvent(QCloseEvent *event)
                                  "Are you sure you want to continue?");
         const QMessageBox::StandardButtons buttons = QMessageBox::Yes | QMessageBox::Cancel;
         const QMessageBox::StandardButton defaultButton = QMessageBox::Yes;
+        const QString &confirmationKey = QStringLiteral("ConfirmQuitApplication");
 
-        if (QMessageBox::warning(this, title, text, buttons, defaultButton) == QMessageBox::Cancel) {
+        if (ConfirmationDialog::warning(this, title, text, buttons, defaultButton, confirmationKey) == QMessageBox::Cancel) {
             event->ignore();
             return;
         }
@@ -985,8 +987,9 @@ void ApplicationWindow::slotCloseOther()
                                  "Are you sure you want to continue?");
         const QMessageBox::StandardButtons buttons = QMessageBox::Yes | QMessageBox::Cancel;
         const QMessageBox::StandardButton defaultButton = QMessageBox::Yes;
+        const QString &confirmationKey = QStringLiteral("ConfirmCloseOtherDocuments");
 
-        if (QMessageBox::warning(this, title, text, buttons, defaultButton) != QMessageBox::Cancel)
+        if (ConfirmationDialog::warning(this, title, text, buttons, defaultButton, confirmationKey) != QMessageBox::Cancel)
             m_documentManager->closeOtherSubWindows(m_documentManager->activeSubWindow());
     }
 }
@@ -1001,8 +1004,9 @@ void ApplicationWindow::slotCloseAll()
                                  "Are you sure you want to continue?");
         const QMessageBox::StandardButtons buttons = QMessageBox::Yes | QMessageBox::Cancel;
         const QMessageBox::StandardButton defaultButton = QMessageBox::Yes;
+        const QString &confirmationKey = QStringLiteral("ConfirmCloseAllDocuments");
 
-        if (QMessageBox::warning(this, title, text, buttons, defaultButton) != QMessageBox::Cancel)
+        if (ConfirmationDialog::warning(this, title, text, buttons, defaultButton, confirmationKey) != QMessageBox::Cancel)
             m_documentManager->closeAllSubWindows();
     }
 }
