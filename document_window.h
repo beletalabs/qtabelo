@@ -48,6 +48,7 @@ public:
 signals:
     void actionCloseOther(DocumentWindow *window);
     void actionCopyPath();
+    void actionCopyFilename();
     void actionRenameFilename();
 
 public slots:
@@ -77,6 +78,7 @@ private:
     QAction *m_actionCloseOther;
     QAction *m_actionShowPath;
     QAction *m_actionCopyPath;
+    QAction *m_actionCopyFilename;
     QAction *m_actionRenameFilename;
 };
 

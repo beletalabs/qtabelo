@@ -183,6 +183,12 @@ void ApplicationWindow::setupActions()
     m_actionCopyPath->setToolTip(tr("Copy document path to clipboard"));
     connect(m_actionCopyPath, &QAction::triggered, this, &ApplicationWindow::slotCopyPath);
 
+    m_actionCopyFilename = new QAction(tr("Copy &Filename"), this);
+    m_actionCopyFilename->setObjectName(QStringLiteral("actionCopyFilename"));
+    m_actionCopyFilename->setIcon(QIcon::fromTheme(QStringLiteral("edit-copy-path"), QIcon(QStringLiteral(":/icons/actions/16/edit-copy-path.svg"))));
+    m_actionCopyFilename->setToolTip(tr("Copy document filename to clipboard"));
+    connect(m_actionCopyFilename, &QAction::triggered, this, &ApplicationWindow::slotCopyFilename);
+
     m_actionRenameFilename = new QAction(tr("Re&name..."), this);
     m_actionRenameFilename->setObjectName(QStringLiteral("actionRenameFilename"));
     m_actionRenameFilename->setIcon(QIcon::fromTheme(QStringLiteral("edit-rename"), QIcon(QStringLiteral(":/icons/actions/16/edit-rename.svg"))));
@@ -219,6 +225,7 @@ void ApplicationWindow::setupActions()
     menuDocument->addAction(m_actionSaveAll);
     menuDocument->addSeparator();
     menuDocument->addAction(m_actionCopyPath);
+    menuDocument->addAction(m_actionCopyFilename);
     menuDocument->addSeparator();
     menuDocument->addAction(m_actionRenameFilename);
     menuDocument->addSeparator();
@@ -572,6 +579,13 @@ void ApplicationWindow::enableUrlActions(const bool enabled)
 
 void ApplicationWindow::enableFileActions(const bool enabled)
 {
+    Q_UNUSED(enabled)
+}
+
+
+void ApplicationWindow::enableFilenameActions(const bool enabled)
+{
+    m_actionCopyFilename->setEnabled(enabled);
     m_actionRenameFilename->setEnabled(enabled);
 }
 
@@ -750,6 +764,7 @@ DocumentWidget *ApplicationWindow::createDocument()
     // Connections: Actions
     connect(docWindow, &DocumentWindow::actionCloseOther, m_documentManager, &DocumentManager::closeOtherSubWindows);
     connect(docWindow, &DocumentWindow::actionCopyPath, document, &DocumentWidget::copyPathToClipboard);
+    connect(docWindow, &DocumentWindow::actionCopyFilename, document, &DocumentWidget::copyFilenameToClipboard);
     connect(docWindow, &DocumentWindow::actionRenameFilename, document, &DocumentWidget::renameFilename);
     // Connections: Document count
     connect(docWindow, &DocumentWindow::destroyed, this, &ApplicationWindow::documentClosed);
@@ -837,6 +852,7 @@ void ApplicationWindow::documentActivated(QMdiSubWindow *subWindow)
     enableActions(hasActiveDocument());
     enableUrlActions(hasActiveDocumentUrl());
     enableFileActions(hasActiveDocumentUrlFile());
+    enableFilenameActions(hasActiveDocumentUrlFilename());
 }
 
 
@@ -858,6 +874,7 @@ void ApplicationWindow::documentUrlChanged(const QUrl &url)
 
         enableUrlActions(hasActiveDocumentUrl());
         enableFileActions(hasActiveDocumentUrlFile());
+        enableFilenameActions(hasActiveDocumentUrlFilename());
     }
 }
 
@@ -913,6 +930,16 @@ bool ApplicationWindow::hasActiveDocumentUrlFile() const
         return false;
 
     return document->url().isLocalFile();
+}
+
+
+bool ApplicationWindow::hasActiveDocumentUrlFilename() const
+{
+    auto *document = activeDocument();
+    if (!document)
+        return false;
+
+    return !document->url().fileName().isEmpty();
 }
 
 
@@ -1027,6 +1054,16 @@ void ApplicationWindow::slotCopyPath()
         return;
 
     document->copyPathToClipboard();
+}
+
+
+void ApplicationWindow::slotCopyFilename()
+{
+    DocumentWidget *document = activeDocument();
+    if (!document)
+        return;
+
+    document->copyFilenameToClipboard();
 }
 
 

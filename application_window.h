@@ -63,6 +63,7 @@ private:
     void enableActionCloseOther(const bool enabled);
     void enableUrlActions(const bool enabled);
     void enableFileActions(const bool enabled);
+    void enableFilenameActions(const bool enabled);
 
     void loadSettings();
     void saveSettings();
@@ -87,6 +88,7 @@ private:
     bool hasActiveDocument() const;
     bool hasActiveDocumentUrl() const;
     bool hasActiveDocumentUrlFile() const;
+    bool hasActiveDocumentUrlFilename() const;
 
 private slots:
     void slotAbout();
@@ -100,6 +102,7 @@ private slots:
     void slotSaveCopyAs();
     void slotSaveAll();
     void slotCopyPath();
+    void slotCopyFilename();
     void slotRenameFilename();
     void slotCloseOther();
     void slotCloseAll();
@@ -124,6 +127,7 @@ private:
     QAction *m_actionSaveCopyAs;
     QAction *m_actionSaveAll;
     QAction *m_actionCopyPath;
+    QAction *m_actionCopyFilename;
     QAction *m_actionRenameFilename;
     QAction *m_actionClose;
     QAction *m_actionCloseOther;

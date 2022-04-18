@@ -60,6 +60,7 @@ public slots:
     void documentCountChanged(const int count);
 
     void copyPathToClipboard();
+    void copyFilenameToClipboard();
     void renameFilename();
 
 private:

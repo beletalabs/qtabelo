@@ -78,6 +78,12 @@ void DocumentWindow::setupActions()
     m_actionCopyPath->setToolTip(tr("Copy document path to clipboard"));
     connect(m_actionCopyPath, &QAction::triggered, this, &DocumentWindow::actionCopyPath);
 
+    m_actionCopyFilename = new QAction(tr("Copy &Filename"), this);
+    m_actionCopyFilename->setObjectName(QStringLiteral("actionCopyFilename"));
+    m_actionCopyFilename->setIcon(QIcon::fromTheme(QStringLiteral("edit-copy-path"), QIcon(QStringLiteral(":/icons/actions/16/edit-copy-path.svg"))));
+    m_actionCopyFilename->setToolTip(tr("Copy document filename to clipboard"));
+    connect(m_actionCopyFilename, &QAction::triggered, this, &DocumentWindow::actionCopyFilename);
+
     m_actionRenameFilename = new QAction(tr("Re&name..."), this);
     m_actionRenameFilename->setObjectName(QStringLiteral("actionRename"));
     m_actionRenameFilename->setIcon(QIcon::fromTheme(QStringLiteral("edit-rename"), QIcon(QStringLiteral(":/icons/actions/16/edit-rename.svg"))));
@@ -90,6 +96,7 @@ void DocumentWindow::setupActions()
     menu->addSeparator();
     menu->addAction(m_actionShowPath);
     menu->addAction(m_actionCopyPath);
+    menu->addAction(m_actionCopyFilename);
     menu->addSeparator();
     menu->addAction(m_actionRenameFilename);
 }
@@ -224,7 +231,8 @@ void DocumentWindow::documentUrlChanged(const QUrl &url)
 
     m_actionShowPath->setEnabled(!url.isEmpty());
     m_actionCopyPath->setEnabled(!url.isEmpty());
-    m_actionRenameFilename->setEnabled(url.isLocalFile());
+    m_actionCopyFilename->setEnabled(!url.fileName().isEmpty());
+    m_actionRenameFilename->setEnabled(!url.fileName().isEmpty());
 }
 
 

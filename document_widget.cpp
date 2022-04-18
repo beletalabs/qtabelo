@@ -125,6 +125,13 @@ void DocumentWidget::copyPathToClipboard()
 }
 
 
+void DocumentWidget::copyFilenameToClipboard()
+{
+    if (!m_url.fileName().isEmpty())
+        QApplication::clipboard()->setText(m_url.fileName());
+}
+
+
 void DocumentWidget::renameFilename()
 {
     if (!m_url.isLocalFile())
