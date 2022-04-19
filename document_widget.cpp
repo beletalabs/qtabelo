@@ -30,6 +30,8 @@
 #include <QMessageBox>
 #include <QWidget>
 
+#include "rename_dialog.h"
+
 
 DocumentWidget::DocumentWidget(QWidget *parent)
     : TableDocument(parent)
@@ -139,7 +141,7 @@ void DocumentWidget::renameFilename()
 
     bool ok = false;
     const QString oldFileName = m_url.fileName();
-    const QString newFileName = QInputDialog::getText(this, tr("Rename file"), tr("New file name"), QLineEdit::Normal, oldFileName, &ok);
+    const QString newFileName = RenameDialog::getFileName(this, tr("Rename file"), tr("New file name"), QLineEdit::Normal, oldFileName, &ok);
     if (!ok || newFileName.isEmpty() || (newFileName == oldFileName))
         return;
 

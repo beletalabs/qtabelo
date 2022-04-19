@@ -42,6 +42,7 @@ SOURCES += \
     document_window.cpp \
     main.cpp \
     preferences_dialog.cpp \
+    rename_dialog.cpp \
     table_document.cpp
 
 HEADERS += \
@@ -55,6 +56,7 @@ HEADERS += \
     document_widget.h \
     document_window.h \
     preferences_dialog.h \
+    rename_dialog.h \
     table_document.h
 
 RESOURCES += \
