@@ -11,6 +11,7 @@
         <file alias="edit-copy-path.svg">icons/actions/16/edit-copy-path.svg</file>
         <file alias="edit-copy.svg">icons/actions/16/edit-copy.svg</file>
         <file alias="edit-rename.svg">icons/actions/16/edit-rename.svg</file>
+        <file alias="go-next.svg">icons/actions/16/go-next.svg</file>
         <file alias="help-about.svg">icons/actions/16/help-about.svg</file>
         <file alias="show-menubar.svg">icons/actions/16/show-menubar.svg</file>
         <file alias="show-path.svg">icons/actions/16/show-path.svg</file>
@@ -31,6 +32,7 @@
         <file alias="edit-copy-path.svg">icons/actions/22/edit-copy-path.svg</file>
         <file alias="edit-copy.svg">icons/actions/22/edit-copy.svg</file>
         <file alias="edit-rename.svg">icons/actions/22/edit-rename.svg</file>
+        <file alias="go-next.svg">icons/actions/22/go-next.svg</file>
         <file alias="help-about.svg">icons/actions/22/help-about.svg</file>
         <file alias="show-menubar.svg">icons/actions/22/show-menubar.svg</file>
         <file alias="show-path.svg">icons/actions/22/show-path.svg</file>

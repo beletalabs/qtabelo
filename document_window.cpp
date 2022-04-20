@@ -247,11 +247,9 @@ void DocumentWindow::slotCloseOther()
         const QString &title = tr("Close all documents except this one");
         const QString &text = tr("This will close all open documents except this one.\n"
                                  "Are you sure you want to continue?");
-        const QMessageBox::StandardButtons buttons = QMessageBox::Yes | QMessageBox::Cancel;
-        const QMessageBox::StandardButton defaultButton = QMessageBox::Yes;
         const QString &confirmationKey = QStringLiteral("ConfirmCloseOtherDocuments");
 
-        if (ConfirmationDialog::warning(this, title, text, buttons, defaultButton, confirmationKey) != QMessageBox::Cancel)
+        if (ConfirmationDialog::warningContinueCancel(this, title, text, confirmationKey) != QMessageBox::Cancel)
             emit actionCloseOther(this);
     }
 }

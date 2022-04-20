@@ -31,19 +31,27 @@ class ConfirmationDialog : public QMessageBox
     Q_OBJECT
 
 public:
-    explicit ConfirmationDialog(const QString &confirmationKey, QWidget *parent = nullptr);
-
     static StandardButton information(QWidget *parent,
-                                  const QString &title, const QString &text,
-                                  StandardButtons buttons = Ok, StandardButton defaultButton = NoButton,
-                                  const QString &confirmationKey = "");
+                                      const QString &title, const QString &text,
+                                      StandardButtons buttons = Ok, StandardButton defaultButton = NoButton,
+                                      const QString &confirmationKey = "");
 
     static StandardButton warning(QWidget *parent,
                                   const QString &title, const QString &text,
                                   StandardButtons buttons = Ok, StandardButton defaultButton = NoButton,
                                   const QString &confirmationKey = "");
 
+    static StandardButton informationContinueCancel(QWidget *parent,
+                                                    const QString &title, const QString &text,
+                                                    const QString &confirmationKey = "");
+
+    static StandardButton warningContinueCancel(QWidget *parent,
+                                                const QString &title, const QString &text,
+                                                const QString &confirmationKey = "");
+
 private:
+    explicit ConfirmationDialog(const QString &confirmationKey, QWidget *parent = nullptr);
+
     StandardButton execute();
 
 private:

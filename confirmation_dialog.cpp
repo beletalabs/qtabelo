@@ -23,6 +23,7 @@
 #include "confirmation_dialog.h"
 
 #include <QCheckBox>
+#include <QPushButton>
 #include <QSettings>
 
 
@@ -63,6 +64,31 @@ QMessageBox::StandardButton ConfirmationDialog::information(QWidget *parent,
 }
 
 
+QMessageBox::StandardButton ConfirmationDialog::informationContinueCancel(QWidget *parent,
+                                                                          const QString &title, const QString &text,
+                                                                          const QString &confirmationKey)
+{
+    QSettings settings(parent);
+
+    if (!confirmationKey.isEmpty()) {
+        const bool confirm = settings.value(QStringLiteral("Confirmations/") + confirmationKey, true).toBool();
+        if (!confirm)
+            return QMessageBox::NoButton;
+    }
+
+    ConfirmationDialog dialog(confirmationKey, parent);
+    dialog.setIcon(QMessageBox::Information);
+    dialog.setWindowTitle(title);
+    dialog.setText(text);
+    QPushButton *buttonContinue = dialog.addButton(tr("C&ontinue"), QMessageBox::AcceptRole);
+    buttonContinue->setIcon(QIcon::fromTheme(QStringLiteral("go-next"), QIcon(QStringLiteral(":/icons/actions/16/go-next.svg"))));
+    dialog.addButton(QMessageBox::Cancel);
+    dialog.setDefaultButton(buttonContinue);
+
+    return dialog.execute();
+}
+
+
 QMessageBox::StandardButton ConfirmationDialog::warning(QWidget *parent,
                                                         const QString &title, const QString &text,
                                                         StandardButtons buttons, StandardButton defaultButton,
@@ -82,6 +108,31 @@ QMessageBox::StandardButton ConfirmationDialog::warning(QWidget *parent,
     dialog.setText(text);
     dialog.setStandardButtons(buttons);
     dialog.setDefaultButton(defaultButton);
+
+    return dialog.execute();
+}
+
+
+QMessageBox::StandardButton ConfirmationDialog::warningContinueCancel(QWidget *parent,
+                                                                      const QString &title, const QString &text,
+                                                                      const QString &confirmationKey)
+{
+    QSettings settings(parent);
+
+    if (!confirmationKey.isEmpty()) {
+        const bool confirm = settings.value(QStringLiteral("Confirmations/") + confirmationKey, true).toBool();
+        if (!confirm)
+            return QMessageBox::NoButton;
+    }
+
+    ConfirmationDialog dialog(confirmationKey, parent);
+    dialog.setIcon(QMessageBox::Warning);
+    dialog.setWindowTitle(title);
+    dialog.setText(text);
+    QPushButton *buttonContinue = dialog.addButton(tr("C&ontinue"), QMessageBox::AcceptRole);
+    buttonContinue->setIcon(QIcon::fromTheme(QStringLiteral("go-next"), QIcon(QStringLiteral(":/icons/actions/16/go-next.svg"))));
+    dialog.addButton(QMessageBox::Cancel);
+    dialog.setDefaultButton(buttonContinue);
 
     return dialog.execute();
 }

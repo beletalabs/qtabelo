@@ -697,11 +697,9 @@ void ApplicationWindow::closeEvent(QCloseEvent *event)
         const QString &title = tr("Quit the application");
         const QString &text = tr("This will close all open documents and quit the application.\n"
                                  "Are you sure you want to continue?");
-        const QMessageBox::StandardButtons buttons = QMessageBox::Yes | QMessageBox::Cancel;
-        const QMessageBox::StandardButton defaultButton = QMessageBox::Yes;
         const QString &confirmationKey = QStringLiteral("ConfirmQuitApplication");
 
-        if (ConfirmationDialog::warning(this, title, text, buttons, defaultButton, confirmationKey) == QMessageBox::Cancel) {
+        if (ConfirmationDialog::warningContinueCancel(this, title, text, confirmationKey) == QMessageBox::Cancel) {
             event->ignore();
             return;
         }
@@ -1084,11 +1082,9 @@ void ApplicationWindow::slotCloseOther()
         const QString &title = tr("Close all documents beside current one");
         const QString &text = tr("This will close all open documents beside the current one.\n"
                                  "Are you sure you want to continue?");
-        const QMessageBox::StandardButtons buttons = QMessageBox::Yes | QMessageBox::Cancel;
-        const QMessageBox::StandardButton defaultButton = QMessageBox::Yes;
         const QString &confirmationKey = QStringLiteral("ConfirmCloseOtherDocuments");
 
-        if (ConfirmationDialog::warning(this, title, text, buttons, defaultButton, confirmationKey) != QMessageBox::Cancel)
+        if (ConfirmationDialog::warningContinueCancel(this, title, text, confirmationKey) != QMessageBox::Cancel)
             m_documentManager->closeOtherSubWindows(m_documentManager->activeSubWindow());
     }
 }
@@ -1101,11 +1097,9 @@ void ApplicationWindow::slotCloseAll()
         const QString &title = tr("Close all documents");
         const QString &text = tr("This will close all open documents.\n"
                                  "Are you sure you want to continue?");
-        const QMessageBox::StandardButtons buttons = QMessageBox::Yes | QMessageBox::Cancel;
-        const QMessageBox::StandardButton defaultButton = QMessageBox::Yes;
         const QString &confirmationKey = QStringLiteral("ConfirmCloseAllDocuments");
 
-        if (ConfirmationDialog::warning(this, title, text, buttons, defaultButton, confirmationKey) != QMessageBox::Cancel)
+        if (ConfirmationDialog::warningContinueCancel(this, title, text, confirmationKey) != QMessageBox::Cancel)
             m_documentManager->closeAllSubWindows();
     }
 }
