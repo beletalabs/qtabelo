@@ -26,6 +26,8 @@
 #include <QTabWidget>
 #include <QVBoxLayout>
 
+#include "properties_pages.h"
+
 
 PropertiesDialog::PropertiesDialog(const QUrl &url, QWidget *parent)
     : QDialog(parent)
@@ -37,7 +39,12 @@ PropertiesDialog::PropertiesDialog(const QUrl &url, QWidget *parent)
     //
     // Content
 
+    auto *pageGeneral = new PropertiesPageGeneral(url);
+    auto *pagePermissions = new PropertiesPagePermissions(url);
+
     auto *tabBox = new QTabWidget;
+    tabBox->addTab(pageGeneral, pageGeneral->title());
+    tabBox->addTab(pagePermissions, pagePermissions->title());
 
 
     // Button box
