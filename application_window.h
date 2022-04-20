@@ -104,6 +104,7 @@ private slots:
     void slotCopyPath();
     void slotCopyFilename();
     void slotRenameFilename();
+    void slotProperties();
     void slotCloseOther();
     void slotCloseAll();
 
@@ -129,6 +130,7 @@ private:
     QAction *m_actionCopyPath;
     QAction *m_actionCopyFilename;
     QAction *m_actionRenameFilename;
+    QAction *m_actionProperties;
     QAction *m_actionClose;
     QAction *m_actionCloseOther;
     QAction *m_actionCloseAll;

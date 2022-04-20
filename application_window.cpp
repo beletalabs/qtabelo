@@ -46,6 +46,7 @@
 #include "document_widget.h"
 #include "document_window.h"
 #include "preferences_dialog.h"
+#include "properties_dialog.h"
 
 
 ApplicationWindow::ApplicationWindow(QWidget *parent)
@@ -195,6 +196,12 @@ void ApplicationWindow::setupActions()
     m_actionRenameFilename->setToolTip(tr("Rename file name of the document"));
     connect(m_actionRenameFilename, &QAction::triggered, this, &ApplicationWindow::slotRenameFilename);
 
+    m_actionProperties = new QAction(tr("Proper&ties"), this);
+    m_actionProperties->setObjectName(QStringLiteral("actionProperties"));
+    m_actionProperties->setIcon(QIcon::fromTheme(QStringLiteral("document-properties"), QIcon(QStringLiteral(":/icons/actions/16/document-properties.svg"))));
+    m_actionProperties->setToolTip(QStringLiteral("Document properties"));
+    connect(m_actionProperties, &QAction::triggered, this, &ApplicationWindow::slotProperties);
+
     m_actionClose = new QAction(tr("&Close"), this);
     m_actionClose->setObjectName(QStringLiteral("actionClose"));
     m_actionClose->setIcon(QIcon::fromTheme(QStringLiteral("document-close"), QIcon(QStringLiteral(":/icons/actions/16/document-close.svg"))));
@@ -226,8 +233,9 @@ void ApplicationWindow::setupActions()
     menuDocument->addSeparator();
     menuDocument->addAction(m_actionCopyPath);
     menuDocument->addAction(m_actionCopyFilename);
-    menuDocument->addSeparator();
     menuDocument->addAction(m_actionRenameFilename);
+    menuDocument->addSeparator();
+    menuDocument->addAction(m_actionProperties);
     menuDocument->addSeparator();
     menuDocument->addAction(m_actionClose);
     menuDocument->addAction(m_actionCloseOther);
@@ -574,6 +582,7 @@ void ApplicationWindow::enableActionCloseOther(const bool enabled)
 void ApplicationWindow::enableUrlActions(const bool enabled)
 {
     m_actionCopyPath->setEnabled(enabled);
+    m_actionProperties->setEnabled(enabled);
 }
 
 
@@ -1072,6 +1081,17 @@ void ApplicationWindow::slotRenameFilename()
         return;
 
     document->renameFilename();
+}
+
+
+void ApplicationWindow::slotProperties()
+{
+    DocumentWidget *document = activeDocument();
+    if (!document)
+        return;
+
+    auto *dialog = new PropertiesDialog(document->url(), this);
+    dialog->open();
 }
 
 
