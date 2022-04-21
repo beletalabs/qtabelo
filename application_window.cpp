@@ -47,11 +47,13 @@
 #include "document_window.h"
 #include "preferences_dialog.h"
 #include "properties_dialog.h"
+#include "recent_document_list.h"
 
 
 ApplicationWindow::ApplicationWindow(QWidget *parent)
     : QMainWindow(parent)
     , m_documentManager{new DocumentManager}
+    , m_recentDocuments(new RecentDocumentList(this))
 {
     setWindowIcon(QIcon(QStringLiteral(":/icons/apps/16/tabelo.svg")));
 
@@ -62,6 +64,8 @@ ApplicationWindow::ApplicationWindow(QWidget *parent)
     setCentralWidget(m_documentManager);
 
     connect(m_documentManager, &DocumentManager::subWindowActivated, this, &ApplicationWindow::documentActivated);
+
+    connect(m_recentDocuments, &RecentDocumentList::changed, this, &ApplicationWindow::updateMenuOpenRecent);
 
     setupActions();
     loadSettings();
@@ -148,6 +152,11 @@ void ApplicationWindow::setupActions()
     connect(m_actionOpen, &QAction::triggered, this, &ApplicationWindow::slotOpen);
     addAction(m_actionOpen);
 
+    m_actionOpenRecentClear = new QAction(tr("Clear &List"), this);
+    m_actionOpenRecentClear->setObjectName(QStringLiteral("actionOpenRecentClear"));
+    m_actionOpenRecentClear->setToolTip(tr("Clear document list"));
+    connect(m_actionOpenRecentClear, &QAction::triggered, m_recentDocuments, &RecentDocumentList::clear);
+
     m_actionSave = new QAction(tr("&Save"), this);
     m_actionSave->setObjectName(QStringLiteral("actionSave"));
     m_actionSave->setIcon(QIcon::fromTheme(QStringLiteral("document-save"), QIcon(QStringLiteral(":/icons/actions/16/document-save.svg"))));
@@ -220,11 +229,18 @@ void ApplicationWindow::setupActions()
     m_actionCloseAll->setToolTip(tr("Close all open documents"));
     connect(m_actionCloseAll, &QAction::triggered, this, &ApplicationWindow::slotCloseAll);
 
+    m_menuOpenRecent = new QMenu(tr("Open Recent"), this);
+    m_menuOpenRecent->setObjectName(QStringLiteral("menuOpenRecent"));
+    m_menuOpenRecent->setIcon(QIcon::fromTheme(QStringLiteral("document-open-recent"), QIcon(QStringLiteral(":/icons/actions/16/document-open-recent.svg"))));
+    m_menuOpenRecent->setToolTip(tr("Open a document which was recently opened"));
+    updateMenuOpenRecent();
+
     auto *menuDocument = menuBar()->addMenu(tr("&Document"));
     menuDocument->setObjectName(QStringLiteral("menuDocument"));
     menuDocument->addAction(m_actionNew);
     menuDocument->addSeparator();
     menuDocument->addAction(m_actionOpen);
+    menuDocument->addMenu(m_menuOpenRecent);
     menuDocument->addSeparator();
     menuDocument->addAction(m_actionSave);
     menuDocument->addAction(m_actionSaveAs);
@@ -562,6 +578,22 @@ void ApplicationWindow::updateActionFullScreen()
 }
 
 
+void ApplicationWindow::updateMenuOpenRecent()
+{
+    m_menuOpenRecent->clear();
+
+    if (m_recentDocuments->count()) {
+        m_menuOpenRecent->setEnabled(true);
+        m_menuOpenRecent->addActions(m_recentDocuments->actions());
+        m_menuOpenRecent->addSeparator();
+        m_menuOpenRecent->addAction(m_actionOpenRecentClear);
+    }
+    else {
+        m_menuOpenRecent->setEnabled(false);
+    }
+}
+
+
 void ApplicationWindow::enableActions(const bool enabled)
 {
     m_actionSave->setEnabled(enabled);
@@ -795,6 +827,7 @@ bool ApplicationWindow::openDocument(const QUrl &url)
     if (subWindow) {
         // Given document is already loaded; activate the subwindow
         m_documentManager->setActiveSubWindow(subWindow);
+        m_recentDocuments->addUrl(url);
         return true;
     }
 
@@ -813,6 +846,7 @@ bool ApplicationWindow::loadDocument(const QUrl &url)
 
     document->show();
     document->setUrl(url);
+    m_recentDocuments->addUrl(url);
 
     documentCreated();
 

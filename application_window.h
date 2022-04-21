@@ -35,6 +35,7 @@ class QUrl;
 
 class DocumentManager;
 class DocumentWidget;
+class RecentDocumentList;
 
 
 class ApplicationWindow : public QMainWindow
@@ -76,6 +77,8 @@ private:
     bool saveDocument(DocumentWidget *document, const QUrl &altUrl);
 
 private slots:
+    void updateMenuOpenRecent();
+
     void documentCreated();
     void documentActivated(QMdiSubWindow *subWindow);
     void documentModifiedChanged(const bool modified);
@@ -114,6 +117,7 @@ private slots:
 
 private:
     DocumentManager *m_documentManager;
+    RecentDocumentList *m_recentDocuments;
 
     QAction *m_actionAbout;
     QAction *m_actionColophon;
@@ -123,6 +127,7 @@ private:
 
     QAction *m_actionNew;
     QAction *m_actionOpen;
+    QAction *m_actionOpenRecentClear;
     QAction *m_actionSave;
     QAction *m_actionSaveAs;
     QAction *m_actionSaveCopyAs;
@@ -134,6 +139,7 @@ private:
     QAction *m_actionClose;
     QAction *m_actionCloseOther;
     QAction *m_actionCloseAll;
+    QMenu *m_menuOpenRecent;
     QToolBar *m_toolbarDocument;
 
     QToolBar *m_toolbarEdit;
