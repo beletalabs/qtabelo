@@ -44,6 +44,7 @@ SOURCES += \
     preferences_dialog.cpp \
     properties_dialog.cpp \
     properties_pages.cpp \
+    recent_document_list.cpp \
     rename_dialog.cpp \
     table_document.cpp
 
@@ -60,6 +61,7 @@ HEADERS += \
     preferences_dialog.h \
     properties_dialog.h \
     properties_pages.h \
+    recent_document_list.h \
     rename_dialog.h \
     table_document.h
 
