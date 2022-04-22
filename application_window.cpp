@@ -64,7 +64,6 @@ ApplicationWindow::ApplicationWindow(QWidget *parent)
     m_documentManager->setTabsMovable(true);
     setCentralWidget(m_documentManager);
 
-    connect(m_documentManager, &DocumentManager::tabPositionChanged, this, &ApplicationWindow::updateActionsDocumentTabPosition);
     connect(m_documentManager, &DocumentManager::subWindowActivated, this, &ApplicationWindow::documentActivated);
 
     connect(m_recentDocuments, &RecentDocumentList::listChanged, this, &ApplicationWindow::updateMenuOpenRecent);
@@ -472,17 +471,18 @@ void ApplicationWindow::setupActions()
     actionDocumentTabPositionTop->setToolTip(tr("Show tabs above the documents"));
     actionDocumentTabPositionTop->setData(QTabWidget::North);
 
-    auto *actionDocumentTabsPositionBottom = new QAction(tr("&Bottom"), this);
-    actionDocumentTabsPositionBottom->setObjectName(QStringLiteral("actionDocumentTabsPositionBottom"));
-    actionDocumentTabsPositionBottom->setCheckable(true);
-    actionDocumentTabsPositionBottom->setToolTip(tr("Show tabs below the documents"));
-    actionDocumentTabsPositionBottom->setData(QTabWidget::South);
+    auto *actionDocumentTabPositionBottom = new QAction(tr("&Bottom"), this);
+    actionDocumentTabPositionBottom->setObjectName(QStringLiteral("actionDocumentTabPositionBottom"));
+    actionDocumentTabPositionBottom->setCheckable(true);
+    actionDocumentTabPositionBottom->setToolTip(tr("Show tabs below the documents"));
+    actionDocumentTabPositionBottom->setData(QTabWidget::South);
 
     m_actionsDocumentTabPosition = new QActionGroup(this);
     m_actionsDocumentTabPosition->setObjectName(QStringLiteral("actionsDocumentTabPosition"));
     m_actionsDocumentTabPosition->addAction(actionDocumentTabPositionTop);
-    m_actionsDocumentTabPosition->addAction(actionDocumentTabsPositionBottom);
+    m_actionsDocumentTabPosition->addAction(actionDocumentTabPositionBottom);
     connect(m_actionsDocumentTabPosition, &QActionGroup::triggered, this, &ApplicationWindow::slotDocumentTabPosition);
+    connect(m_documentManager, &DocumentManager::tabPositionChanged, this, &ApplicationWindow::updateActionsDocumentTabPosition);
 
     m_actionDocumentTabAutoHide = new QAction(tr("&Auto Hide"), this);
     m_actionDocumentTabAutoHide->setObjectName(QStringLiteral("actionDocumentTabAutoHide"));
