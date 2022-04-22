@@ -78,6 +78,7 @@ private:
     bool saveDocument(DocumentWidget *document, const QUrl &altUrl);
 
 private slots:
+    void updateActionsDocumentTabPosition(const QTabWidget::TabPosition position);
     void updateMenuOpenRecent();
 
     void documentCreated();
@@ -114,6 +115,7 @@ private slots:
 
     void slotToolButtonStyle(const QAction *action);
     void slotToolButtonSize(const QAction *action);
+    void slotDocumentTabPosition(const QAction *action);
     void slotFullScreen(const bool checked);
 
 private:
@@ -164,6 +166,7 @@ private:
     QActionGroup *m_actionsToolButtonStyle;
     QActionGroup *m_actionsToolButtonSize;
     QAction *m_actionShowDocumentTabs;
+    QActionGroup *m_actionsDocumentTabPosition;
     QAction *m_actionShowStatusbar;
     QAction *m_actionFullScreen;
     QToolBar *m_toolbarSettings;

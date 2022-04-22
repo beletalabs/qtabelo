@@ -36,6 +36,7 @@
 #include <QScreen>
 #include <QSettings>
 #include <QStatusBar>
+#include <QTabWidget>
 #include <QToolBar>
 #include <QUrl>
 
@@ -63,6 +64,7 @@ ApplicationWindow::ApplicationWindow(QWidget *parent)
     m_documentManager->setTabsMovable(true);
     setCentralWidget(m_documentManager);
 
+    connect(m_documentManager, &DocumentManager::tabPositionChanged, this, &ApplicationWindow::updateActionsDocumentTabPosition);
     connect(m_documentManager, &DocumentManager::subWindowActivated, this, &ApplicationWindow::documentActivated);
 
     connect(m_recentDocuments, &RecentDocumentList::listChanged, this, &ApplicationWindow::updateMenuOpenRecent);
@@ -72,6 +74,7 @@ ApplicationWindow::ApplicationWindow(QWidget *parent)
     loadSettings();
 
     m_documentManager->initTabVisible();
+    m_documentManager->initTabPosition();
 
     documentActivated(nullptr);
     documentClosed();
@@ -462,6 +465,24 @@ void ApplicationWindow::setupActions()
     connect(m_actionShowDocumentTabs, &QAction::toggled, m_documentManager, &DocumentManager::setTabVisible);
     connect(m_documentManager, &DocumentManager::tabVisibleChanged, m_actionShowDocumentTabs, &QAction::setChecked);
 
+    auto *actionDocumentTabPositionTop = new QAction(tr("&Top"), this);
+    actionDocumentTabPositionTop->setObjectName(QStringLiteral("actionDocumentTabPositionTop"));
+    actionDocumentTabPositionTop->setCheckable(true);
+    actionDocumentTabPositionTop->setToolTip(tr("Show tabs above the documents"));
+    actionDocumentTabPositionTop->setData(QTabWidget::North);
+
+    auto *actionDocumentTabsPositionBottom = new QAction(tr("&Bottom"), this);
+    actionDocumentTabsPositionBottom->setObjectName(QStringLiteral("actionDocumentTabsPositionBottom"));
+    actionDocumentTabsPositionBottom->setCheckable(true);
+    actionDocumentTabsPositionBottom->setToolTip(tr("Show tabs below the documents"));
+    actionDocumentTabsPositionBottom->setData(QTabWidget::South);
+
+    m_actionsDocumentTabPosition = new QActionGroup(this);
+    m_actionsDocumentTabPosition->setObjectName(QStringLiteral("actionsDocumentTabPosition"));
+    m_actionsDocumentTabPosition->addAction(actionDocumentTabPositionTop);
+    m_actionsDocumentTabPosition->addAction(actionDocumentTabsPositionBottom);
+    connect(m_actionsDocumentTabPosition, &QActionGroup::triggered, this, &ApplicationWindow::slotDocumentTabPosition);
+
     m_actionShowStatusbar = new QAction(tr("Show Stat&usbar"), this);
     m_actionShowStatusbar->setObjectName(QStringLiteral("actionShowStatusbar"));
     m_actionShowStatusbar->setCheckable(true);
@@ -486,6 +507,12 @@ void ApplicationWindow::setupActions()
     menuToolButtonStyle->addSection(tr("Icon Size"));
     menuToolButtonStyle->addActions(m_actionsToolButtonSize->actions());
 
+    auto *menuDocumentTabPosition = new QMenu(tr("Document Tab &Position"), this);
+    menuDocumentTabPosition->setObjectName(QStringLiteral("menuDocumentTabPosition"));
+    menuDocumentTabPosition->addSection(tr("Position"));
+    menuDocumentTabPosition->addActions(m_actionsDocumentTabPosition->actions());
+    connect(m_actionShowDocumentTabs, &QAction::toggled, menuDocumentTabPosition, &QMenu::setEnabled);
+
     auto *menuSettings = menuBar()->addMenu(tr("&Settings"));
     menuSettings->setObjectName(QStringLiteral("menuSettings"));
     menuSettings->addAction(m_actionShowPath);
@@ -503,6 +530,7 @@ void ApplicationWindow::setupActions()
     menuSettings->addMenu(menuToolButtonStyle);
     menuSettings->addSeparator();
     menuSettings->addAction(m_actionShowDocumentTabs);
+    menuSettings->addMenu(menuDocumentTabPosition);
     menuSettings->addSeparator();
     menuSettings->addAction(m_actionShowStatusbar);
     menuSettings->addSeparator();
@@ -570,6 +598,18 @@ void ApplicationWindow::updateActionsToolButtonSize(const int pixel)
     const QList<QAction *> actions = m_actionsToolButtonSize->actions();
     for (auto *action : actions) {
         if (action->data().toInt() == pixel) {
+            action->trigger();
+            break;
+        }
+    }
+}
+
+
+void ApplicationWindow::updateActionsDocumentTabPosition(const QTabWidget::TabPosition position)
+{
+    const QList<QAction *> actions = m_actionsDocumentTabPosition->actions();
+    for (auto *action : actions) {
+        if (static_cast<QTabWidget::TabPosition>(action->data().toInt()) == position) {
             action->trigger();
             break;
         }
@@ -1205,6 +1245,12 @@ void ApplicationWindow::slotToolButtonSize(const QAction *action)
     m_toolbarTools->setIconSize(size);
     m_toolbarSettings->setIconSize(size);
     m_toolbarHelp->setIconSize(size);
+}
+
+
+void ApplicationWindow::slotDocumentTabPosition(const QAction *action)
+{
+    m_documentManager->setTabPosition(static_cast<QTabWidget::TabPosition>(action->data().toInt()));
 }
 
 

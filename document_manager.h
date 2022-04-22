@@ -25,6 +25,8 @@
 
 #include <QMdiArea>
 
+#include <QTabWidget>
+
 class QMdiSubWindow;
 class QUrl;
 class QWidget;
@@ -35,6 +37,7 @@ class DocumentManager : public QMdiArea
     Q_OBJECT
 
     Q_PROPERTY(bool tabVisible MEMBER m_tabVisible READ isTabVisible WRITE setTabVisible RESET resetTabVisible NOTIFY tabVisibleChanged)
+    Q_PROPERTY(QTabWidget::TabPosition tabPosition READ tabPosition WRITE setTabPosition RESET resetTabPosition NOTIFY tabPositionChanged)
 
 public:
     explicit DocumentManager(QWidget *parent = nullptr);
@@ -42,6 +45,7 @@ public:
     void saveSettings();
 
     bool isTabVisible() const;
+    QTabWidget::TabPosition tabPosition() const;
     bool hasTabBar() const;
 
     int subWindowCount() const;
@@ -50,11 +54,16 @@ public:
 
 signals:
     void tabVisibleChanged(const bool visible);
+    void tabPositionChanged(const QTabWidget::TabPosition position);
 
 public slots:
     void setTabVisible(const bool visible);
     void resetTabVisible();
     void initTabVisible();
+
+    void setTabPosition(const QTabWidget::TabPosition position);
+    void resetTabPosition();
+    void initTabPosition();
 
     void closeSelectedSubWindow(QMdiSubWindow *subWindow);
     void closeOtherSubWindows(QMdiSubWindow *subWindow);

@@ -36,6 +36,8 @@ DocumentManager::DocumentManager(QWidget *parent)
     : QMdiArea(parent)
     , m_tabVisible{true}
 {
+    QMdiArea::setTabPosition(QTabWidget::North);
+
     loadSettings();
 }
 
@@ -48,6 +50,12 @@ void DocumentManager::loadSettings()
     bool visible = settings.value(QStringLiteral("DocumentManager/DocumentTabVisible"), true).toBool();
     m_tabVisible = visible;
     setTabBarVisible(visible);
+
+    // Document Tab Position
+    int value = settings.value(QStringLiteral("DocumentManager/DocumentTabPosition"), QTabWidget::North).toInt();
+    const QList<QTabWidget::TabPosition> positions = {QTabWidget::North, QTabWidget::South};
+    const QTabWidget::TabPosition position = positions.contains(static_cast<QTabWidget::TabPosition>(value)) ? static_cast<QTabWidget::TabPosition>(value) : QTabWidget::North;
+    QMdiArea::setTabPosition(position);
 }
 
 
@@ -58,11 +66,15 @@ void DocumentManager::saveSettings()
     // Document Tab Visible
     bool visible = m_tabVisible;
     settings.setValue(QStringLiteral("DocumentManager/DocumentTabVisible"), visible);
+
+    // Document Tab Position
+    const QTabWidget::TabPosition position = tabPosition();
+    settings.setValue(QStringLiteral("DocumentManager/DocumentTabPosition"), position);
 }
 
 
 //
-// Property: tabsVisible
+// Property: tabVisible
 //
 
 bool DocumentManager::isTabVisible() const
@@ -96,6 +108,39 @@ void DocumentManager::initTabVisible()
 {
     if (hasTabBar())
         emit tabVisibleChanged(m_tabVisible);
+}
+
+
+//
+// Property: tabPosition
+//
+
+QTabWidget::TabPosition DocumentManager::tabPosition() const
+{
+    return QMdiArea::tabPosition();
+}
+
+
+void DocumentManager::setTabPosition(const QTabWidget::TabPosition position)
+{
+    if (position != QMdiArea::tabPosition()) {
+        QMdiArea::setTabPosition(position);
+        emit tabPositionChanged(position);
+    }
+}
+
+
+void DocumentManager::resetTabPosition()
+{
+    const QTabWidget::TabPosition position = QTabWidget::North;
+    QMdiArea::setTabPosition(position);
+    emit tabPositionChanged(position);
+}
+
+
+void DocumentManager::initTabPosition()
+{
+    emit tabPositionChanged(QMdiArea::tabPosition());
 }
 
 
