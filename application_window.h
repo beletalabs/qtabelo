@@ -46,6 +46,7 @@ public:
     ApplicationWindow(QWidget *parent = nullptr);
     ~ApplicationWindow();
 
+public slots:
     bool openDocument(const QUrl &url);
 
 signals:

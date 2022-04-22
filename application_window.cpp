@@ -65,7 +65,8 @@ ApplicationWindow::ApplicationWindow(QWidget *parent)
 
     connect(m_documentManager, &DocumentManager::subWindowActivated, this, &ApplicationWindow::documentActivated);
 
-    connect(m_recentDocuments, &RecentDocumentList::changed, this, &ApplicationWindow::updateMenuOpenRecent);
+    connect(m_recentDocuments, &RecentDocumentList::listChanged, this, &ApplicationWindow::updateMenuOpenRecent);
+    connect(m_recentDocuments, &RecentDocumentList::documentSelected, this, &ApplicationWindow::openDocument);
 
     setupActions();
     loadSettings();
@@ -232,7 +233,7 @@ void ApplicationWindow::setupActions()
     m_menuOpenRecent = new QMenu(tr("Open Recent"), this);
     m_menuOpenRecent->setObjectName(QStringLiteral("menuOpenRecent"));
     m_menuOpenRecent->setIcon(QIcon::fromTheme(QStringLiteral("document-open-recent"), QIcon(QStringLiteral(":/icons/actions/16/document-open-recent.svg"))));
-    m_menuOpenRecent->setToolTip(tr("Open a document which was recently opened"));
+//    m_menuOpenRecent->setToolTip(tr("Open a document which was recently opened"));
     updateMenuOpenRecent();
 
     auto *menuDocument = menuBar()->addMenu(tr("&Document"));
@@ -748,6 +749,7 @@ void ApplicationWindow::closeEvent(QCloseEvent *event)
         m_documentManager->closeAllSubWindows();
     }
 
+    m_recentDocuments->saveSettings();
     saveSettings();
     event->accept();
 }

@@ -26,21 +26,69 @@
 #include <QDebug>
 #include <QDir>
 #include <QList>
+#include <QSettings>
 #include <QUrl>
 
 
 RecentDocumentList::RecentDocumentList(QObject *parent)
     : QObject(parent)
     , m_documentList{}
-    , m_maximum{10}
+    , m_maximum{20}
+    , m_restore{true}
 {
+    loadSettings();
+}
 
+
+void RecentDocumentList::loadSettings()
+{
+    QSettings settings;
+
+    // Maximum Recent Documents
+    const int value = settings.value(QStringLiteral("Application/MaximumRecentDocuments"), 20).toInt();
+    m_maximum = value >= 0 && value <= 50 ? value : 20;
+
+    // Restore Recent Documents
+    m_restore = settings.value(QStringLiteral("Application/RestoreRecentDocuments"), true).toBool();
+
+    // Recent Document List
+    const int count = settings.beginReadArray(QStringLiteral("RecentDocuments"));
+    for (int i = count; i >= 0; --i) {
+        settings.setArrayIndex(i);
+        addUrl(settings.value(QStringLiteral("Document"), QString()).toString());
+    }
+    settings.endArray();
+}
+
+
+void RecentDocumentList::saveSettings()
+{
+    QSettings settings;
+
+    // Maximum Recent Documents
+    const int value = m_maximum;
+    settings.setValue(QStringLiteral("Application/MaximumRecentDocuments"), value);
+
+    // Restore Recent Documents
+    const bool restore = m_restore;
+    settings.setValue(QStringLiteral("Application/RestoreRecentDocuments"), restore);
+
+    // Recent Document List
+    if (!m_restore)
+        clear();
+    settings.remove(QStringLiteral("RecentDocuments"));
+    settings.beginWriteArray(QStringLiteral("RecentDocuments"));
+    for (int i = 0; i < m_documentList.count(); ++i) {
+        settings.setArrayIndex(i);
+        settings.setValue(QStringLiteral("Document"), m_documentList.at(i)->data().toUrl().toString());
+    }
+    settings.endArray();
 }
 
 
 void RecentDocumentList::addUrl(const QUrl &url)
 {
-    if (url.isEmpty() || !url.isValid())
+    if (!url.isValid())
         return;
 
     QAction *action = findUrlAction(url);
@@ -48,6 +96,7 @@ void RecentDocumentList::addUrl(const QUrl &url)
         // Create a new entry at the top
         action = new QAction(urlActionText(url), this);
         action->setData(url);
+        connect(action, &QAction::triggered, this, &RecentDocumentList::slotUrlAction);
         m_documentList.prepend(action);
     }
     else {
@@ -59,7 +108,7 @@ void RecentDocumentList::addUrl(const QUrl &url)
     while (m_documentList.size() > m_maximum)
         delete m_documentList.takeLast();
 
-    emit changed();
+    emit listChanged();
 }
 
 
@@ -76,7 +125,7 @@ QList<QUrl> RecentDocumentList::urls() const
     for (auto *document : m_documentList)
         urls.append(document->data().toUrl());
 
-    return QList<QUrl>();
+    return urls;
 }
 
 
@@ -94,17 +143,30 @@ int RecentDocumentList::maximum() const
 
 void RecentDocumentList::setMaximum(const int max)
 {
-    if (max != m_maximum)
+    if (max != m_maximum) {
         m_maximum = max;
+
+        shrinkDocumentList(max);
+    }
+}
+
+
+bool RecentDocumentList::restore() const
+{
+    return m_restore;
+}
+
+
+void RecentDocumentList::setRestore(const bool restore)
+{
+    if (restore != m_restore)
+        m_restore = restore;
 }
 
 
 void RecentDocumentList::clear()
 {
-    while (m_documentList.count() > 0)
-        delete m_documentList.takeLast();
-
-    emit changed();
+    shrinkDocumentList(0);
 }
 
 
@@ -132,4 +194,24 @@ QString RecentDocumentList::urlActionText(const QUrl &url) const
         text = tr("%1 %2").arg(url.fileName(), text);
 
     return text;
+}
+
+
+void RecentDocumentList::shrinkDocumentList(const int max)
+{
+    if (m_documentList.count() > max) {
+
+        while (m_documentList.count() > max)
+            delete m_documentList.takeLast();
+
+        emit listChanged();
+    }
+}
+
+
+void RecentDocumentList::slotUrlAction()
+{
+    auto *action = qobject_cast<QAction *>(sender());
+    if (action)
+        emit documentSelected(action->data().toUrl());
 }

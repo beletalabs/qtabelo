@@ -35,9 +35,12 @@ class RecentDocumentList : public QObject
 
     Q_PROPERTY(int count READ count)
     Q_PROPERTY(int maximum MEMBER m_maximum READ maximum WRITE setMaximum)
+    Q_PROPERTY(bool restore MEMBER m_restore READ restore WRITE setRestore)
 
 public:
     explicit RecentDocumentList(QObject *parent = nullptr);
+
+    void saveSettings();
 
     void addUrl(const QUrl &url);
 
@@ -46,23 +49,34 @@ public:
 
     int count() const;
     int maximum() const;
+    bool restore() const;
 
 signals:
-    void changed();
+    void listChanged();
+    void documentSelected(const QUrl &url);
 
 public slots:
     void setMaximum(const int max);
+    void setRestore(const bool restore);
 
     void clear();
 
 private:
+    void loadSettings();
+
     QAction *findUrlAction(const QUrl &url) const;
     QString urlActionText(const QUrl &url) const;
+
+    void shrinkDocumentList(const int max);
+
+private slots:
+    void slotUrlAction();
 
 private:
     QList<QAction *> m_documentList;
 
     int m_maximum;
+    bool m_restore;
 };
 
 #endif // RECENT_DOCUMENT_LIST_H
