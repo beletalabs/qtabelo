@@ -22,6 +22,7 @@
 
 #include "document_manager.h"
 
+#include <QDebug>
 #include <QList>
 #include <QMdiSubWindow>
 #include <QSettings>
@@ -35,8 +36,11 @@
 DocumentManager::DocumentManager(QWidget *parent)
     : QMdiArea(parent)
     , m_tabVisible{true}
+    , m_tabAutoHide{false}
 {
+    setTabBarVisible(true);
     QMdiArea::setTabPosition(QTabWidget::North);
+    setTabBarAutoHide(false);
 
     loadSettings();
 }
@@ -56,6 +60,11 @@ void DocumentManager::loadSettings()
     const QList<QTabWidget::TabPosition> positions = {QTabWidget::North, QTabWidget::South};
     const QTabWidget::TabPosition position = positions.contains(static_cast<QTabWidget::TabPosition>(value)) ? static_cast<QTabWidget::TabPosition>(value) : QTabWidget::North;
     QMdiArea::setTabPosition(position);
+
+    // Document Tab Auto Hide
+    bool hide = settings.value(QStringLiteral("DocumentManager/DocumentTabAutoHide"), false).toBool();
+    m_tabAutoHide = hide;
+    setTabBarAutoHide(hide);
 }
 
 
@@ -70,6 +79,10 @@ void DocumentManager::saveSettings()
     // Document Tab Position
     const QTabWidget::TabPosition position = tabPosition();
     settings.setValue(QStringLiteral("DocumentManager/DocumentTabPosition"), position);
+
+    // Document Tab Auto Hide
+    bool hide = isTabAutoHide();
+    settings.setValue(QStringLiteral("DocumentManager/DocumentTabAutoHide"), hide);
 }
 
 
@@ -145,6 +158,45 @@ void DocumentManager::initTabPosition()
 
 
 //
+// Property: tabAutoHide
+//
+
+bool DocumentManager::isTabAutoHide() const
+{
+    return m_tabAutoHide;
+}
+
+
+void DocumentManager::setTabAutoHide(const bool hide)
+{
+    if (hasTabBar() && hide != isTabAutoHide()) {
+        m_tabAutoHide = hide;
+        setTabBarAutoHide(hide);
+        emit tabAutoHideChanged(hide);
+    }
+}
+
+
+void DocumentManager::resetTabAutoHide()
+{
+    if (hasTabBar()) {
+        m_tabAutoHide = false;
+        setTabBarAutoHide(false);
+        emit tabAutoHideChanged(false);
+    }
+}
+
+
+void DocumentManager::initTabAutoHide()
+{
+    if (hasTabBar()) {
+        setTabBarAutoHide(isTabAutoHide());
+        emit tabAutoHideChanged(isTabAutoHide());
+    }
+}
+
+
+//
 //
 //
 
@@ -162,8 +214,15 @@ bool DocumentManager::isTabBarVisible() const
 
 void DocumentManager::setTabBarVisible(const bool visible)
 {
-    if (hasTabBar())
+    if (hasTabBar() && !(subWindowCount() <= 1 && isTabAutoHide()))
         findChild<QTabBar *>()->setVisible(visible);
+}
+
+
+void DocumentManager::setTabBarAutoHide(const bool hide)
+{
+    if (hasTabBar())
+        findChild<QTabBar *>()->setAutoHide(hide);
 }
 
 

@@ -38,6 +38,7 @@ class DocumentManager : public QMdiArea
 
     Q_PROPERTY(bool tabVisible MEMBER m_tabVisible READ isTabVisible WRITE setTabVisible RESET resetTabVisible NOTIFY tabVisibleChanged)
     Q_PROPERTY(QTabWidget::TabPosition tabPosition READ tabPosition WRITE setTabPosition RESET resetTabPosition NOTIFY tabPositionChanged)
+    Q_PROPERTY(bool tabAutoHide MEMBER m_tabAutoHide READ isTabAutoHide WRITE setTabAutoHide RESET resetTabAutoHide NOTIFY tabAutoHideChanged)
 
 public:
     explicit DocumentManager(QWidget *parent = nullptr);
@@ -46,6 +47,7 @@ public:
 
     bool isTabVisible() const;
     QTabWidget::TabPosition tabPosition() const;
+    bool isTabAutoHide() const;
     bool hasTabBar() const;
 
     int subWindowCount() const;
@@ -55,6 +57,7 @@ public:
 signals:
     void tabVisibleChanged(const bool visible);
     void tabPositionChanged(const QTabWidget::TabPosition position);
+    void tabAutoHideChanged(const bool hide);
 
 public slots:
     void setTabVisible(const bool visible);
@@ -65,6 +68,10 @@ public slots:
     void resetTabPosition();
     void initTabPosition();
 
+    void setTabAutoHide(const bool hide);
+    void resetTabAutoHide();
+    void initTabAutoHide();
+
     void closeSelectedSubWindow(QMdiSubWindow *subWindow);
     void closeOtherSubWindows(QMdiSubWindow *subWindow);
 
@@ -73,9 +80,11 @@ private:
 
     bool isTabBarVisible() const;
     void setTabBarVisible(const bool visible);
+    void setTabBarAutoHide(const bool hide);
 
 private:
     bool m_tabVisible;
+    bool m_tabAutoHide;
 };
 
 #endif // DOCUMENT_MANAGER_H

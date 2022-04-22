@@ -167,6 +167,7 @@ private:
     QActionGroup *m_actionsToolButtonSize;
     QAction *m_actionShowDocumentTabs;
     QActionGroup *m_actionsDocumentTabPosition;
+    QAction *m_actionDocumentTabAutoHide;
     QAction *m_actionShowStatusbar;
     QAction *m_actionFullScreen;
     QToolBar *m_toolbarSettings;

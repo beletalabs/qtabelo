@@ -75,6 +75,7 @@ ApplicationWindow::ApplicationWindow(QWidget *parent)
 
     m_documentManager->initTabVisible();
     m_documentManager->initTabPosition();
+    m_documentManager->initTabAutoHide();
 
     documentActivated(nullptr);
     documentClosed();
@@ -483,6 +484,13 @@ void ApplicationWindow::setupActions()
     m_actionsDocumentTabPosition->addAction(actionDocumentTabsPositionBottom);
     connect(m_actionsDocumentTabPosition, &QActionGroup::triggered, this, &ApplicationWindow::slotDocumentTabPosition);
 
+    m_actionDocumentTabAutoHide = new QAction(tr("&Auto Hide"), this);
+    m_actionDocumentTabAutoHide->setObjectName(QStringLiteral("actionDocumentTabAutoHide"));
+    m_actionDocumentTabAutoHide->setCheckable(true);
+    m_actionDocumentTabAutoHide->setToolTip(tr("Tabs are automatically hidden if they contain only 1 document"));
+    connect(m_actionDocumentTabAutoHide, &QAction::toggled, m_documentManager, &DocumentManager::setTabAutoHide);
+    connect(m_documentManager, &DocumentManager::tabAutoHideChanged, m_actionDocumentTabAutoHide, &QAction::setChecked);
+
     m_actionShowStatusbar = new QAction(tr("Show Stat&usbar"), this);
     m_actionShowStatusbar->setObjectName(QStringLiteral("actionShowStatusbar"));
     m_actionShowStatusbar->setCheckable(true);
@@ -511,6 +519,8 @@ void ApplicationWindow::setupActions()
     menuDocumentTabPosition->setObjectName(QStringLiteral("menuDocumentTabPosition"));
     menuDocumentTabPosition->addSection(tr("Position"));
     menuDocumentTabPosition->addActions(m_actionsDocumentTabPosition->actions());
+    menuDocumentTabPosition->addSection(tr("Behavior"));
+    menuDocumentTabPosition->addAction(m_actionDocumentTabAutoHide);
     connect(m_actionShowDocumentTabs, &QAction::toggled, menuDocumentTabPosition, &QMenu::setEnabled);
 
     auto *menuSettings = menuBar()->addMenu(tr("&Settings"));
