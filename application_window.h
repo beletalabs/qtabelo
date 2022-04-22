@@ -163,6 +163,7 @@ private:
     QAction *m_actionShowToolbarHelp;
     QActionGroup *m_actionsToolButtonStyle;
     QActionGroup *m_actionsToolButtonSize;
+    QAction *m_actionShowDocumentTabs;
     QAction *m_actionShowStatusbar;
     QAction *m_actionFullScreen;
     QToolBar *m_toolbarSettings;

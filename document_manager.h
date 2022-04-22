@@ -34,16 +34,39 @@ class DocumentManager : public QMdiArea
 {
     Q_OBJECT
 
+    Q_PROPERTY(bool tabVisible MEMBER m_tabVisible READ isTabVisible WRITE setTabVisible RESET resetTabVisible NOTIFY tabVisibleChanged)
+
 public:
     explicit DocumentManager(QWidget *parent = nullptr);
+
+    void saveSettings();
+
+    bool isTabVisible() const;
+    bool hasTabBar() const;
 
     int subWindowCount() const;
 
     QMdiSubWindow *findSubWindow(const QUrl &url) const;
 
+signals:
+    void tabVisibleChanged(const bool visible);
+
 public slots:
+    void setTabVisible(const bool visible);
+    void resetTabVisible();
+    void initTabVisible();
+
     void closeSelectedSubWindow(QMdiSubWindow *subWindow);
     void closeOtherSubWindows(QMdiSubWindow *subWindow);
+
+private:
+    void loadSettings();
+
+    bool isTabBarVisible() const;
+    void setTabBarVisible(const bool visible);
+
+private:
+    bool m_tabVisible;
 };
 
 #endif // DOCUMENT_MANAGER_H

@@ -18,6 +18,7 @@
         <file alias="show-menubar.svg">icons/actions/16/show-menubar.svg</file>
         <file alias="show-path.svg">icons/actions/16/show-path.svg</file>
         <file alias="show-statusbar.svg">icons/actions/16/show-statusbar.svg</file>
+        <file alias="show-tabbar.svg">icons/actions/16/show-tabbar.svg</file>
         <file alias="view-fullscreen.svg">icons/actions/16/view-fullscreen.svg</file>
         <file alias="view-restore.svg">icons/actions/16/view-restore.svg</file>
         <file alias="window-close.svg">icons/actions/16/window-close.svg</file>
@@ -41,6 +42,7 @@
         <file alias="show-menubar.svg">icons/actions/22/show-menubar.svg</file>
         <file alias="show-path.svg">icons/actions/22/show-path.svg</file>
         <file alias="show-statusbar.svg">icons/actions/22/show-statusbar.svg</file>
+        <file alias="show-tabbar.svg">icons/actions/22/show-tabbar.svg</file>
         <file alias="view-fullscreen.svg">icons/actions/22/view-fullscreen.svg</file>
         <file alias="view-restore.svg">icons/actions/22/view-restore.svg</file>
         <file alias="window-close.svg">icons/actions/22/window-close.svg</file>

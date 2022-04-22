@@ -24,6 +24,8 @@
 
 #include <QList>
 #include <QMdiSubWindow>
+#include <QSettings>
+#include <QTabBar>
 #include <QUrl>
 #include <QWidget>
 
@@ -32,10 +34,97 @@
 
 DocumentManager::DocumentManager(QWidget *parent)
     : QMdiArea(parent)
+    , m_tabVisible{true}
 {
-
+    loadSettings();
 }
 
+
+void DocumentManager::loadSettings()
+{
+    QSettings settings;
+
+    // Document Tab Visible
+    bool visible = settings.value(QStringLiteral("DocumentManager/DocumentTabVisible"), true).toBool();
+    m_tabVisible = visible;
+    setTabBarVisible(visible);
+}
+
+
+void DocumentManager::saveSettings()
+{
+    QSettings settings;
+
+    // Document Tab Visible
+    bool visible = m_tabVisible;
+    settings.setValue(QStringLiteral("DocumentManager/DocumentTabVisible"), visible);
+}
+
+
+//
+// Property: tabsVisible
+//
+
+bool DocumentManager::isTabVisible() const
+{
+    return m_tabVisible;
+}
+
+
+void DocumentManager::setTabVisible(const bool visible)
+{
+    if (hasTabBar() && visible != m_tabVisible) {
+        m_tabVisible = visible;
+        setTabBarVisible(visible);
+        emit tabVisibleChanged(visible);
+    }
+}
+
+
+void DocumentManager::resetTabVisible()
+{
+    if (hasTabBar()) {
+        const bool visible = true;
+        m_tabVisible = visible;
+        setTabBarVisible(visible);
+        emit tabVisibleChanged(visible);
+    }
+}
+
+
+void DocumentManager::initTabVisible()
+{
+    if (hasTabBar())
+        emit tabVisibleChanged(m_tabVisible);
+}
+
+
+//
+//
+//
+
+bool DocumentManager::hasTabBar() const
+{
+    return findChild<QTabBar *>() != nullptr;
+}
+
+
+bool DocumentManager::isTabBarVisible() const
+{
+    return hasTabBar() ? findChild<QTabBar *>()->isVisible() : false;
+}
+
+
+void DocumentManager::setTabBarVisible(const bool visible)
+{
+    if (hasTabBar())
+        findChild<QTabBar *>()->setVisible(visible);
+}
+
+
+//
+//
+//
 
 int DocumentManager::subWindowCount() const
 {

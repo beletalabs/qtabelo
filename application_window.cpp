@@ -71,6 +71,8 @@ ApplicationWindow::ApplicationWindow(QWidget *parent)
     setupActions();
     loadSettings();
 
+    m_documentManager->initTabVisible();
+
     documentActivated(nullptr);
     documentClosed();
 }
@@ -450,6 +452,16 @@ void ApplicationWindow::setupActions()
     m_actionsToolButtonSize->addAction(actionToolButtonSizeDefault);
     connect(m_actionsToolButtonSize, &QActionGroup::triggered, this, &ApplicationWindow::slotToolButtonSize);
 
+    m_actionShowDocumentTabs = new QAction(tr("Show &Document Tabs"), this);
+    m_actionShowDocumentTabs->setObjectName(QStringLiteral("actionShowDocumentTabs"));
+    m_actionShowDocumentTabs->setCheckable(true);
+    m_actionShowDocumentTabs->setChecked(true);
+    m_actionShowDocumentTabs->setIcon(QIcon::fromTheme(QStringLiteral("show-tabbar"), QIcon(QStringLiteral(":/icons/actions/16/show-tabbar.svg"))));
+    m_actionShowDocumentTabs->setIconText(tr("Document Tabs"));
+    m_actionShowDocumentTabs->setToolTip(tr("Show the document tabs"));
+    connect(m_actionShowDocumentTabs, &QAction::toggled, m_documentManager, &DocumentManager::setTabVisible);
+    connect(m_documentManager, &DocumentManager::tabVisibleChanged, m_actionShowDocumentTabs, &QAction::setChecked);
+
     m_actionShowStatusbar = new QAction(tr("Show Stat&usbar"), this);
     m_actionShowStatusbar->setObjectName(QStringLiteral("actionShowStatusbar"));
     m_actionShowStatusbar->setCheckable(true);
@@ -490,6 +502,8 @@ void ApplicationWindow::setupActions()
     menuSettings->addAction(m_actionShowToolbarHelp);
     menuSettings->addMenu(menuToolButtonStyle);
     menuSettings->addSeparator();
+    menuSettings->addAction(m_actionShowDocumentTabs);
+    menuSettings->addSeparator();
     menuSettings->addAction(m_actionShowStatusbar);
     menuSettings->addSeparator();
     menuSettings->addAction(m_actionFullScreen);
@@ -497,6 +511,7 @@ void ApplicationWindow::setupActions()
     m_toolbarSettings = addToolBar(tr("Settings Toolbar"));
     m_toolbarSettings->setObjectName(QStringLiteral("toolbarSettings"));
     m_toolbarSettings->addAction(m_actionShowMenubar);
+    m_toolbarSettings->addAction(m_actionShowDocumentTabs);
     m_toolbarSettings->addAction(m_actionShowStatusbar);
     m_toolbarSettings->addSeparator();
     m_toolbarSettings->addAction(m_actionFullScreen);
@@ -749,6 +764,7 @@ void ApplicationWindow::closeEvent(QCloseEvent *event)
         m_documentManager->closeAllSubWindows();
     }
 
+    m_documentManager->saveSettings();
     m_recentDocuments->saveSettings();
     saveSettings();
     event->accept();
