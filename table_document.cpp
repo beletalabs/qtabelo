@@ -24,7 +24,6 @@
 
 #include <QSettings>
 #include <QTabBar>
-#include <QTabWidget>
 #include <QVBoxLayout>
 
 
@@ -35,6 +34,7 @@ TableDocument::TableDocument(QWidget *parent)
 {
     m_tabBox->setDocumentMode(true);
     m_tabBox->setMovable(true);
+    m_tabBox->setTabPosition(QTabWidget::South);
     m_tabBox->setTabsClosable(true);
     connect(m_tabBox, &QTabWidget::tabCloseRequested, this, &TableDocument::slotCloseTab);
 
@@ -54,6 +54,12 @@ void TableDocument::loadSettings()
     // Sheet Tab Visible
     const bool visible = settings.value(QStringLiteral("Document/SheetTabVisible"), true).toBool();
     m_tabVisible = visible;
+
+    // Sheet Tab Position
+    const int value = settings.value(QStringLiteral("Document/SheetTabPosition"), QTabWidget::South).toInt();
+    const QList<int> positions = {QTabWidget::North, QTabWidget::South};
+    const QTabWidget::TabPosition position = positions.contains(value) ? static_cast<QTabWidget::TabPosition>(value) : QTabWidget::South;
+    m_tabBox->setTabPosition(position);
 }
 
 
@@ -64,6 +70,10 @@ void TableDocument::saveSettings()
     // Sheet Tab Visible
     bool visible = isTabVisible();
     settings.setValue(QStringLiteral("Document/SheetTabVisible"), visible);
+
+    // Sheet Tab Position
+    const QTabWidget::TabPosition position = tabPosition();
+    settings.setValue(QStringLiteral("Document/SheetTabPosition"), position);
 }
 
 
@@ -100,6 +110,39 @@ void TableDocument::initTabVisible()
     const bool visible = isTabVisible();
     setTabBarVisible(visible);
     emit tabVisibleChanged(visible);
+}
+
+
+//
+// Property: tabPosition
+//
+
+QTabWidget::TabPosition TableDocument::tabPosition() const
+{
+    return m_tabBox->tabPosition();
+}
+
+
+void TableDocument::setTabPosition(const QTabWidget::TabPosition position)
+{
+    if (position != tabPosition()) {
+        m_tabBox->setTabPosition(position);
+        emit tabPositionChanged(position);
+    }
+}
+
+
+void TableDocument::resetTabPosition()
+{
+    const QTabWidget::TabPosition position = QTabWidget::South;
+    m_tabBox->setTabPosition(position);
+    emit tabPositionChanged(position);
+}
+
+
+void TableDocument::initTabPosition()
+{
+    emit tabPositionChanged(tabPosition());
 }
 
 

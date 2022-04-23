@@ -79,11 +79,13 @@ private:
 
 private slots:
     void updateActionsDocumentTabPosition(const QTabWidget::TabPosition position);
+    void updateActionsSheetTabPosition(const QTabWidget::TabPosition position);
     void updateMenuOpenRecent();
 
     void documentCreated();
     void documentActivated(QMdiSubWindow *subWindow);
     void documentTabVisibleChanged(const bool visible);
+    void documentTabPositionChanged(const QTabWidget::TabPosition position);
     void documentModifiedChanged(const bool modified);
     void documentUrlChanged(const QUrl &url);
     void documentClosed();
@@ -118,6 +120,7 @@ private slots:
     void slotToolButtonSize(const QAction *action);
     void slotDocumentTabPosition(const QAction *action);
     void slotShowSheetTabs(const bool checked);
+    void slotSheetTabPosition(const QAction *action);
     void slotFullScreen(const bool checked);
 
 private:
@@ -171,8 +174,10 @@ private:
     QActionGroup *m_actionsDocumentTabPosition;
     QAction *m_actionDocumentTabAutoHide;
     QAction *m_actionShowSheetTabs;
+    QActionGroup *m_actionsSheetTabPosition;
     QAction *m_actionShowStatusbar;
     QAction *m_actionFullScreen;
+    QMenu *m_menuSheetTabPosition;
     QToolBar *m_toolbarSettings;
 
     QToolBar *m_toolbarHelp;
