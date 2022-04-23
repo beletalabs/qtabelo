@@ -32,17 +32,38 @@ class TableDocument : public QWidget
 {
     Q_OBJECT
 
+    Q_PROPERTY(bool tabVisible MEMBER m_tabVisible READ isTabVisible WRITE setTabVisible RESET resetTabVisible NOTIFY tabVisibleChanged)
+
 public:
     explicit TableDocument(QWidget *parent = nullptr);
 
+    void saveSettings();
+
+    bool isTabVisible() const;
+
+signals:
+    void tabVisibleChanged(const bool visible);
+
+public slots:
+    void setTabVisible(const bool visible);
+    void resetTabVisible();
+    void initTabVisible();
+
 protected:
     void slotAddTab(const int count);
+
+private:
+    void loadSettings();
+
+    void setTabBarVisible(const bool visible);
 
 private slots:
     void slotCloseTab(const int index);
 
 private:
     QTabWidget *m_tabBox;
+
+    bool m_tabVisible;
 };
 
 #endif // TABLE_DOCUMENT_H

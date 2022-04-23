@@ -491,6 +491,15 @@ void ApplicationWindow::setupActions()
     connect(m_actionDocumentTabAutoHide, &QAction::toggled, m_documentManager, &DocumentManager::setTabAutoHide);
     connect(m_documentManager, &DocumentManager::tabAutoHideChanged, m_actionDocumentTabAutoHide, &QAction::setChecked);
 
+    m_actionShowSheetTabs = new QAction(tr("Show &Sheet Tabs"), this);
+    m_actionShowSheetTabs->setObjectName(QStringLiteral("actionShowSheetTabs"));
+    m_actionShowSheetTabs->setCheckable(true);
+    m_actionShowSheetTabs->setChecked(true);
+    m_actionShowSheetTabs->setIcon(QIcon::fromTheme(QStringLiteral("show-tabbar-bottom"), QIcon(QStringLiteral(":/icons/actions/16/show-tabbar-bottom.svg"))));
+    m_actionShowSheetTabs->setIconText(tr("Sheet Tabs"));
+    m_actionShowSheetTabs->setToolTip(tr("Show the sheet tabs"));
+    connect(m_actionShowSheetTabs, &QAction::toggled, this, &ApplicationWindow::slotShowSheetTabs);
+
     m_actionShowStatusbar = new QAction(tr("Show Stat&usbar"), this);
     m_actionShowStatusbar->setObjectName(QStringLiteral("actionShowStatusbar"));
     m_actionShowStatusbar->setCheckable(true);
@@ -541,6 +550,7 @@ void ApplicationWindow::setupActions()
     menuSettings->addSeparator();
     menuSettings->addAction(m_actionShowDocumentTabs);
     menuSettings->addMenu(menuDocumentTabPosition);
+    menuSettings->addAction(m_actionShowSheetTabs);
     menuSettings->addSeparator();
     menuSettings->addAction(m_actionShowStatusbar);
     menuSettings->addSeparator();
@@ -550,6 +560,7 @@ void ApplicationWindow::setupActions()
     m_toolbarSettings->setObjectName(QStringLiteral("toolbarSettings"));
     m_toolbarSettings->addAction(m_actionShowMenubar);
     m_toolbarSettings->addAction(m_actionShowDocumentTabs);
+    m_toolbarSettings->addAction(m_actionShowSheetTabs);
     m_toolbarSettings->addAction(m_actionShowStatusbar);
     m_toolbarSettings->addSeparator();
     m_toolbarSettings->addAction(m_actionFullScreen);
@@ -668,6 +679,8 @@ void ApplicationWindow::enableActions(const bool enabled)
     m_actionSaveAll->setEnabled(enabled);
     m_actionClose->setEnabled(enabled);
     m_actionCloseAll->setEnabled(enabled);
+
+    m_actionShowSheetTabs->setEnabled(enabled);
 }
 
 
@@ -862,6 +875,8 @@ DocumentWidget *ApplicationWindow::createDocument()
     docWindow->setWidget(document);
     m_documentManager->addSubWindow(docWindow);
 
+    // Connections: Tabs
+    connect(document, &DocumentWidget::tabVisibleChanged, this, &ApplicationWindow::documentTabVisibleChanged);
     // Connections: Modified
     connect(document, &DocumentWidget::modifiedChanged, docWindow, &DocumentWindow::documentModifiedChanged);
     connect(document, &DocumentWidget::modifiedChanged, this, &ApplicationWindow::documentModifiedChanged);
@@ -879,6 +894,7 @@ DocumentWidget *ApplicationWindow::createDocument()
     connect(this, &ApplicationWindow::documentCountChanged, docWindow, &DocumentWindow::documentCountChanged);
 
     // Initialize
+    document->initTabVisible();
     document->initModified();
     document->initUrl();
 
@@ -952,16 +968,23 @@ void ApplicationWindow::documentActivated(QMdiSubWindow *subWindow)
 
     DocumentWidget *document = extractDocument(subWindow);
     if (document) {
-
+        m_actionShowSheetTabs->setChecked(document->isTabVisible());
     }
     else {
-
+        m_actionShowSheetTabs->setChecked(true);
     }
 
     enableActions(hasActiveDocument());
     enableUrlActions(hasActiveDocumentUrl());
     enableFileActions(hasActiveDocumentUrlFile());
     enableFilenameActions(hasActiveDocumentUrlFilename());
+}
+
+
+void ApplicationWindow::documentTabVisibleChanged(const bool visible)
+{
+    if (sender() == activeDocument())
+        m_actionShowSheetTabs->setChecked(visible);
 }
 
 
@@ -1261,6 +1284,16 @@ void ApplicationWindow::slotToolButtonSize(const QAction *action)
 void ApplicationWindow::slotDocumentTabPosition(const QAction *action)
 {
     m_documentManager->setTabPosition(static_cast<QTabWidget::TabPosition>(action->data().toInt()));
+}
+
+
+void ApplicationWindow::slotShowSheetTabs(const bool checked)
+{
+    DocumentWidget *document = activeDocument();
+    if (!document)
+        return;
+
+    document->setTabVisible(checked);
 }
 
 

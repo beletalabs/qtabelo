@@ -27,6 +27,7 @@
 
 #include <QUrl>
 
+class QCloseEvent;
 class QWidget;
 
 
@@ -62,6 +63,9 @@ public slots:
     void copyPathToClipboard();
     void copyFilenameToClipboard();
     void renameFilename();
+
+protected:
+    void closeEvent(QCloseEvent *event) override;
 
 private:
     bool m_modified;

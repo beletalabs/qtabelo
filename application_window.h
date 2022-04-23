@@ -83,6 +83,7 @@ private slots:
 
     void documentCreated();
     void documentActivated(QMdiSubWindow *subWindow);
+    void documentTabVisibleChanged(const bool visible);
     void documentModifiedChanged(const bool modified);
     void documentUrlChanged(const QUrl &url);
     void documentClosed();
@@ -116,6 +117,7 @@ private slots:
     void slotToolButtonStyle(const QAction *action);
     void slotToolButtonSize(const QAction *action);
     void slotDocumentTabPosition(const QAction *action);
+    void slotShowSheetTabs(const bool checked);
     void slotFullScreen(const bool checked);
 
 private:
@@ -168,6 +170,7 @@ private:
     QAction *m_actionShowDocumentTabs;
     QActionGroup *m_actionsDocumentTabPosition;
     QAction *m_actionDocumentTabAutoHide;
+    QAction *m_actionShowSheetTabs;
     QAction *m_actionShowStatusbar;
     QAction *m_actionFullScreen;
     QToolBar *m_toolbarSettings;

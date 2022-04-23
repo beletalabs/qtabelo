@@ -24,6 +24,7 @@
 
 #include <QApplication>
 #include <QClipboard>
+#include <QCloseEvent>
 #include <QDebug>
 #include <QFile>
 #include <QInputDialog>
@@ -39,6 +40,13 @@ DocumentWidget::DocumentWidget(QWidget *parent)
     , m_url{QUrl()}
 {
     setAttribute(Qt::WA_DeleteOnClose);
+}
+
+
+void DocumentWidget::closeEvent(QCloseEvent *event)
+{
+    saveSettings();
+    event->accept();
 }
 
 
