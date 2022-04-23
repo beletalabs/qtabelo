@@ -34,6 +34,7 @@ class TableDocument : public QWidget
 
     Q_PROPERTY(bool tabVisible MEMBER m_tabVisible READ isTabVisible WRITE setTabVisible RESET resetTabVisible NOTIFY tabVisibleChanged)
     Q_PROPERTY(QTabWidget::TabPosition tabPosition READ tabPosition WRITE setTabPosition RESET resetTabPosition NOTIFY tabPositionChanged)
+    Q_PROPERTY(bool tabAutoHide READ isTabAutoHide WRITE setTabAutoHide RESET resetTabAutoHide NOTIFY tabAutoHideChanged)
 
 public:
     explicit TableDocument(QWidget *parent = nullptr);
@@ -42,10 +43,12 @@ public:
 
     bool isTabVisible() const;
     QTabWidget::TabPosition tabPosition() const;
+    bool isTabAutoHide() const;
 
 signals:
     void tabVisibleChanged(const bool visible);
     void tabPositionChanged(const QTabWidget::TabPosition position);
+    void tabAutoHideChanged(const bool autoHide);
 
 public slots:
     void setTabVisible(const bool visible);
@@ -55,6 +58,10 @@ public slots:
     void setTabPosition(const QTabWidget::TabPosition position);
     void resetTabPosition();
     void initTabPosition();
+
+    void setTabAutoHide(const bool autoHide);
+    void resetTabAutoHide();
+    void initTabAutoHide();
 
 protected:
     void slotAddTab(const int count);

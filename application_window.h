@@ -86,6 +86,7 @@ private slots:
     void documentActivated(QMdiSubWindow *subWindow);
     void documentTabVisibleChanged(const bool visible);
     void documentTabPositionChanged(const QTabWidget::TabPosition position);
+    void documentTabAutoHideChanged(const bool autoHide);
     void documentModifiedChanged(const bool modified);
     void documentUrlChanged(const QUrl &url);
     void documentClosed();
@@ -121,6 +122,7 @@ private slots:
     void slotDocumentTabPosition(const QAction *action);
     void slotShowSheetTabs(const bool checked);
     void slotSheetTabPosition(const QAction *action);
+    void slotSheetTabAutoHide(const bool checked);
     void slotFullScreen(const bool checked);
 
 private:
@@ -175,6 +177,7 @@ private:
     QAction *m_actionDocumentTabAutoHide;
     QAction *m_actionShowSheetTabs;
     QActionGroup *m_actionsSheetTabPosition;
+    QAction *m_actionSheetTabAutoHide;
     QAction *m_actionShowStatusbar;
     QAction *m_actionFullScreen;
     QMenu *m_menuSheetTabPosition;

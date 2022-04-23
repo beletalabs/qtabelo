@@ -518,6 +518,12 @@ void ApplicationWindow::setupActions()
     m_actionsSheetTabPosition->addAction(actionSheetTabPositionBottom);
     connect(m_actionsSheetTabPosition, &QActionGroup::triggered, this, &ApplicationWindow::slotSheetTabPosition);
 
+    m_actionSheetTabAutoHide = new QAction(tr("&Auto Hide"), this);
+    m_actionSheetTabAutoHide->setObjectName(QStringLiteral("actionSheetTabAutoHide"));
+    m_actionSheetTabAutoHide->setCheckable(true);
+    m_actionSheetTabAutoHide->setToolTip(tr("Tabs are automatically hidden if they contain only 1 sheet"));
+    connect(m_actionSheetTabAutoHide, &QAction::toggled, this, &ApplicationWindow::slotSheetTabAutoHide);
+
     m_actionShowStatusbar = new QAction(tr("Show Stat&usbar"), this);
     m_actionShowStatusbar->setObjectName(QStringLiteral("actionShowStatusbar"));
     m_actionShowStatusbar->setCheckable(true);
@@ -554,6 +560,8 @@ void ApplicationWindow::setupActions()
     m_menuSheetTabPosition->setObjectName(QStringLiteral("menuSheetTabPosition"));
     m_menuSheetTabPosition->addSection(tr("Position"));
     m_menuSheetTabPosition->addActions(m_actionsSheetTabPosition->actions());
+    m_menuSheetTabPosition->addSection(tr("Behavior"));
+    m_menuSheetTabPosition->addAction(m_actionSheetTabAutoHide);
     connect(m_actionShowSheetTabs, &QAction::toggled, m_menuSheetTabPosition, &QMenu::setEnabled);
 
     auto *menuSettings = menuBar()->addMenu(tr("&Settings"));
@@ -916,6 +924,7 @@ DocumentWidget *ApplicationWindow::createDocument()
     // Connections: Tabs
     connect(document, &DocumentWidget::tabVisibleChanged, this, &ApplicationWindow::documentTabVisibleChanged);
     connect(document, &DocumentWidget::tabPositionChanged, this, &ApplicationWindow::documentTabPositionChanged);
+    connect(document, &DocumentWidget::tabAutoHideChanged, this, &ApplicationWindow::documentTabAutoHideChanged);
     // Connections: Modified
     connect(document, &DocumentWidget::modifiedChanged, docWindow, &DocumentWindow::documentModifiedChanged);
     connect(document, &DocumentWidget::modifiedChanged, this, &ApplicationWindow::documentModifiedChanged);
@@ -935,6 +944,7 @@ DocumentWidget *ApplicationWindow::createDocument()
     // Initialize
     document->initTabVisible();
     document->initTabPosition();
+    document->initTabAutoHide();
     document->initModified();
     document->initUrl();
 
@@ -1015,10 +1025,12 @@ void ApplicationWindow::documentActivated(QMdiSubWindow *subWindow)
     if (document) {
         m_actionShowSheetTabs->setChecked(document->isTabVisible());
         updateActionsSheetTabPosition(document->tabPosition());
+        m_actionSheetTabAutoHide->setChecked(document->isTabAutoHide());
     }
     else {
         m_actionShowSheetTabs->setChecked(true);
         updateActionsSheetTabPosition(QTabWidget::South);
+        m_actionSheetTabAutoHide->setChecked(true);
     }
 }
 
@@ -1034,6 +1046,13 @@ void ApplicationWindow::documentTabPositionChanged(const QTabWidget::TabPosition
 {
     if (sender() == activeDocument())
         updateActionsSheetTabPosition(position);
+}
+
+
+void ApplicationWindow::documentTabAutoHideChanged(const bool autoHide)
+{
+    if (sender() == activeDocument())
+        m_actionSheetTabAutoHide->setChecked(autoHide);
 }
 
 
@@ -1353,6 +1372,16 @@ void ApplicationWindow::slotSheetTabPosition(const QAction *action)
         return;
 
     document->setTabPosition(static_cast<QTabWidget::TabPosition>(action->data().toInt()));
+}
+
+
+void ApplicationWindow::slotSheetTabAutoHide(const bool checked)
+{
+    DocumentWidget *document = activeDocument();
+    if (!document)
+        return;
+
+    document->setTabAutoHide(checked);
 }
 
 
