@@ -25,6 +25,8 @@
 
 #include <QWidget>
 
+class QTabWidget;
+
 
 class TableDocument : public QWidget
 {
@@ -32,6 +34,15 @@ class TableDocument : public QWidget
 
 public:
     explicit TableDocument(QWidget *parent = nullptr);
+
+protected:
+    void slotAddTab(const int count);
+
+private slots:
+    void slotCloseTab(const int index);
+
+private:
+    QTabWidget *m_tabBox;
 };
 
 #endif // TABLE_DOCUMENT_H

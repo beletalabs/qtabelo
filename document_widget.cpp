@@ -112,7 +112,7 @@ void DocumentWidget::initUrl()
 
 void DocumentWidget::documentCountChanged(const int count)
 {
-    Q_UNUSED(count)
+    slotAddTab(count);
 }
 
 

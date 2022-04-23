@@ -22,9 +22,51 @@
 
 #include "table_document.h"
 
+#include <QTabWidget>
+#include <QVBoxLayout>
+
 
 TableDocument::TableDocument(QWidget *parent)
     : QWidget(parent)
+    , m_tabBox{new QTabWidget}
 {
+    m_tabBox->setDocumentMode(true);
+    m_tabBox->setMovable(true);
+    m_tabBox->setTabsClosable(true);
+    connect(m_tabBox, &QTabWidget::tabCloseRequested, this, &TableDocument::slotCloseTab);
 
+    // Main layout
+    auto *mainLayout = new QVBoxLayout();
+    mainLayout->addWidget(m_tabBox);
+    setLayout(mainLayout);
+}
+
+
+//
+//
+//
+
+void TableDocument::slotAddTab(const int count)
+{
+    if (!m_tabBox->count()) {
+
+        for (int i = 1; i <= count; ++i) {
+            auto *widget = new QWidget;
+            widget->setAttribute(Qt::WA_DeleteOnClose);
+            m_tabBox->addTab(widget, tr("Sheet %1").arg(i));
+        }
+    }
+}
+
+
+void TableDocument::slotCloseTab(const int index)
+{
+    if (m_tabBox->count() > 1) {
+
+        auto *widget = m_tabBox->widget(index);
+        if (widget) {
+            widget->close();
+            m_tabBox->removeTab(index);
+        }
+    }
 }
