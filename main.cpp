@@ -1,7 +1,7 @@
 /**
  * Copyright 2022 naracanto <https://naracanto.github.io>.
  *
- * This file is part of QTabelo <https://github.com/cutelabs/qtabelo>.
+ * This file is part of QTabelo <https://github.com/beletalabs/qtabelo>.
  *
  * QTabelo is an open source table editor written in C++ using the
  * Qt framework.
@@ -31,8 +31,8 @@
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    app.setOrganizationName(QStringLiteral("Cute Labs"));
-    app.setOrganizationDomain(QStringLiteral("https://cutelabs.github.io"));
+    app.setOrganizationName(QStringLiteral("Beleta Labs"));
+    app.setOrganizationDomain(QStringLiteral("https://beletalabs.github.io"));
     app.setApplicationName(QStringLiteral("QTabelo"));
     app.setApplicationDisplayName(QStringLiteral("QTabelo"));
     app.setApplicationVersion(QStringLiteral("0.1.0"));

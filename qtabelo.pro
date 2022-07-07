@@ -1,7 +1,7 @@
 #
 # Copyright 2022 naracanto <https://naracanto.github.io>.
 #
-# This file is part of QTabelo <https://github.com/cutelabs/qtabelo>.
+# This file is part of QTabelo <https://github.com/beletalabs/qtabelo>.
 #
 # QTabelo is an open source table editor written in C++ using the
 # Qt framework.
