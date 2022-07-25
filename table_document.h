@@ -63,7 +63,7 @@ public slots:
     void resetTabAutoHide();
     void initTabAutoHide();
 
-protected:
+protected slots:
     void slotAddTab(const int count);
 
 private:

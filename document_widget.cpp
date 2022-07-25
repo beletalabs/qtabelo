@@ -125,7 +125,7 @@ void DocumentWidget::documentCountChanged(const int count)
 
 
 //
-// Slots
+//
 //
 
 void DocumentWidget::copyPathToClipboard()

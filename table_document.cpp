@@ -34,7 +34,7 @@ TableDocument::TableDocument(QWidget *parent)
 {
     m_tabBox->setDocumentMode(true);
     m_tabBox->setMovable(true);
-    m_tabBox->setTabsClosable(true);
+//    m_tabBox->setTabsClosable(true);
     m_tabBox->setTabPosition(QTabWidget::South);
     m_tabBox->setTabBarAutoHide(true);
     connect(m_tabBox, &QTabWidget::tabCloseRequested, this, &TableDocument::slotCloseTab);
@@ -215,6 +215,9 @@ void TableDocument::slotAddTab(const int count)
             m_tabBox->addTab(widget, tr("Sheet %1").arg(i));
         }
     }
+
+    if (m_tabBox->count() > 1)
+        m_tabBox->setTabsClosable(true);
 }
 
 
@@ -228,4 +231,7 @@ void TableDocument::slotCloseTab(const int index)
             m_tabBox->removeTab(index);
         }
     }
+
+    if (m_tabBox->count() <= 1)
+        m_tabBox->setTabsClosable(false);
 }
