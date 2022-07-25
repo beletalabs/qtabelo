@@ -54,7 +54,7 @@ void DocumentWidget::closeEvent(QCloseEvent *event)
 // Property: modified
 //
 
-bool DocumentWidget::modified() const
+bool DocumentWidget::isModified() const
 {
     return m_modified;
 }

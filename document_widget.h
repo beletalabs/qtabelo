@@ -35,13 +35,13 @@ class DocumentWidget : public TableDocument
 {
     Q_OBJECT
 
-    Q_PROPERTY(bool modified MEMBER m_modified READ modified WRITE setModified RESET resetModified NOTIFY modifiedChanged)
+    Q_PROPERTY(bool modified MEMBER m_modified READ isModified WRITE setModified RESET resetModified NOTIFY modifiedChanged)
     Q_PROPERTY(QUrl url MEMBER m_url READ url WRITE setUrl RESET resetUrl NOTIFY urlChanged)
 
 public:
     explicit DocumentWidget(QWidget *parent = nullptr);
 
-    bool modified() const;
+    bool isModified() const;
     void initModified();
 
     QUrl url() const;
