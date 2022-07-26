@@ -56,10 +56,10 @@ void TableDocument::loadSettings()
     const bool visible = settings.value(QStringLiteral("Document/SheetTabBarVisible"), true).toBool();
     m_tabBarVisible = visible;
 
-    // Sheet Tab Position
-    const int value = settings.value(QStringLiteral("Document/SheetTabPosition"), QTabWidget::South).toInt();
-    const QList<int> positions = {QTabWidget::North, QTabWidget::South};
-    const QTabWidget::TabPosition position = positions.contains(value) ? static_cast<QTabWidget::TabPosition>(value) : QTabWidget::South;
+    // Sheet Tab Bar Position
+    const int value = settings.value(QStringLiteral("Document/SheetTabBarPosition"), QTabWidget::South).toInt();
+    const QList<int> values = {QTabWidget::North, QTabWidget::South};
+    const QTabWidget::TabPosition position = values.contains(value) ? static_cast<QTabWidget::TabPosition>(value) : QTabWidget::South;
     m_tabBox->setTabPosition(position);
 
     // Sheet Tab Auto Hide
@@ -76,9 +76,9 @@ void TableDocument::saveSettings()
     const bool visible = isTabBarVisible();
     settings.setValue(QStringLiteral("Document/SheetTabBarVisible"), visible);
 
-    // Sheet Tab Position
-    const QTabWidget::TabPosition position = tabPosition();
-    settings.setValue(QStringLiteral("Document/SheetTabPosition"), position);
+    // Sheet Tab Bar Position
+    const QTabWidget::TabPosition position = tabBarPosition();
+    settings.setValue(QStringLiteral("Document/SheetTabBarPosition"), position);
 
     // Sheet Tab Auto Hide
     bool autoHide = isTabAutoHide();
@@ -129,35 +129,34 @@ void TableDocument::_setTabBarVisible(const bool visible)
 
 
 //
-// Property: tabPosition
+// Property: tabBarPosition
 //
 
-QTabWidget::TabPosition TableDocument::tabPosition() const
+QTabWidget::TabPosition TableDocument::tabBarPosition() const
 {
     return m_tabBox->tabPosition();
 }
 
 
-void TableDocument::setTabPosition(const QTabWidget::TabPosition position)
+void TableDocument::setTabBarPosition(const QTabWidget::TabPosition position)
 {
-    if (position != tabPosition()) {
+    if (position != tabBarPosition()) {
         m_tabBox->setTabPosition(position);
-        emit tabPositionChanged(position);
+        emit tabBarPositionChanged(position);
     }
 }
 
 
-void TableDocument::resetTabPosition()
+void TableDocument::resetTabBarPosition()
 {
-    const QTabWidget::TabPosition position = QTabWidget::South;
-    m_tabBox->setTabPosition(position);
-    emit tabPositionChanged(position);
+    m_tabBox->setTabPosition(QTabWidget::South);
+    emit tabBarPositionChanged(QTabWidget::South);
 }
 
 
-void TableDocument::initTabPosition()
+void TableDocument::initTabBarPosition()
 {
-    emit tabPositionChanged(tabPosition());
+    emit tabBarPositionChanged(tabBarPosition());
 }
 
 

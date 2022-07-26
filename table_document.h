@@ -33,7 +33,7 @@ class TableDocument : public QWidget
     Q_OBJECT
 
     Q_PROPERTY(bool tabBarVisible MEMBER m_tabBarVisible READ isTabBarVisible WRITE setTabBarVisible RESET resetTabBarVisible NOTIFY tabBarVisibleChanged)
-    Q_PROPERTY(QTabWidget::TabPosition tabPosition READ tabPosition WRITE setTabPosition RESET resetTabPosition NOTIFY tabPositionChanged)
+    Q_PROPERTY(QTabWidget::TabPosition tabBarPosition READ tabBarPosition WRITE setTabBarPosition RESET resetTabBarPosition NOTIFY tabBarPositionChanged)
     Q_PROPERTY(bool tabAutoHide READ isTabAutoHide WRITE setTabAutoHide RESET resetTabAutoHide NOTIFY tabAutoHideChanged)
 
 public:
@@ -42,12 +42,12 @@ public:
     void saveSettings();
 
     bool isTabBarVisible() const;
-    QTabWidget::TabPosition tabPosition() const;
+    QTabWidget::TabPosition tabBarPosition() const;
     bool isTabAutoHide() const;
 
 signals:
     void tabBarVisibleChanged(const bool visible);
-    void tabPositionChanged(const QTabWidget::TabPosition position);
+    void tabBarPositionChanged(const QTabWidget::TabPosition position);
     void tabAutoHideChanged(const bool autoHide);
 
 public slots:
@@ -55,9 +55,9 @@ public slots:
     void resetTabBarVisible();
     void initTabBarVisible();
 
-    void setTabPosition(const QTabWidget::TabPosition position);
-    void resetTabPosition();
-    void initTabPosition();
+    void setTabBarPosition(const QTabWidget::TabPosition position);
+    void resetTabBarPosition();
+    void initTabBarPosition();
 
     void setTabAutoHide(const bool autoHide);
     void resetTabAutoHide();

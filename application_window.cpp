@@ -923,7 +923,7 @@ DocumentWidget *ApplicationWindow::createDocument()
 
     // Connections: Tabs
     connect(document, &DocumentWidget::tabBarVisibleChanged, this, &ApplicationWindow::documentTabVisibleChanged);
-    connect(document, &DocumentWidget::tabPositionChanged, this, &ApplicationWindow::documentTabPositionChanged);
+    connect(document, &DocumentWidget::tabBarPositionChanged, this, &ApplicationWindow::documentTabPositionChanged);
     connect(document, &DocumentWidget::tabAutoHideChanged, this, &ApplicationWindow::documentTabAutoHideChanged);
     // Connections: Modified
     connect(document, &DocumentWidget::modifiedChanged, docWindow, &DocumentWindow::documentModifiedChanged);
@@ -943,7 +943,7 @@ DocumentWidget *ApplicationWindow::createDocument()
 
     // Initialize
     document->initTabBarVisible();
-    document->initTabPosition();
+    document->initTabBarPosition();
     document->initTabAutoHide();
     document->initModified();
     document->initUrl();
@@ -1024,7 +1024,7 @@ void ApplicationWindow::documentActivated(QMdiSubWindow *subWindow)
     DocumentWidget *document = extractDocument(subWindow);
     if (document) {
         m_actionShowSheetTabs->setChecked(document->isTabBarVisible());
-        updateActionsSheetTabPosition(document->tabPosition());
+        updateActionsSheetTabPosition(document->tabBarPosition());
         m_actionSheetTabAutoHide->setChecked(document->isTabAutoHide());
     }
     else {
@@ -1371,7 +1371,7 @@ void ApplicationWindow::slotSheetTabPosition(const QAction *action)
     if (!document)
         return;
 
-    document->setTabPosition(static_cast<QTabWidget::TabPosition>(action->data().toInt()));
+    document->setTabBarPosition(static_cast<QTabWidget::TabPosition>(action->data().toInt()));
 }
 
 
