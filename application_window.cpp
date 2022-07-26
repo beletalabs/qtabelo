@@ -922,7 +922,7 @@ DocumentWidget *ApplicationWindow::createDocument()
     m_documentManager->addSubWindow(docWindow);
 
     // Connections: Tabs
-    connect(document, &DocumentWidget::tabVisibleChanged, this, &ApplicationWindow::documentTabVisibleChanged);
+    connect(document, &DocumentWidget::tabBarVisibleChanged, this, &ApplicationWindow::documentTabVisibleChanged);
     connect(document, &DocumentWidget::tabPositionChanged, this, &ApplicationWindow::documentTabPositionChanged);
     connect(document, &DocumentWidget::tabAutoHideChanged, this, &ApplicationWindow::documentTabAutoHideChanged);
     // Connections: Modified
@@ -942,7 +942,7 @@ DocumentWidget *ApplicationWindow::createDocument()
     connect(this, &ApplicationWindow::documentCountChanged, docWindow, &DocumentWindow::documentCountChanged);
 
     // Initialize
-    document->initTabVisible();
+    document->initTabBarVisible();
     document->initTabPosition();
     document->initTabAutoHide();
     document->initModified();
@@ -1023,7 +1023,7 @@ void ApplicationWindow::documentActivated(QMdiSubWindow *subWindow)
 
     DocumentWidget *document = extractDocument(subWindow);
     if (document) {
-        m_actionShowSheetTabs->setChecked(document->isTabVisible());
+        m_actionShowSheetTabs->setChecked(document->isTabBarVisible());
         updateActionsSheetTabPosition(document->tabPosition());
         m_actionSheetTabAutoHide->setChecked(document->isTabAutoHide());
     }
@@ -1361,7 +1361,7 @@ void ApplicationWindow::slotShowSheetTabs(const bool checked)
     if (!document)
         return;
 
-    document->setTabVisible(checked);
+    document->setTabBarVisible(checked);
 }
 
 

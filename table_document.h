@@ -32,7 +32,7 @@ class TableDocument : public QWidget
 {
     Q_OBJECT
 
-    Q_PROPERTY(bool tabVisible MEMBER m_tabVisible READ isTabVisible WRITE setTabVisible RESET resetTabVisible NOTIFY tabVisibleChanged)
+    Q_PROPERTY(bool tabBarVisible MEMBER m_tabBarVisible READ isTabBarVisible WRITE setTabBarVisible RESET resetTabBarVisible NOTIFY tabBarVisibleChanged)
     Q_PROPERTY(QTabWidget::TabPosition tabPosition READ tabPosition WRITE setTabPosition RESET resetTabPosition NOTIFY tabPositionChanged)
     Q_PROPERTY(bool tabAutoHide READ isTabAutoHide WRITE setTabAutoHide RESET resetTabAutoHide NOTIFY tabAutoHideChanged)
 
@@ -41,19 +41,19 @@ public:
 
     void saveSettings();
 
-    bool isTabVisible() const;
+    bool isTabBarVisible() const;
     QTabWidget::TabPosition tabPosition() const;
     bool isTabAutoHide() const;
 
 signals:
-    void tabVisibleChanged(const bool visible);
+    void tabBarVisibleChanged(const bool visible);
     void tabPositionChanged(const QTabWidget::TabPosition position);
     void tabAutoHideChanged(const bool autoHide);
 
 public slots:
-    void setTabVisible(const bool visible);
-    void resetTabVisible();
-    void initTabVisible();
+    void setTabBarVisible(const bool visible);
+    void resetTabBarVisible();
+    void initTabBarVisible();
 
     void setTabPosition(const QTabWidget::TabPosition position);
     void resetTabPosition();
@@ -69,7 +69,7 @@ protected slots:
 private:
     void loadSettings();
 
-    void setTabBarVisible(const bool visible);
+    void _setTabBarVisible(const bool visible);
 
 private slots:
     void slotCloseTab(const int index);
@@ -77,7 +77,7 @@ private slots:
 private:
     QTabWidget *m_tabBox;
 
-    bool m_tabVisible;
+    bool m_tabBarVisible;
 };
 
 #endif // TABLE_DOCUMENT_H

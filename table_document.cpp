@@ -30,7 +30,7 @@
 TableDocument::TableDocument(QWidget *parent)
     : QWidget(parent)
     , m_tabBox{new QTabWidget}
-    , m_tabVisible{true}
+    , m_tabBarVisible{true}
 {
     m_tabBox->setDocumentMode(true);
     m_tabBox->setMovable(true);
@@ -52,9 +52,9 @@ void TableDocument::loadSettings()
 {
     QSettings settings;
 
-    // Sheet Tab Visible
-    const bool visible = settings.value(QStringLiteral("Document/SheetTabVisible"), true).toBool();
-    m_tabVisible = visible;
+    // Sheet Tab Bar Visible
+    const bool visible = settings.value(QStringLiteral("Document/SheetTabBarVisible"), true).toBool();
+    m_tabBarVisible = visible;
 
     // Sheet Tab Position
     const int value = settings.value(QStringLiteral("Document/SheetTabPosition"), QTabWidget::South).toInt();
@@ -72,9 +72,9 @@ void TableDocument::saveSettings()
 {
     QSettings settings;
 
-    // Sheet Tab Visible
-    bool visible = isTabVisible();
-    settings.setValue(QStringLiteral("Document/SheetTabVisible"), visible);
+    // Sheet Tab Bar Visible
+    const bool visible = isTabBarVisible();
+    settings.setValue(QStringLiteral("Document/SheetTabBarVisible"), visible);
 
     // Sheet Tab Position
     const QTabWidget::TabPosition position = tabPosition();
@@ -87,38 +87,44 @@ void TableDocument::saveSettings()
 
 
 //
-// Property: tabVisible
+// Property: tabBarVisible
 //
 
-bool TableDocument::isTabVisible() const
+bool TableDocument::isTabBarVisible() const
 {
-    return m_tabVisible;
+    return m_tabBarVisible;
 }
 
 
-void TableDocument::setTabVisible(const bool visible)
+void TableDocument::setTabBarVisible(const bool visible)
 {
-    if (visible != isTabVisible()) {
-        m_tabVisible = visible;
-        setTabBarVisible(visible);
-        emit tabVisibleChanged(visible);
+    if (visible != m_tabBarVisible) {
+        m_tabBarVisible = visible;
+        _setTabBarVisible(m_tabBarVisible);
+        emit tabBarVisibleChanged(m_tabBarVisible);
     }
 }
 
 
-void TableDocument::resetTabVisible()
+void TableDocument::resetTabBarVisible()
 {
-    m_tabVisible = true;
-    setTabBarVisible(m_tabVisible);
-    emit tabVisibleChanged(m_tabVisible);
+    m_tabBarVisible = true;
+    _setTabBarVisible(m_tabBarVisible);
+    emit tabBarVisibleChanged(m_tabBarVisible);
 }
 
 
-void TableDocument::initTabVisible()
+void TableDocument::initTabBarVisible()
 {
-    const bool visible = isTabVisible();
-    setTabBarVisible(visible);
-    emit tabVisibleChanged(visible);
+    _setTabBarVisible(m_tabBarVisible);
+    emit tabBarVisibleChanged(m_tabBarVisible);
+}
+
+
+void TableDocument::_setTabBarVisible(const bool visible)
+{
+    if (!(m_tabBox->count() <= 1 && isTabAutoHide()))
+        m_tabBox->tabBar()->setVisible(visible);
 }
 
 
@@ -187,17 +193,6 @@ void TableDocument::initTabAutoHide()
     const bool autoHide = isTabAutoHide();
     m_tabBox->setTabBarAutoHide(autoHide);
     emit tabAutoHideChanged(autoHide);
-}
-
-
-//
-//
-//
-
-void TableDocument::setTabBarVisible(const bool visible)
-{
-    if (!(m_tabBox->count() <= 1 && isTabAutoHide()))
-        m_tabBox->tabBar()->setVisible(visible);
 }
 
 
