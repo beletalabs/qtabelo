@@ -62,8 +62,8 @@ void TableDocument::loadSettings()
     const QTabWidget::TabPosition position = values.contains(value) ? static_cast<QTabWidget::TabPosition>(value) : QTabWidget::South;
     m_tabBox->setTabPosition(position);
 
-    // Sheet Tab Auto Hide
-    const bool autoHide = settings.value(QStringLiteral("Document/SheetTabAutoHide"), true).toBool();
+    // Sheet Tab Bar Auto Hide
+    const bool autoHide = settings.value(QStringLiteral("Document/SheetTabBarAutoHide"), true).toBool();
     m_tabBox->setTabBarAutoHide(autoHide);
 }
 
@@ -80,9 +80,9 @@ void TableDocument::saveSettings()
     const QTabWidget::TabPosition position = tabBarPosition();
     settings.setValue(QStringLiteral("Document/SheetTabBarPosition"), position);
 
-    // Sheet Tab Auto Hide
-    bool autoHide = isTabAutoHide();
-    settings.setValue(QStringLiteral("Document/SheetTabAutoHide"), autoHide);
+    // Sheet Tab Bar Auto Hide
+    const bool autoHide = isTabBarAutoHide();
+    settings.setValue(QStringLiteral("Document/SheetTabBarAutoHide"), autoHide);
 }
 
 
@@ -123,7 +123,7 @@ void TableDocument::initTabBarVisible()
 
 void TableDocument::_setTabBarVisible(const bool visible)
 {
-    if (!(m_tabBox->count() <= 1 && isTabAutoHide()))
+    if (!(m_tabBox->count() <= 1 && m_tabBox->tabBarAutoHide()))
         m_tabBox->tabBar()->setVisible(visible);
 }
 
@@ -161,37 +161,34 @@ void TableDocument::initTabBarPosition()
 
 
 //
-// Property: tabAutoHide
+// Property: tabBarAutoHide
 //
 
-bool TableDocument::isTabAutoHide() const
+bool TableDocument::isTabBarAutoHide() const
 {
     return m_tabBox->tabBarAutoHide();
 }
 
 
-void TableDocument::setTabAutoHide(const bool autoHide)
+void TableDocument::setTabBarAutoHide(const bool autoHide)
 {
-    if (autoHide != isTabAutoHide()) {
+    if (autoHide != isTabBarAutoHide()) {
         m_tabBox->setTabBarAutoHide(autoHide);
-        emit tabAutoHideChanged(autoHide);
+        emit tabBarAutoHideChanged(autoHide);
     }
 }
 
 
-void TableDocument::resetTabAutoHide()
+void TableDocument::resetTabBarAutoHide()
 {
-    const bool autoHide = true;
-    m_tabBox->setTabBarAutoHide(autoHide);
-    emit tabAutoHideChanged(autoHide);
+    m_tabBox->setTabBarAutoHide(true);
+    emit tabBarAutoHideChanged(true);
 }
 
 
-void TableDocument::initTabAutoHide()
+void TableDocument::initTabBarAutoHide()
 {
-    const bool autoHide = isTabAutoHide();
-    m_tabBox->setTabBarAutoHide(autoHide);
-    emit tabAutoHideChanged(autoHide);
+    emit tabBarAutoHideChanged(isTabBarAutoHide());
 }
 
 

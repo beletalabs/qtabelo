@@ -924,7 +924,7 @@ DocumentWidget *ApplicationWindow::createDocument()
     // Connections: Tabs
     connect(document, &DocumentWidget::tabBarVisibleChanged, this, &ApplicationWindow::documentTabVisibleChanged);
     connect(document, &DocumentWidget::tabBarPositionChanged, this, &ApplicationWindow::documentTabPositionChanged);
-    connect(document, &DocumentWidget::tabAutoHideChanged, this, &ApplicationWindow::documentTabAutoHideChanged);
+    connect(document, &DocumentWidget::tabBarAutoHideChanged, this, &ApplicationWindow::documentTabAutoHideChanged);
     // Connections: Modified
     connect(document, &DocumentWidget::modifiedChanged, docWindow, &DocumentWindow::documentModifiedChanged);
     connect(document, &DocumentWidget::modifiedChanged, this, &ApplicationWindow::documentModifiedChanged);
@@ -944,7 +944,7 @@ DocumentWidget *ApplicationWindow::createDocument()
     // Initialize
     document->initTabBarVisible();
     document->initTabBarPosition();
-    document->initTabAutoHide();
+    document->initTabBarAutoHide();
     document->initModified();
     document->initUrl();
 
@@ -1025,7 +1025,7 @@ void ApplicationWindow::documentActivated(QMdiSubWindow *subWindow)
     if (document) {
         m_actionShowSheetTabs->setChecked(document->isTabBarVisible());
         updateActionsSheetTabPosition(document->tabBarPosition());
-        m_actionSheetTabAutoHide->setChecked(document->isTabAutoHide());
+        m_actionSheetTabAutoHide->setChecked(document->isTabBarAutoHide());
     }
     else {
         m_actionShowSheetTabs->setChecked(true);
@@ -1381,7 +1381,7 @@ void ApplicationWindow::slotSheetTabAutoHide(const bool checked)
     if (!document)
         return;
 
-    document->setTabAutoHide(checked);
+    document->setTabBarAutoHide(checked);
 }
 
 
