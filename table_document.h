@@ -48,7 +48,7 @@ public:
 signals:
     void tabBarVisibleChanged(const bool visible);
     void tabBarPositionChanged(const QTabWidget::TabPosition position);
-    void tabBarAutoHideChanged(const bool autoHide);
+    void tabBarAutoHideChanged(const bool enabled);
 
 public slots:
     void setTabBarVisible(const bool visible);
@@ -59,7 +59,7 @@ public slots:
     void resetTabBarPosition();
     void initTabBarPosition();
 
-    void setTabBarAutoHide(const bool autoHide);
+    void setTabBarAutoHide(const bool enabled);
     void resetTabBarAutoHide();
     void initTabBarAutoHide();
 
@@ -75,7 +75,7 @@ private slots:
     void slotCloseTab(const int index);
 
 private:
-    QTabWidget *m_tabBox;
+    QTabWidget *m_tabs;
 
     bool m_tabBarVisible;
 };

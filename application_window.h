@@ -79,7 +79,7 @@ private:
 
 private slots:
     void updateActionsDocumentTabPosition(const QTabWidget::TabPosition position);
-    void updateActionsSheetTabPosition(const QTabWidget::TabPosition position);
+    void updateActionsSheetTabBarPosition(const QTabWidget::TabPosition position);
     void updateMenuOpenRecent();
 
     void documentCreated();
@@ -120,9 +120,9 @@ private slots:
     void slotToolButtonStyle(const QAction *action);
     void slotToolButtonSize(const QAction *action);
     void slotDocumentTabPosition(const QAction *action);
-    void slotShowSheetTabs(const bool checked);
-    void slotSheetTabPosition(const QAction *action);
-    void slotSheetTabAutoHide(const bool checked);
+    void slotShowSheetTabBar(const bool checked);
+    void slotSheetTabBarPosition(const QAction *action);
+    void slotSheetTabBarAutoHide(const bool checked);
     void slotFullScreen(const bool checked);
 
 private:
@@ -175,12 +175,12 @@ private:
     QAction *m_actionShowDocumentTabs;
     QActionGroup *m_actionsDocumentTabPosition;
     QAction *m_actionDocumentTabAutoHide;
-    QAction *m_actionShowSheetTabs;
-    QActionGroup *m_actionsSheetTabPosition;
-    QAction *m_actionSheetTabAutoHide;
+    QAction *m_actionShowSheetTabBar;
+    QActionGroup *m_actionsSheetTabBarPosition;
+    QAction *m_actionSheetTabBarAutoHide;
     QAction *m_actionShowStatusbar;
     QAction *m_actionFullScreen;
-    QMenu *m_menuSheetTabPosition;
+    QMenu *m_menuSheetTabBarPosition;
     QToolBar *m_toolbarSettings;
 
     QToolBar *m_toolbarHelp;
